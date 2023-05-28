@@ -1,0 +1,285 @@
+body{
+  background-color: #121212;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 1px;
+}
+
+@keyframes text{
+  from{transform: translateY(-100px);opacity: 0;}
+  to{transform: translateY(0);opacity: 1;}
+}
+
+@keyframes text2{
+  from{transform: translateY(100px);opacity: 0;}
+  to{transform: translateY(0);opacity: 1;}
+}
+
+@keyframes appear{
+  from{opacity: 0;}
+  to{opacity: 1;}
+}
+
+@keyframes spread {
+  from{width: 50%;}
+  to{width: 100%;}
+}
+
+@media only screen and (max-width: 2000px){
+  .main-header{
+    float: left;
+    width: 25%;
+    height: 650px;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    min-width: 270px;
+    animation-name: appear;
+    animation-duration: 3s;
+    animation-delay: 0.1s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+  }
+
+  .logo{
+    font-size: 15px;
+    margin: 0px;
+  }
+
+  h1:hover{
+    color: #20bcba;
+    transition-duration: 1s;
+  }
+
+  h2{
+    text-align: right;
+    margin-right: 20px;
+  }
+
+  .undername{
+    width: 50%;
+    animation-name: spread;
+    animation-duration: 2s;
+    animation-delay: 0.1s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+  }
+
+  .menu{
+    margin-top: 100px;
+  }
+
+  .option{
+      list-style: none;
+      width: 100%;
+      height: 50px;
+  }
+
+  a{
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    margin-right: 30px;
+  }
+
+  a:hover{
+      color: #20bcba;
+      transition-duration: 1s;
+  }
+
+  main{
+    float: left;
+    height: 650px;
+    width: 75%;
+    box-sizing: border-box;
+    padding: 20px;
+    background: url('prism/prism.png');
+    border-radius: 5px;
+  }
+
+  .photo{
+    background: url('main.jpeg');
+    filter: brightness(75%);
+  }
+
+  .contact{
+    margin-top: 25%;
+    margin-left: 25%;
+    font-size: 150%;
+    animation-name: text;
+    animation-duration: 2s;
+    animation-delay: 0.1s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+  }
+
+  .offer{
+    margin-top: 5%;
+    margin-left: 5%;
+    font-size: 125%;
+    animation-name: text;
+    animation-duration: 2s;
+    animation-delay: 0.1s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+  }
+
+  .info{
+    margin-top: 380px;
+    text-align: right;
+    font-size: 25px;
+  }
+
+  hr{
+    width: 50%;
+    animation-name: text;
+    animation-duration: 2s;
+    animation-delay: 0.1s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+  }
+  .motto{
+    text-align: center;
+    animation-name: text;
+    animation-duration: 2s;
+    animation-delay: 0.2s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+    text-shadow: 0 0 13px #000000;
+  }
+
+  .slogan{
+    font-size: 20px;
+    animation-name: text;
+    animation-duration: 2s;
+    animation-delay: 0.3s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+    text-shadow: 0 0 13px #000000;
+  }
+
+  .sm{
+      list-style: none;
+      width: 30%;
+      height: 50px;
+      float: left;
+      display: block;
+      margin-top: 150px;
+  }
+
+  .main-footer{
+    display: none;
+  }
+
+  .description{
+    float: left;
+    width: 30%;
+    margin: 50px;
+    box-sizing: border-box;
+  }
+  .mini{
+    float: left;
+    width: 50%;
+    border-radius: 10px;
+    margin: 10px;
+    box-sizing: border-box;
+  }
+
+  .portfolio-item{
+    margin: 20px;
+    box-sizing: border-box;
+  }
+
+  .gora{
+    animation-name: text;
+    animation-duration: 2s;
+    animation-delay: 0.1s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+  }
+
+  .dol{
+    animation-name: text2;
+    animation-duration: 2s;
+    animation-delay: 0.1s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+  }
+}
+
+@media only screen and (max-width: 1195px){
+  .menu{
+    margin-top: 20px;
+    height: 20px;
+  }
+
+  .option{
+    height: 20px;
+  }
+
+  .main-header{
+    min-width: 320px;
+    width: 100%;
+    height: 250px;
+    clear: both;
+  }
+
+  .undername{
+    margin-top: 20px;
+    width: 200px;
+  }
+
+  .option{
+    display: block;
+    float: left;
+    width: 30%;
+    min-width: 110px;
+  }
+  ul{
+    margin-top: 20px;
+  }
+  .menu+.social-menu{
+    display: none;
+  }
+  .info{
+    margin-top: 300px;
+  }
+  .photo, .contact{
+    width: 100%;
+    clear: both;
+  }
+
+  .contact{
+    margin-top: 0px;
+    margin-left: 20px;
+    min-width: 500px;
+  }
+  .main-footer{
+    display: block;
+    width: 100%;
+  }
+  .sm{
+    width: 30%;
+    margin-top: 20px;
+    text-align: center;
+  }
+  main{
+    width: 100%;
+    height: auto;
+  }
+
+  .description{
+    width: 100%;
+    clear: both;
+    margin-top: 5px;
+  }
+
+  .mini{
+    clear: both;
+  }
+
+  .on-photo{
+    clear: both;
+    width:200%;
+  }
+}

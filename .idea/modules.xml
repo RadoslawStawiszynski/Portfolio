@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Nauka_Python/.idea/Nauka Python.iml" filepath="$PROJECT_DIR$/../Nauka_Python/.idea/Nauka Python.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Nauka_Python_Sto/.idea/Nauka_Python_Sto.iml" filepath="$PROJECT_DIR$/../Nauka_Python_Sto/.idea/Nauka_Python_Sto.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Portfolio.iml" filepath="$PROJECT_DIR$/.idea/Portfolio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Python_CodeAccess/.idea/Python_CodeAccess.iml" filepath="$PROJECT_DIR$/../Python_CodeAccess/.idea/Python_CodeAccess.iml" />
     </modules>
   </component>
 </project>

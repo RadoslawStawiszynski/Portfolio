@@ -52,8 +52,8 @@ body{
   }
 
   h2{
-    text-align: right;
-    margin-right: 20px;
+    margin: 0 auto; /* Dodane centrowanie */
+    text-align: center; /* Dodane centrowanie */
   }
 
   .undername{
@@ -126,7 +126,7 @@ body{
 
   .info{
     margin-top: 380px;
-    text-align: right;
+    text-align: center;
     font-size: 25px;
   }
 
@@ -146,6 +146,7 @@ body{
     animation-fill-mode: both;
     animation-timing-function: ease-out;
     text-shadow: 0 0 13px #000000;
+    background-color: rgba(0, 0, 0, 0.5); /* Tło ciemne i 50% przezroczyste */
   }
 
   .slogan{
@@ -156,6 +157,7 @@ body{
     animation-fill-mode: both;
     animation-timing-function: ease-out;
     text-shadow: 0 0 13px #000000;
+    background-color: rgba(0, 0, 0, 0.5); /* Tło ciemne i 50% przezroczyste */
   }
 
   .sm{

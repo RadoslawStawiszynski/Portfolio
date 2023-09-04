@@ -150,6 +150,7 @@ body{
   }
 
   .slogan{
+    text-align: center;
     font-size: 20px;
     animation-name: text;
     animation-duration: 2s;

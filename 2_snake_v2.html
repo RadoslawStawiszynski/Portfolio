@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+</head>
+<body>
+  <header class='main-header '>
+    <a href='index.html' class='logo'>
+      <h1>Tworzenie kodu</h1>
+    </a>
+    <h2>Radosław Stawiszyński</h2>
+    <hr class="undername">
+    <nav class='menu'>
+      <ul>
+        <li class='option'><a href="portfolio.html">Portfolio</a></li>
+        <li class='option'><a  href="oferta.html">Oferta</a></li>
+        <li class='option'><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </nav>
+    <aside class='social-menu'>
+      <ul>
+        <li class='sm'><a href=""><i class="fab fa-facebook-square"></i></a></li>
+        <li class='sm'><a href=""><i class="fab fa-instagram"></i></a></li>
+        <li class='sm'><a href="https://www.linkedin.com/in/radosław-stawiszyński-2643b6251/"><i class="fab fa-linkedin"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+    <main>
+      <div class="portfolio-item">
+        <div class="description gora">
+          <h4><a target="blank" ">Proste programy i algorytmy w Python</a></h4>
+          <p>Snake Game </p>
+
+            <pre>
+                <code>
+        #   SNAKE GAME
+        #
+        #   Python 3.5.2 Pygame
+
+
+        import pygame
+        import sys
+        import time
+        import random
+
+        # Pygame Init
+        init_status = pygame.init()
+        if init_status[1] > 0:
+            print("(!) Had {0} initialising errors, exiting... ".format(init_status[1]))
+            sys.exit()
+        else:
+            print("(+) Pygame initialised successfully ")
+
+        # Play Surface / Powłoka, Plansza
+        size = width, height = 640, 320
+        playSurface = pygame.display.set_mode(size)
+        pygame.display.set_caption("Snake Game")
+
+        # Colors
+        red = pygame.Color(255, 0, 0)
+        green = pygame.Color(0, 255, 0)
+        black = pygame.Color(0, 0, 0)
+        white = pygame.Color(255, 255, 255)
+        brown = pygame.Color(165, 42, 42)
+
+        # FPS controller
+        fpsController = pygame.time.Clock()
+
+        # Game settings
+        delta = 10
+        snakePos = [100, 50]
+        snakeBody = [[100, 50], [90, 50], [80, 50]]
+        foodPos = [400, 50]
+        foodSpawn = True  # parametr wskazuje czy jedzenie jest na plnszy
+        direction = 'RIGHT'  # w ktrórą w stronę wystaruje snake
+        changeto = ''
+        score = 0
+
+
+        # Game Over
+        def gameOver():
+            myFont = pygame.font.SysFont('monaco', 72)
+            GOsurf = myFont.render("Game Over", True, red)
+            GOrect = GOsurf.get_rect()
+            GOrect.midtop = (320, 25)
+            playSurface.blit(GOsurf, GOrect)
+            showScore(0)
+            pygame.display.flip()
+            time.sleep(4)
+            pygame.quit()
+            sys.exit()
+
+
+        # Show Score
+        def showScore(choice=1):
+            SFont = pygame.font.SysFont('monaco', 32)
+            Ssurf = SFont.render("Score  :  {0}".format(score), True, black)
+            Srect = Ssurf.get_rect()
+            if choice == 1:
+                Srect.midtop = (80, 10)
+            else:
+                Srect.midtop = (320, 100)
+            playSurface.blit(Ssurf, Srect)
+
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                        changeto = "RIGHT"
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                        changeto = "LEFT"
+                    if event.key == pygame.K_UP or event.key == pygame.K_w:
+                        changeto = "UP"
+                    if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                        changeto = "DOWN"
+            if changeto == "RIGHT" and direction != 'LEFT':
+                direction = changeto
+            if changeto == "LEFT" and direction != 'RIGHT':
+                direction = changeto
+            if changeto == "DOWN" and direction != 'UP':
+                direction = changeto
+            if changeto == "UP" and direction != 'DOWN':
+                direction = changeto
+            if direction == 'RIGHT':
+                snakePos[0] += delta
+            if direction == 'LEFT':
+                snakePos[0] -= delta
+            if direction == 'UP':
+                snakePos[1] -= delta
+            if direction == 'DOWN':
+                snakePos[1] += delta
+
+            # Snake body mechanism
+            snakeBody.insert(0, list(snakePos))
+            if snakePos == foodPos:
+                foodSpawn = False
+                score += 1
+            else:
+                snakeBody.pop()
+            if not foodSpawn:
+                foodPos = [random.randrange(1, width // 10) * delta, random.randrange(1, height // 10) * delta]
+                foodSpawn = True
+
+            playSurface.fill(white)
+            for pos in snakeBody:
+                pygame.draw.rect(playSurface, green, pygame.Rect(pos[0], pos[1], delta, delta))
+            pygame.draw.rect(playSurface, brown, pygame.Rect(foodPos[0], foodPos[1], delta, delta))
+
+            # Bounds / Granice
+            if snakePos[0] >= width or snakePos[0] < 0:
+                gameOver()
+            if snakePos[1] >= height or snakePos[1] < 0:
+                gameOver()
+
+            # Self hit
+            for block in snakeBody[1:]:
+                if snakePos == block:
+                    gameOver()
+            showScore()
+            pygame.display.flip()
+
+            # Slow down the snake's movement
+            pygame.time.delay(100)  # Delay for 100 milliseconds (0.1 seconds)
+
+            fpsController.tick(20)
+                </code>
+            </pre>
+        </div>
+      </div>
+    </main>
+    <footer class="main-footer social-menu">
+        <ul>
+          <li class='sm'><a href=""><i class="fab fa-facebook-square"></i></a></li>
+          <li class='sm'><a href=""><i class="fab fa-instagram"></i></a></li>
+          <li class='sm'><a href="https://www.linkedin.com/in/radosław-stawiszyński-2643b6251/"><i class="fab fa-linkedin"></i></a></li>
+        </ul>
+    </footer>
+</body>
+</html>

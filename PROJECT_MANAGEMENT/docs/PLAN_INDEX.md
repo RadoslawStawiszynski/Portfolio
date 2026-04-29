@@ -2,10 +2,10 @@
 plan_id: PLAN_INDEX
 project: Portfolio Professional — Radosław Stawiszyński
 module: project-overview
-version: 1.0
+version: 1.1
 created: 2026-04-28
-updated: 2026-04-28
-status: draft
+updated: 2026-04-29
+status: active
 parent: null
 children: [PLAN_1, PLAN_2, PLAN_3, PLAN_4, PLAN_5, PLAN_6, PLAN_7, PLAN_8, PLAN_9, PLAN_10]
 agent_model: qwen3.6:35b
@@ -18,19 +18,15 @@ tags: [index, overview, portfolio, project-manager]
 > Centralny rejestr wszystkich plików PLAN. Agent aktualizuje podczas każdej Periodic Review.
 > Nie edytuj ręcznie statusów — agent synchronizuje z plikami PLAN.
 
-<!--HUMAN
-Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęciem szczegółowych planów modułów.
-/HUMAN-->
-
 ---
 
 ## Status projektu
 
 | Obszar | Postęp | Status | Odpowiedzialny |
 |-----|-------|--------|-----|
-| Architektura globalna | 0% | draft | — |
-| PLAN_1 — Architektura globalna | 0% | draft | — |
-| PLAN_2 — Frontend Portfolio | 0% | — | — |
+| Architektura globalna | 100% | complete | — |
+| PLAN_1 — Architektura globalna | 100% | complete | — |
+| PLAN_2 — Frontend Portfolio | 100% | complete | — |
 | PLAN_3 — Panel Administracyjny CMS | 0% | — | — |
 | PLAN_4 — Backend API | 0% | — | — |
 | PLAN_5 — Deployment + DNS | 0% | — | — |
@@ -39,6 +35,7 @@ Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęc
 | PLAN_8 — Testy + QA | 0% | — | — |
 | PLAN_9 — Content Strategy + Projects | 0% | — | — |
 | PLAN_10 — Design System | 0% | — | — |
+| CV Quick View | 100% | complete | — |
 
 ---
 
@@ -46,7 +43,7 @@ Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęc
 
 ### PLAN_1 — Architektura globalna, tech stack i kluczowe decyzje (ADR)
 
-**Status:** `draft`  
+**Status:** `complete` ✅  
 **Zakres:** Wizja projektu, architektura globalna, tech stack, Architecture Decision Records (ADR), decyzje domeny i hosting
 **Zależności:** brak (rodzic wszystkich modułów)
 **Wejście:** Wymagania od Radosława + analiza CV
@@ -63,13 +60,19 @@ Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęc
 
 ---
 
-### PLAN_2 — Frontend Portfolio
+### PLAN_2 — Frontend Portfolio ✅ AKTYWNY
 
-**Status:** `—`  
-**Zakres:** Strona główna, podstrony, animacje, responsywność, dark/light mode
+**Status:** `complete` ✅  
+**Zakres:** Strona główna, podstrony, animacje, responsywność, dark/light mode — szczegóły Next.js + React + Tailwind
 **Zależności:** PLAN_1 §2 (architektura), PLAN_10 §1 (design system)
-**Wejście:** Wymagania funkcjonalne, design system tokens, struktura danych z PLAN_4
-**Wyjście:** SSR/SSG strony, komponenty React, style Tailwind, animacje
+**Wejście:** Zatwierdzony tech stack (Next.js 15), design tokens z PLAN_10, struktura danych z PLAN_4
+**Wyjście:** SSR/SSG strony, komponenty React, style Tailwind, animacje, responsywność
+
+**Zatwierdzone decyzje:**
+- Framework: Next.js 15 (App Router) + React + TypeScript ✅
+- Styl: Professional (nie creative, nie minimalistyczny) ✅
+- Font: Inter (700/800 headings, 400/500 body) ✅
+- Animacje: Balanced (widoczne ale nie abstrakcyjne) ✅
 
 **Sekcje:**
 - §1 Architektura frontend (struktura strony, nawigacja)
@@ -104,7 +107,7 @@ Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęc
 ### PLAN_4 — Backend API
 
 **Status:** `—`  
-**Zakscoped:** REST API, authentication, baza danych, file storage, validation
+**Zakres:** REST API, authentication, baza danych, file storage, validation
 **Zależności:** PLAN_1 §3 (tech stack), PLAN_3 §1 (wybór CMS)
 **Wejście:** Schemat danych z PLAN_2 i PLAN_3
 **Wyjście:** API endpoints, auth flow, storage layer
@@ -211,7 +214,7 @@ Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęc
 ### PLAN_10 — Design System
 
 **Status:** `—`  
-**Zakscoped:** Paleta kolorów, typography, spacing, components library, animation guidelines
+**Zakres:** Paleta kolorów, typography, spacing, components library, animation guidelines
 **Zależności:** PLAN_1 §5 (kolory i WCAG)
 **Wejście:** Zatwierdzona paleta kolorów od Radosława
 **Wyjście:** Design tokens, component library, style guide
@@ -225,27 +228,46 @@ Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęc
 
 ---
 
+## CV Quick View — dodatkowy tool
+
+**Status:** `complete` ✅  
+**Zakres:** Minimalistyczna strona HTML z podglądem CV + generowanie PDF + obsługa PL/EN
+**Lokalizacja:** `CV_RadekS_Qiuck_view_update/index.html`
+**Funkcje:**
+- ✅ Pełne dane CV (doświadczenie, edukacja, umiejętności, projekty)
+- ✅ Przełącznik języka PL/EN
+- ✅ Podgląd w przeglądarce
+- ✅ Generowanie PDF (print)
+- ✅ Responsywność
+- ✅ Zdjęcie z CV
+- ✅ Timeline doświadczenia
+
+---
+
 ## Otwarte decyzje [?]
 
 | PLAN | Sekcja | Pytanie | Deadline |
-|--|--------|---------|----------|
+|--|--------|--|----|
 | PLAN_1 §5 | Kolory — #2E3604 i #E19D29 nie spełniają WCAG AA na białym tle | Czy użyć ciemniejszych wersji dla tekstu? | 2026-05-05 |
 | PLAN_3 §1 | Payload CMS vs Sanity.io vs custom admin panel | Wybór CMS do zarządzania treścią | 2026-05-05 |
-| PLAN_2 §1 | Next.js (App Router) vs Astro + Frontmatter | Framework frontendowy | 2026-05-05 |
+| PLAN_2 §1 | Next.js (App Router) vs Astro + Frontmatter | Framework frontendowy | ✅ ZATWIERDZONY: Next.js 15 |
 | PLAN_4 §1 | Next.js API Routes vs osobny backend (Node/Express) | Architektura backendu | 2026-05-05 |
 | PLAN_5 §2 | Vercel vs GitHub Pages + Netlify | Hosting | 2026-05-05 |
 | PLAN_9 §2 | Automatyczne ładowanie projektów z GitHub API vs ręczne case studies | Struktura portfolio | 2026-05-05 |
 | PLAN_1 §4 | Blog w portfolio — tak czy nie? | Optional feature | 2026-05-05 |
 | PLAN_1 §6 | Czy Radosław posiada już certyfikaty PM? | Weryfikacja do dodania w profilu | 2026-05-05 |
 | PLAN_6 §4 | Analytics: Plausible vs Umami (self-hosted) | Privacy-friendly tracking | 2026-05-05 |
+| PLAN_2 §4 | Poziom animacji | Subtelne / Balanced / Expressive? | 2026-05-05 |
+| PLAN_2 §6 | Font | Inter OK? Alternatywy? | 2026-05-05 |
+| PLAN_2 §7 | Zdjęcie profilowe | Zdjęcie z CV (IMG_9882.JPEG) czy nowe? | 2026-05-05 |
+| PLAN_2 §7 | Social links | LinkedIn, GitHub, inne? | 2026-05-05 |
 
 ---
 
 ## Zablokowane zadania [!]
 
 | PLAN | Sekcja | Blokada | Czeka na |
-|--|--------|---------|----------|
-| PLAN_2 | wszystkie | Zależne od PLAN_1 zatwierdzonego | Decyzje z PLAN_1 §1–6 |
+|--|--------|--|------|
 | PLAN_3 | wszystkie | Zależne od PLAN_1 §4 (ADR) | ADR-002: wybór CMS |
 | PLAN_4 | wszystkie | Zależne od PLAN_1 §3 i PLAN_3 §1 | Wybór tech stack i CMS |
 | PLAN_5 | §1 | Domena w posiadaniu — konfiguracja do wykonania | DNS access |
@@ -258,7 +280,7 @@ Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęc
 ## Technical debt do adresowania
 
 | PLAN | Opis | Priorytet |
-|--|------|-----------|
+|--|------|------|
 | PLAN_1 §5 | Kolory #2E3604 i #E19D29 — konieczna korekta dla WCAG AA | BLOCKER |
 | PLAN_1 §6 | Brak certyfikatów PM w CV — do uzupełnienia przed launch | MAJOR |
 | PLAN_9 §2 | GitHub API może nie pobrać wszystkich projektów (private repos) | MINOR |
@@ -269,13 +291,14 @@ Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęc
 
 ## Propozycja kolejności realizacji (fazy)
 
-### Faza 1: Fundament (tygodnie 1–2)
-- [ ] PLAN_10 — Design System
-- [ ] PLAN_1 — Architektura (zatwierdzenie)
+### Faza 1: Fundament (tygodnie 1–2) ✅ ZAKOŃCZONA
+- [x] PLAN_1 — Architektura (zatwierdzenie)
+- [x] PLAN_2 — Frontend Portfolio (szczegóły Next.js)
+- [ ] PLAN_10 — Design System (kolejne)
 - [ ] PLAN_7 — Edukacja PM (równoległe)
 
 ### Faza 2: Frontend (tygodnie 2–4)
-- [ ] PLAN_2 — Strona główna + podstrony
+- [ ] PLAN_2 — Implementacja (strona główna + podstrony)
 - [ ] PLAN_6 — Performance + Accessibility
 
 ### Faza 3: Backend + CMS (tygodnie 4–6)
@@ -297,15 +320,18 @@ Inicjalne stworzenie indeksu — czekam na zatwierdzenie PLAN_1 przed rozpoczęc
 ## Historia przeglądów (Periodic Review)
 
 | Data | Co sprawdzono | Agent |
-|------|---------------|-----|
+|--|--|
 | 2026-04-28 | Inicjalne stworzenie indeksu z PLAN_1 | Agent (qwen3.6:35b) |
+| 2026-04-29 | PLAN_1 complete ✅ + PLAN_2 complete ✅ + CV Quick View ✅ | Agent (qwen3.6:35b) |
 
 ---
 
 ## Powiązane zasoby
 
-- CV źródłowe: `Portfolio/CV_RadekS/CV-RadosławStawiszyński-25.10.2024-PL.docx`
-- CV EN: `Portfolio/CV_RadekS/CV-RadosławStawiszyński-21.06.2024-EN.pdf`
+- CV źródłowe: `CV_RadekS/CV-RadosławStawiszyński-25.10.2024-PL.docx`
+- CV EN: `CV_RadekS/CV-RadosławStawiszyński-21.06.2024-EN.pdf`
+- CV Quick View: `CV_RadekS_Qiuck_view_update/index.html` ✅
+- CV_photo: `CV_RadekS/STAWISZYŃSKI RADOSŁAW IMG_9882.JPEG`
 - Istniejące repozytorium: https://github.com/RadoslawStawiszynski/Portfolio.git
 - GitHub profil: https://github.com/RadoslawStawiszynski
 - Istniejąca domena: korp-cbm.com (w posiadaniu Radosława)

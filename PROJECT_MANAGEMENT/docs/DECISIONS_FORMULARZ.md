@@ -16,58 +16,70 @@ status: waiting-for-human
 ## 🔴 PRIORYTET 1 — Architektura (musi być przed kodem)
 
 ### 1.1 Framework frontend
+
 > Portfolio ma być budowane na:
 
 - [x] **Next.js 15** — React, SSR, Payload CMS (PROPOZYCJA)
 - [ ] **Astro 5** — lżejszy, island architecture
-- [ ] **Inne:** ___________
+- [ ] **Inne:** \***\*\_\_\_\*\***
 
 **Uzasadnienie (opcjonalne):**
-<!--HUMAN
+dobry wybór frameworka, Lubie REACTA
+
+<!--HUMAN dobry wybór frameworka, Lubie REACTA
 /-->
 
 ---
 
 ### 1.2 CMS (panel administracyjny)
+
 > Panel do zarządzania treścią:
 
 - [x] **Payload CMS** — open-source, w tym samym repo, TypeScript (PROPOZYCJA)
 - [ ] **Sanity.io** — SaaS, szybszy setup
 - [ ] **Własny admin panel** — full control, więcej pracy
 - [ ] **Bez CMS** — wszystkie treści hard-coded / markdown files
-- [ ] **Inne:** ___________
+- [ ] **Inne:** \***\*\_\_\_\*\***
 
 **Uzasadnienie (opcjonalne):**
+
 <!--HUMAN
 /-->
 
 ---
 
 ### 1.3 Baza danych
+
 > Dane portfolio (projekty, strony, treści):
 
-- [x] **PostgreSQL** — strukturalne, Prisma ORM, Railway (PROPOZYCJA)
+- [ ] **PostgreSQL** — strukturalne, Prisma ORM, Railway (PROPOZYCJA)
 - [ ] **MongoDB** — flexible schema, Atlas free tier
-- [ ] **SQLite** — lokalna, bez zewnętrznych zależności
+- [x] **SQLite** — lokalna, bez zewnętrznych zależności
 - [ ] **Headless CMS database** — Payload/Sanity自带
-- [ ] **Inne:** ___________
+- [ ] **Inne:** \***\*\_\_\_\*\***
 
 **Uzasadnienie (opcjonalne):**
+jesli to mozliwe chciałbym uniknąć instalowania zależności jesli juz trzeba to musi być obsługa kontenerów dockera, albo skrypt do uruchomienia, automatycznie.
+
 <!--HUMAN
 /-->
 
 ---
 
 ### 1.4 Hosting
+
 > Gdzie strona będzie hostowana:
 
-- [x] **Vercel** — zero-config Next.js, PR previews (PROPOZYCJA)
+- [ ] **Vercel** — zero-config Next.js, PR previews (PROPOZYCJA)
 - [ ] **GitHub Pages** — darmowy, ale tylko SSG
 - [ ] **Netlify** — SSG + edge functions
 - [ ] **Self-hosted** — własny serwer VPS
-- [ ] **Inne:** ___________
+- [x] **Inne:** \***SEO HOST** -wariant HOSTING SH2
 
 **Uzasadnienie (opcjonalne):**
+Potzreba dodoatkowo instrukcji i wymagania dotyczace serwera gdzie miałaby byc strona. Serwer musi być obługiwany prze agenta (propozycja jaki i jak)
+moja propozycja jest do rozważenia. Przeanalzuj ją i podaj informacje
+
 <!--HUMAN
 /-->
 
@@ -76,6 +88,7 @@ status: waiting-for-human
 ## 🟡 PRIORYTET 2 — Design (przed frontendem)
 
 ### 2.1 Paleta kolorów
+
 > Propozycja: `#2E3604`, `#4E5E07`, `#E19D29`, `#D8D2CF`, `#8D8179`
 
 ⚠️ **Uwaga:** Kolory `#2E3604` (kontrast 2.5:1) i `#E19D29` (1.6:1) **nie spełniają WCAG AA**.
@@ -83,29 +96,32 @@ status: waiting-for-human
 - [x] **Użyć ciemniejszych wersji** — `#1A1F00`, `#3A4605`, zachować klimat (PROPOZYCJA)
 - [ ] **Zachować kolory** — ale używać tylko jako akcentów graficznych
 - [ ] **Nowa paleta** — redesign, neutralny branding PM
-- [ ] **Moja paleta:** 
-  - Kolor 1: ___________
-  - Kolor 2: ___________
-  - Kolor 3: ___________
-  - Kolor 4: ___________
-  - Kolor 5: ___________
+- [ ] **Moja paleta:**
+  - Kolor 1: \***\*\_\_\_\*\***
+  - Kolor 2: \***\*\_\_\_\*\***
+  - Kolor 3: \***\*\_\_\_\*\***
+  - Kolor 4: \***\*\_\_\_\*\***
+  - Kolor 5: \***\*\_\_\_\*\***
 
 **Uzasadnienie (opcjonalne):**
+
 <!--HUMAN
 /-->
 
 ---
 
 ### 2.2 Styl portfolio
+
 > Jak ma wyglądać portfolio:
 
 - [x] **Profesjonalne / corporate** — czyste, strukturalne, PM-ready
 - [ ] **Kreatywne / designer** — animacje, non-standard layout
 - [ ] **Minimalistyczne** — mniej jest więcej
 - [ ] **Hybryda** — profesjonalna struktura + kreatywne akcenty
-- [ ] **Inny styl:** ___________
+- [ ] **Inny styl:** \***\*\_\_\_\*\***
 
 **Uzasadnienie (opcjonalne):**
+
 <!--HUMAN
 /-->
 
@@ -114,93 +130,112 @@ status: waiting-for-human
 ## 🟡 PRIORYTET 3 — Zawartość (przed deploymentem)
 
 ### 3.1 Blog w portfolio
+
 > Czy dodać sekcję bloga (wpisy o projektach, technologiach, doświadczeniu PM):
 
-- [x] **Tak** — wzmacnia profil PM (PROPOZYCJA)
-- [ ] **Nie** — tylko case studies i projekty
+- [ ] **Tak** — wzmacnia profil PM (PROPOZYCJA)
+- [x] **Nie** — tylko case studies i projekty
 - [ ] **Potem** — dodać po launchem
 
 **Uzasadnienie (opcjonalne):**
+
 <!--HUMAN
 /-->
 
 ---
 
 ### 3.2 GitHub auto-import
+
 > Automatyczne ładowanie projektów z GitHub API vs ręczne case studies:
 
 - [x] **GitHub API + ręczne case studies** — pół-automatyczny (PROPOZYCJA)
 - [ ] **Tylko ręczne** — wszystkie case studies pisane ręcznie
 - [ ] **Tylko automatyczny** — bez case studies, tylko listy projektów
-- [ ] **Inne:** ___________
+- [ ] **Inne:** \***\*\_\_\_\*\***
 
 **Uzasadnienie (opcjonalne):**
+
 <!--HUMAN
 /-->
 
 ---
 
 ### 3.3 Projekty PM do eksponowania
+
 > Które projekty z CV pokazać jako case studies? (zaznacz)
 
 - [x] **Instalacje fotowoltaiczne B2B** (od 03/2021) — kierowanie biurem projektowym
 - [x] **Expertel Serwis** (10/2019 – 09/2020) — koordynacja zespołów
 - [x] **Optical Core / Qi Connect** (04/2018 – 08/2019) — koordynacja 15 osób
 - [x] **Creative Ceramika** (07/2016 – 01/2018) — projektant, koordynacja sklepu
-- [ ] **Dodatkowe projekty:** ___________
+- [ ] **Dodatkowe projekty:** \***\*\_\_\_\*\***
 
 **Które projekty z GitHub dodać jako case studies:**
-<!--HUMAN
-Wymien projekty z GitHub które chcesz pokazać:
-/-->
+
+1. powyższe projekty muszą byc opracowane pod kontem programisty PYTHON i PM
+2. podaj sam propozycje projektów
+3. <!--HUMAN
+   Wymien projekty z GitHub które chcesz pokazać:
+   /-->
 
 ---
 
 ## 🟢 PRIORYTET 4 — Rozwój PM (równoległy)
 
 ### 4.1 Certyfikacje PM
+
 > Które certyfikacje chcesz dopracować przed launchem?
 
 - [ ] **PSM I** (Professional Scrum Master) — 40–60h nauki, eksam online
 - [ ] **CSM** (Certified Scrum Master) — 14h kurs + certyfikat
 - [ ] **PMP** — wymaga 3 lata PM experience, 80–120h nauki
-- [ ] **PSMB** (Professional Scrum Master Beginner) — 20–30h
+- [x] **PSMB** (Professional Scrum Master Beginner) — 20–30h
 - [ ] **Żadnej** — skupiam się na narzędziach, nie certyfikatach
 
 **Uzasadnienie (opcjonalne):**
+
+1. podaj propozycje gdzie mozna wykonać takie szkolenie np youtube, udemy?
 <!--HUMAN
 /-->
 
 ---
 
 ### 4.2 Narzędzia PM do nauki
+
 > Które narzędzia PM chcesz opanować przed launchem? (zaznacz)
 
 - [x] **Jira / Confluence** — standard w zespołach dev (PROPOZYCJA)
-- [x] **Notion** — dokumentacja (PROPOZYCJA)
+- [ ] **Notion** — dokumentacja (PROPOZYCJA)
 - [ ] **ClickUp** — alternatywa dla Jira
 - [ ] **Miro** — whiteboard / brainstorming
-- [ ] **Trello** — kanban dla projektów
+- [x] **Trello** — kanban dla projektów
 - [ ] **Toggl** — time tracking
-- [ ] **draw.io / Mermaid** — diagramy
+- [x] **draw.io / Mermaid** — diagramy
 - [ ] **Postman** — API testing (dla PM rozumiejącego integracje)
 
 **Dodatkowe narzędzia:**
+
+1. Wiecej propozycji.
+2. Kanban cline ?
 <!--HUMAN
 /-->
 
 ---
 
 ### 4.3 Frameworki PM
+
 > Które frameworki chcesz dodać do CV?
 
 - [x] **Agile / Scrum** — podstawa zarządzania w IT (PROPOZYCJA)
 - [x] **Kanban** — wizualizacja przepływu pracy
 - [ ] **Waterfall** — tradycyjne zarządzanie
 - [ ] **Lean / Six Sigma** — optymalizacja procesów
-- [ ] **Inne:** ___________
+- [ ] **Inne:** \***\*\_\_\_\*\***
 
 **Uzasadnienie (opcjonalne):**
+
+1. wiecej propozycji
+
 <!--HUMAN
 /-->
 
@@ -209,6 +244,7 @@ Wymien projekty z GitHub które chcesz pokazać:
 ## 🟢 PRIORYTET 5 — Deployment (przed launchem)
 
 ### 5.1 Analytics
+
 > Narzędzie do śledzenia odwiedzin:
 
 - [x] **Umami** — self-hosted, darmowy, privacy-friendly (PROPOZYCJA)
@@ -217,19 +253,22 @@ Wymien projekty z GitHub które chcesz pokazać:
 - [ ] **Bez analytics** — nie potrzebuję
 
 **Uzasadnienie (opcjonalne):**
+
 <!--HUMAN
 /-->
 
 ---
 
 ### 5.2 Subdomen konfiguracja
+
 > DNS dla radoslaw-staw.korp-cbm.com:
 
-- [ ] **Cloudflare CNAME** → Vercel (PROPOZYCJA — potrzebuję dostęp do Cloudflare dashboard)
+- [x] **Cloudflare CNAME** → Vercel (PROPOZYCJA — potrzebuję dostęp do Cloudflare dashboard)
 - [ ] **Cloudflare A record** → IP Vercel
-- [ ] **Inne:** ___________
+- [ ] **Inne:** \***\*\_\_\_\*\***
 
 **Czy masz dostęp do Cloudflare dashboard?**
+
 - [x] **Tak** — podasz credentials
 - [ ] **Nie** — skonfiguruję później
 
@@ -244,24 +283,24 @@ Tutaj wpisz swoje ostateczne decyzje — skopiuj zaznaczone opcje:
 ```yaml
 # Decyzje końcowe:
 
-framework: "nextjs"         # nextjs | astro
-cms: "payload"              # payload | sanity | custom | none
-database: "postgresql"      # postgresql | mongodb | sqlite | cms-db
-hosting: "vercel"           # vercel | github-pages | netlify | self-hosted
-colors:                     # paleta kolorów
-  primary: "#1A1F00"        # ciemna zieleń (skorygowana)
-  secondary: "#3A4605"      # zielona (skorygowana)
-  accent: "#E19D29"         # złota (używana na ciemnym tle)
-  background: "#D8D2CF"     # jasny beż
-  text-muted: "#8D8179"     # szary
-style: "professional"       # professional | creative | minimalist | hybrid
-blog: true                  # true | false
-github-import: true         # true | false
-certifications: ["PSM I"]   # lista certyfikatów
-tools: ["jira", "notion"]   # lista narzędzi PM
-frameworks: ["agile", "scrum", "kanban"]  # lista frameworków
-analytics: "umami"          # umami | plausible | ga4 | none
-dns: "cloudflare-cname"     # cloudflare-cname | cloudflare-a | inne
+framework: "nextjs" # nextjs | astro
+cms: "payload" # payload | sanity | custom | none
+database: "postgresql" # postgresql | mongodb | sqlite | cms-db
+hosting: "vercel" # vercel | github-pages | netlify | self-hosted
+colors: # paleta kolorów
+  primary: "#1A1F00" # ciemna zieleń (skorygowana)
+  secondary: "#3A4605" # zielona (skorygowana)
+  accent: "#E19D29" # złota (używana na ciemnym tle)
+  background: "#D8D2CF" # jasny beż
+  text-muted: "#8D8179" # szary
+style: "professional" # professional | creative | minimalist | hybrid
+blog: true # true | false
+github-import: true # true | false
+certifications: ["PSM I"] # lista certyfikatów
+tools: ["jira", "notion"] # lista narzędzi PM
+frameworks: ["agile", "scrum", "kanban"] # lista frameworków
+analytics: "umami" # umami | plausible | ga4 | none
+dns: "cloudflare-cname" # cloudflare-cname | cloudflare-a | inne
 ```
 
 ---

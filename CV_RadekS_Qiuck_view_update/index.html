@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV — Radosław Stawiszyński | Quick View</title>
+    <style>
+        :root {
+            --primary: #2E3607;
+            --secondary: #4E5E07;
+            --accent: #E19D29;
+            --bg: #F5F3F2;
+            --card-bg: #FFFFFF;
+            --text: #2E3604;
+            --muted: #8D8179;
+            --border: #D8D2CF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .photo-container {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--accent);
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            font-size: 3rem;
+            opacity: 0.5;
+        }
+
+        .header-info h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .header-info .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 0.8rem;
+        }
+
+        .header-info .contact-line {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .header-info .contact-line span {
+            margin: 0 0.8rem;
+        }
+
+        /* ── Controls ── */
+        .controls {
+            max-width: 900px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.6rem 1.4rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: #c48820; }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: var(--accent); }
+
+        .lang-switcher {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* ── Main content ── */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 3rem;
+        }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .section h2 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section h2 .icon { font-size: 1.2em; }
+
+        .section p, .section li {
+            font-size: 0.95rem;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .section ul {
+            padding-left: 1.5rem;
+        }
+
+        .section li {
+            margin-bottom: 0.4rem;
+        }
+
+        /* ── Timeline ── */
+        .timeline {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.2rem;
+            padding-left: 1rem;
+        }
+
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 6px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--card-bg);
+        }
+
+        .timeline-item .date {
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .timeline-item .title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--secondary);
+        }
+
+        .timeline-item .company {
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-item .description {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .timeline-item .description ul {
+            margin-top: 0.3rem;
+        }
+
+        /* ── Skills ── */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .skill-category h3 {
+            font-size: 1rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.3rem 0;
+            font-size: 0.9rem;
+        }
+
+        .skill-level {
+            display: flex;
+            gap: 2px;
+        }
+
+        .skill-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .skill-dot.filled { background: var(--accent); }
+
+        /* ── PDF buttons ── */
+        .pdf-section {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .pdf-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 2rem;
+            margin: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .pdf-btn-pl {
+            background: var(--secondary);
+            color: white;
+        }
+        .pdf-btn-pl:hover { background: var(--primary); }
+
+        .pdf-btn-en {
+            background: var(--accent);
+            color: white;
+        }
+        .pdf-btn-en:hover { background: #c48820; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .header-inner { flex-direction: column; text-align: center; }
+            .header-info .contact-line { display: flex; flex-direction: column; gap: 0.2rem; }
+            .section { padding: 1.2rem 1.5rem; }
+            .skills-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Print ── */
+        @media print {
+            .controls, .pdf-section { display: none !important; }
+            .section { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════ HEADER ═══════════════ -->
+    <div class="header">
+        <div class="header-inner">
+            <div class="photo-container">
+                <img src="../CV_RadekS/STAWISZYŃSKI RADOSŁAW IMG_9882.JPEG" 
+                     alt="Radosław Stawiszyński" 
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=photo-placeholder>👤</span>';">
+            </div>
+            <div class="header-info">
+                <h1 id="name">Radosław Stawiszyński</h1>
+                <p class="subtitle" id="subtitle">Projekt Manager z kompetencjami technicznymi</p>
+                <p class="contact-line">
+                    <span id="email-email">📧 radosław.stawiszynski@gmail.com</span>
+                    <span id="phone-email">📱 +48 789 273 573</span>
+                    <span id="location-email">📍 Tychy, Polska</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════ CONTROLS ═══════════════ -->
+    <div class="controls">
+        <select class="lang-switcher" id="langSwitcher" onchange="switchLang(this.value)">
+            <option value="pl">🇵🇱 Polski</option>
+            <option value="en">🇬🇧 English</option>
+        </select>
+        <button class="btn btn-primary" onclick="printCV()">🖨️ <span id="btn-print">Drukuj / PDF</span></button>
+        <button class="btn btn-secondary" onclick="downloadCV('pl')">📄 <span id="btn-download-pl">Pobierz CV PL</span></button>
+        <button class="btn btn-secondary" onclick="downloadCV('en')">📄 <span id="btn-download-en">Download CV EN</span></button>
+    </div>
+
+    <!-- ═══════════════ CONTENT ═══════════════ -->
+    <div class="content">
+
+        <!-- ── Podsumowanie ── -->
+        <div class="section">
+            <h2><span class="icon">🎯</span> <span data-pl="Podsumowanie" data-en="Summary">Podsumowanie</span></h2>
+            <p id="summary-pl">Z zapałem poszukuję okazji do zanurzenia się w fascynującym świecie technologii, gdzie mogę rozwijać się w obszarach Frontend, Backend lub Big Data. Jestem gotowy na nowe wyzwania i szukam inspirującego środowiska, które pozwoli mi wykorzystać moją pasję do programowania oraz rozwijać umiejętności praktyczne. Oczekuję możliwości współpracy z zespołem ekspertów, którzy podzielają moje zainteresowania i chęć ciągłego rozwoju w branży technologicznej.</p>
+            <p id="summary-en" style="display:none;">With enthusiasm, I seek opportunities to immerse myself in the fascinating world of technology, developing skills in Frontend, Backend, or Big Data. I am ready for new challenges and looking for an inspiring environment that allows me to apply my passion for programming and develop practical skills. I look forward to collaborating with a team of experts who share my interest in continuous growth in the tech industry.</p>
+        </div>
+
+        <!-- ── Doświadczenie ── -->
+        <div class="section">
+            <h2><span class="icon">💼</span> <span data-pl="Doświadczenie zawodowe" data-en="Professional Experience">Doświadczenie zawodowe</span></h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="date" data-pl="Marzec 2021 – obecnie" data-en="March 2021 – present">Marzec 2021 – obecnie</div>
+                    <div class="title">Kierownik Biura Projektowego</div>
+                    <div class="company">CBM Radosław Stawiszyński (B2B)</div>
+                    <div class="description">
+                        <ul>
+                            <li data-pl="Kierowanie biurem projektowym instalacji fotowoltaicznych, pomp ciepła, Smart Home (Grenton)" data-en="Leading a project office for photovoltaic installations, heat pumps, Smart Home (Grenton)">Kierowanie biurem projektowym instalacji fotowoltaicznych, pomp ciepła, Smart Home (Grenton)</li>
+                            <li data-pl="Kierowanie działem logistycznym, magazynem, zamówieniami i zespołami montażowymi" data-en="Managing logistics, warehouse, orders and installation teams">Kierowanie działem logistycznym, magazynem, zamówieniami i zespołami montażowymi</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="date" data-pl="Październik 2019 – Wrzesień 2020" data-en="October 2019 – September 2020">Październik 2019 – Wrzesień 2020</div>
+                    <div class="title" data-pl="Koordynator ds. technicznych" data-en="Technical Coordinator">Koordynator ds. technicznych</div>
+                    <div class="company">Expertel Serwis – Katowice</div>
+                    <div class="description">
+                        <ul>
+                            <li data-pl="Koordynowanie pracy zespołów telekomunikacyjnych i fotowoltaicznych" data-en="Coordinating telecom and photovoltaic teams">Koordynowanie pracy zespołów telekomunikacyjnych i fotowoltaicznych</li>
+                            <li data-pl="Nadzór nad postępem pracy, dokumentacja i raportowanie" data-en="Supervising work progress, documentation and reporting">Nadzór nad postępem pracy, dokumentacja i raportowanie</li>
+                            <li data-pl="Koordynacja magazynu i zamawianie towaru" data-en="Warehouse coordination and ordering">Koordynacja magazynu i zamawianie towaru</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="date" data-pl="Kwiecień 2018 – Sierpień 2019" data-en="April 2018 – August 2019">Kwiecień 2018 – Sierpień 2019</div>
+                    <div class="title" data-pl="Technik Telekomunikacji / Koordynator" data-en="Telecommunications Technician / Coordinator">Technik Telekomunikacji / Koordynator</div>
+                    <div class="company">Optical Core / Qi Connect</div>
+                    <div class="description">
+                        <ul>
+                            <li data-pl="Koordynowanie pracy zespołem 15 osób" data-en="Coordinating a team of 15 people">Koordynowanie pracy zespołem 15 osób</li>
+                            <li data-pl="Zaopatrzenie materiałowe, raportowanie, tworzenie zestawień" data-en="Material procurement, reporting, creating summaries">Zaopatrzenie materiałowe, raportowanie, tworzenie zestawień</li>
+                            <li data-pl="Współpraca z jednostkami administracyjnymi" data-en="Cooperation with administrative units">Współpraca z jednostkami administracyjnymi</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="date" data-pl="Lipiec 2016 – Styczeń 2018" data-en="July 2016 – January 2018">Lipiec 2016 – Styczeń 2018</div>
+                    <div class="title" data-pl="Projektant graficzno-procesowy" data-en="Graphic-Process Designer">Projektant graficzno-procesowy</div>
+                    <div class="company">Creative Ceramika Sp. z o.o.</div>
+                    <div class="description">
+                        <ul>
+                            <li data-pl="Wdrażanie nowych projektów i koordynacja linii produkcyjnej" data-en="Implementing new projects and coordinating production line">Wdrażanie nowych projektów i koordynacja linii produkcyjnej</li>
+                            <li data-pl="Tworzenie technologii produkcji płytek ceramicznych" data-en="Creating ceramic tile production technology">Tworzenie technologii produkcji płytek ceramicznych</li>
+                            <li data-pl="Współpraca z zespołem technicznym we Włoszech (j. angielski)" data-en="Cooperation with Italian technical team (English)">Współpraca z zespołem technicznym we Włoszech (j. angielski)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Edukacja ── -->
+        <div class="section">
+            <h2><span class="icon">🎓</span> <span data-pl="Edukacja" data-en="Education">Edukacja</span></h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="date" data-pl="2 rok (w trakcie)" data-en="2nd year (in progress)">2 rok (w trakcie)</div>
+                    <div class="title" data-pl="Informatyka" data-en="Computer Science">Informatyka</div>
+                    <div class="company" data-pl="Akademia Humastyczno-Ekonomiczna w Łodzi" data-en="Humanistic-Economic Academy in Łódź">Akademia Humastyczno-Ekonomiczna w Łodzi</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="date" data-pl="Przerwane" data-en="Incomplete">Przerwane</div>
+                    <div class="title" data-pl="Chemia Ogólna" data-en="General Chemistry">Chemia Ogólna</div>
+                    <div class="company" data-pl="Politechnika Gdańska" data-en="Gdańsk University of Technology">Politechnika Gdańska</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="date" data-pl="Profil matematyczno-przyrodniczy" data-en="Mathematics-Natural Science Profile">Profil matematyczno-przyrodniczy</div>
+                    <div class="title" data-pl="I Liceum Ogólnokształcące" data-en="1st General Lyceum">I Liceum Ogólnokształcące</div>
+                    <div class="company" data-pl="im. Marii Curie-Skłodowskiej w Tczewie" data-en="named after Maria Curie-Skłodowska in Tczew">im. Marii Curie-Skłodowskiej w Tczewie</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Umiejętności techniczne ── -->
+        <div class="section">
+            <h2><span class="icon">💻</span> <span data-pl="Umiejętności techniczne" data-en="Technical Skills">Umiejętności techniczne</span></h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3 data-pl="Programowanie" data-en="Programming">Programowanie</h3>
+                    <div class="skill-item"><span>Python</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
+                    <div class="skill-item"><span>JavaScript</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
+                    <div class="skill-item"><span>C++</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
+                    <div class="skill-item"><span>Pascal</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-pl="Web" data-en="Web">Web</h3>
+                    <div class="skill-item"><span>HTML/CSS</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
+                    <div class="skill-item"><span>React</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
+                    <div class="skill-item"><span>Vue</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-pl="Bazy danych / Narzędzia" data-en="Databases / Tools">Bazy danych / Narzędzia</h3>
+                    <div class="skill-item"><span>SQL/DB</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
+                    <div class="skill-item"><span>Git/GitHub</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
+                    <div class="skill-item"><span>VS Code / PyCharm</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
+                    <div class="skill-item"><span>Linux</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Umiejętności miękkie ── -->
+        <div class="section">
+            <h2><span class="icon">🤝</span> <span data-pl="Umiejętności miękkie" data-en="Soft Skills">Umiejętności miękkie</span></h2>
+            <div class="skills-grid">
+                <div class="skill-item"><span data-pl="Zarządzanie czasem" data-en="Time Management">Zarządzanie czasem</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div></div></div>
+                <div class="skill-item"><span data-pl="Zarządzanie zespołem" data-en="Team Management">Zarządzanie zespołem</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div></div></div>
+                <div class="skill-item"><span data-pl="Skrupulatność" data-en="Thoroughness">Skrupulatność</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div></div></div>
+                <div class="skill-item"><span data-pl="Odpowiedzialność" data-en="Responsibility">Odpowiedzialność</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div></div></div>
+            </div>
+        </div>
+
+        <!-- ── Certyfikacje ── -->
+        <div class="section">
+            <h2><span class="icon">📜</span> <span data-pl="Certyfikacje i uprawnienia" data-en="Certifications & Qualifications">Certyfikacje i uprawnienia</span></h2>
+            <ul>
+                <li data-pl="Prawo Jazdy Kat. B" data-en="Category B Driver's License">Prawo Jazdy Kat. B</li>
+                <li data-pl="Uprawnienia SEP — D1, E1 verte" data-en="SEP Certificates — D1, E1 verte">Uprawnienia SEP — D1, E1 verte</li>
+            </ul>
+        </div>
+
+        <!-- ── Języki ── -->
+        <div class="section">
+            <h2><span class="icon">🌍</span> <span data-pl="Języki" data-en="Languages">Języki</span></h2>
+            <div class="skills-grid">
+                <div class="skill-item"><span>Polski</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div></div></div>
+                <div class="skill-item"><span>English</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
+                <div class="skill-item"><span>Niemiecki</span><div class="skill-level"><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
+            </div>
+        </div>
+
+        <!-- ── Projekty Python ── -->
+        <div class="section">
+            <h2><span class="icon">🐍</span> <span data-pl="Projekty Python" data-en="Python Projects">Projekty Python</span></h2>
+            <ul>
+                <li><strong>HTTP/FTP/SSH Server</strong> — Serwer obsługujący protokoły HTTP, FTP i SSH</li>
+                <li><strong>File Manager</strong> — Program do zarządzania plikami i katalogami</li>
+                <li><strong>Programming Quiz</strong> — Quiz o programowaniu z zapisem wyników</li>
+                <li><strong>Sudoku</strong> — Gra logiczna z generowaniem i rozwiązywaniem plansz</li>
+                <li><strong>Simple Calculator</strong> — Kalkulator z podstawowymi operacjami</li>
+                <li><strong>Stopwatch</strong> — Aplikacja do pomiaru czasu</li>
+                <li><strong>Find Letter or Number</strong> — Analiza ciągu znaków</li>
+                <li><strong>Snake</strong> — Klasyczna gra węża z interfejsem graficznym</li>
+                <li><strong>Find The Key</strong> — Gra logiczna z zagadkami</li>
+            </ul>
+        </div>
+
+        <!-- ── Projekty Web ── -->
+        <div class="section">
+            <h2><span class="icon">🌐</span> <span data-pl="Projekty Web" data-en="Web Projects">Projekty Web</span></h2>
+            <ul>
+                <li><strong>Accordion</strong> — Interaktywny akordeon (React)</li>
+                <li><strong>Date Counter</strong> — Odliczanie czasu do wydarzenia (React)</li>
+                <li><strong>Flashcards</strong> — Aplikacja do fiszek edukacyjnych (React)</li>
+                <li><strong>Travel List</strong> — Lista bagaży do podróży (React)</li>
+                <li><strong>Dev Profile</strong> — Szablon profilu dewelopera</li>
+                <li><strong>Pizza Menu</strong> — Interaktywne menu pizzerii (React)</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ═══════════════ PDF DOWNLOAD ═══════════════ -->
+    <div class="pdf-section">
+        <p style="font-size:1.1rem; margin-bottom:1rem;" data-pl="Pobierz CV w formacie PDF" data-en="Download CV in PDF format">Pobierz CV w formacie PDF</p>
+        <button class="pdf-btn pdf-btn-pl" onclick="downloadCV('pl')">📄 CV w języku polskim (PDF)</button>
+        <button class="pdf-btn pdf-btn-en" onclick="downloadCV('en')">📄 CV in English (PDF)</button>
+    </div>
+
+    <!-- ═══════════════ SCRIPTS ═══════════════ -->
+    <script>
+        // ── Language switcher ──
+        function switchLang(lang) {
+            const allPl = document.querySelectorAll('[data-pl]');
+            const allEn = document.querySelectorAll('[data-en]');
+            
+            if (lang === 'pl') {
+                allPl.forEach(el => el.style.display = '');
+                allEn.forEach(el => el.style.display = 'none');
+                document.getElementById('summary-pl').style.display = '';
+                document.getElementById('summary-en').style.display = 'none';
+                document.getElementById('email-email').textContent = '📧 radosław.stawiszynski@gmail.com';
+                document.getElementById('email-en').textContent = '';
+                document.getElementById('btn-download-pl').textContent = 'Pobierz CV PL';
+                document.getElementById('btn-download-en').textContent = 'Download CV EN';
+            } else {
+                allPl.forEach(el => el.style.display = 'none');
+                allEn.forEach(el => el.style.display = '');
+                document.getElementById('summary-pl').style.display = 'none';
+                document.getElementById('summary-en').style.display = '';
+                document.getElementById('email-email').textContent = '';
+                document.getElementById('email-en').textContent = '📧 radosław.stawiszynski@gmail.com';
+                document.getElementById('btn-download-pl').textContent = 'Download CV PL';
+                document.getElementById('btn-download-en').textContent = 'Pobierz CV EN';
+            }
+            
+            document.documentElement.lang = lang;
+        }
+
+        // ── Print / PDF ──
+        function printCV() {
+            window.print();
+        }
+
+        // ── Download CV PDF ──
+        function downloadCV(lang) {
+            // Open current page in new window for PDF export
+            const win = window.open('', '_blank');
+            win.document.write('<!DOCTYPE html><html><head><title>CV Radosław Stawiszyński</title>');
+            win.document.write('<style>' + document.querySelector('style').textContent + '</style>');
+            win.document.write('</head><body>');
+            win.document.write(document.querySelector('.content').outerHTML);
+            win.document.write('<div class="pdf-section" style="display:none;"><p>Pobierz CV w formacie PDF</p></div>');
+            win.document.write('</body></html>');
+            win.document.close();
+            
+            setTimeout(() => {
+                win.print();
+            }, 500);
+        }
+    </script>
+
+</body>
+</html>

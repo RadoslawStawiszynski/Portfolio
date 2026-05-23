@@ -1,7 +1,7 @@
 # PLAN GŁÓWNY — PortfolioHub Platform
 
 ```
-Wersja:    1.2
+Wersja:    1.3
 Data:      2026-05-23
 Autor:     Radosław Stawiszyński + Claude (Sonnet 4.6)
 Status:    ACTIVE — wszystkie ADR zatwierdzone, gotowe do Fazy 0
@@ -381,16 +381,16 @@ Sync lokalny: `wrangler r2 object get/put` lub eksport przez panel Cloudflare.
 
 ### 3.2 Zadania reorganizacji
 
-- [ ] **P3.1** Utwórz folder `platform/` i przenieś tam nowy kod
-- [ ] **P3.2** Utwórz folder `portfolios/` ze strukturą per-portfolio
-- [ ] **P3.3** Utwórz folder `archive/` i przenieś stare pliki HTML (1_key_v1.html, 2_snake_v2.html, 3_number_letter_v2.html, 4_sudoku_v1.html, index.html, kontakt.html, oferta.html, portfolio.html, styles.css, main.jpeg, mini_pro.jpeg, prosty_python.jpeg)
-- [ ] **P3.4** Przenieś `kopia/` do `archive/kopia-milosz-php/`
-- [ ] **P3.5** Utwórz folder `side-quests/` i przenieś `prog_python/` tam
-- [ ] **P3.6** Utwórz `.gitignore` z zawartością: node_modules/, .env, .env.local, \*.log, dist/, .next/, uploads/
-- [ ] **P3.7** Zaktualizuj README.md — opis platformy, linki do dokumentacji
-- [ ] **P3.8** Oczyść git ze zbędnych plików (git rm --cached + .gitignore)
-- [ ] **P3.9** Skopiuj CV Radosława do `portfolios/radek-stawiszynski/assets/`
-- [ ] **P3.10** Skopiuj CV Miłosza do `portfolios/milosz-gawlik/assets/`
+- [x] **P3.1** Utwórz folder `platform/` (2026-05-23)
+- [x] **P3.2** Utwórz folder `portfolios/` ze strukturą per-portfolio (2026-05-23)
+- [x] **P3.3** Przenieś stare pliki HTML do `archive/old-html-portfolio/` (2026-05-23)
+- [x] **P3.4** Przenieś `kopia/` do `archive/kopia-milosz-php/` (2026-05-23)
+- [x] **P3.5** Utwórz folder `side-quests/` i przenieś `prog_python/` + gry HTML (2026-05-23)
+- [x] **P3.6** Utwórz `.gitignore` (2026-05-23)
+- [x] **P3.7** Zaktualizuj README.md (2026-05-23)
+- [x] **P3.8** Git remote → SSH, pierwszy push na GitHub (2026-05-23)
+- [x] **P3.9** Skopiuj CV Radosława do `portfolios/radek-stawiszynski/assets/cv/` (2026-05-23)
+- [x] **P3.10** Skopiuj CV Miłosza + dane JSON do `portfolios/milosz-gawlik/` (2026-05-23)
 
 ---
 
@@ -926,7 +926,7 @@ PLATFORM_DOMAIN=korp-cbm.com
 
 ### 13.3 Zadania hosting
 
-- [ ] **H13.1** Utwórz konto Vercel + połącz z GitHub repo
+- [x] **H13.1** Utwórz konto Vercel + połącz z GitHub repo (2026-05-23)
 - [ ] **H13.2** Utwórz bazę PostgreSQL na Neon (lub Supabase) i zapisz DATABASE_URL
 - [ ] **H13.3** Utwórz konto Upstash + Redis instance, zapisz REDIS_URL
 - [ ] **H13.4** Utwórz Cloudflare R2 bucket `portfoliohub` + klucze API
@@ -934,8 +934,8 @@ PLATFORM_DOMAIN=korp-cbm.com
 - [ ] **H13.6** Przenieś domenę korp-cbm.com do Cloudflare (lub ustaw nameservery)
 - [ ] **H13.7** Ustaw DNS records: A/CNAME dla korp-cbm.com → Vercel + wildcard *.korp-cbm.com
 - [ ] **H13.8** Dodaj custom domains w Vercel (korp-cbm.com, *.korp-cbm.com)
-- [ ] **H13.9** Skonfiguruj zmienne środowiskowe w Vercel Dashboard (wszystkie z .env.example)
-- [ ] **H13.10** Wykonaj first deploy (git push → Vercel auto-build)
+- [ ] **H13.9** Skonfiguruj zmienne środowiskowe w Vercel (vercel env add)
+- [ ] **H13.10** First produkcyjny deploy (`vercel --prod` z CLI po testach)
 - [ ] **H13.11** Skonfiguruj UptimeRobot ping monitoring na korp-cbm.com
 
 ---
@@ -1123,11 +1123,21 @@ Aktywna faza: [AKTUALIZUJ TU]
 ### Faza 0 — Przygotowanie (1–2 dni)
 
 ```
-- [ ] Zatwierdź decyzje ADR-001 przez ADR-010 (Radosław decyduje)
-- [ ] Reorganizacja repo (P3.1–P3.10)
-- [ ] Wybierz i zamów VPS (H13.1)
-- [ ] Przenieś domenę do Cloudflare (H13.5)
-- [ ] Skonfiguruj DNS wildcard (D11.1)
+- [x] Zatwierdź decyzje ADR-001 przez ADR-010 (2026-05-23)
+- [x] Reorganizacja repo — P3.1–P3.10 (2026-05-23, commit 54fa46e)
+- [x] .gitignore + README.md zaktualizowane (2026-05-23)
+- [x] SSH key GitHub wygenerowany i dodany (2026-05-23)
+- [x] Vercel CLI zainstalowany i zalogowany (2026-05-23)
+- [x] Vercel projekt "portfolio" utworzony + linked z GitHub (2026-05-23)
+- [x] Vercel: auto-deploy wyłączony (Ignored Build Step = exit 1) (2026-05-23)
+- [x] Vercel: Root Directory = platform, Framework = Next.js (2026-05-23)
+- [ ] Neon — utwórz projekt PostgreSQL (region: eu-central-1) → DATABASE_URL
+- [ ] Upstash — utwórz Redis instance → UPSTASH_REDIS_REST_URL + TOKEN
+- [ ] Cloudflare R2 — utwórz bucket "portfoliohub" → klucze API
+- [ ] Resend — zweryfikuj domenę korp-cbm.com → RESEND_API_KEY
+- [ ] Zmienne środowiskowe → vercel env add (wszystkie z .env.example)
+- [ ] Przenieś domenę korp-cbm.com do Cloudflare (H13.6)
+- [ ] Skonfiguruj DNS wildcard *.korp-cbm.com (D11.1)
 - [ ] Utwórz CLAUDE.md i context files (AI19.1–AI19.5)
 ```
 
@@ -1289,6 +1299,7 @@ Aktywna faza: [AKTUALIZUJ TU]
 | 2026-05-23 | 1.0    | Inicjalne stworzenie — pełna architektura platformy | Claude Sonnet 4.6 |
 | 2026-05-23 | 1.1    | Zatwierdzono ADR-001÷010; zmiana hostingu na Vercel; dodano DIALOG; retro-terminal theme | Radosław + Claude |
 | 2026-05-23 | 1.2    | Reorganizacja repo (commit 54fa46e); zasada git push tylko po testach i zgodzie Radosława | Radosław + Claude |
+| 2026-05-23 | 1.3    | Faza 0 częściowo ukończona: Vercel skonfigurowany, SSH GitHub, P3.1-P3.10 done | Radosław + Claude |
 
 ---
 

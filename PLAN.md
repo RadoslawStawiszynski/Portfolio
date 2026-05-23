@@ -1,7 +1,7 @@
 # PLAN GŁÓWNY — PortfolioHub Platform
 
 ```
-Wersja:    1.1
+Wersja:    1.2
 Data:      2026-05-23
 Autor:     Radosław Stawiszyński + Claude (Sonnet 4.6)
 Status:    ACTIVE — wszystkie ADR zatwierdzone, gotowe do Fazy 0
@@ -13,6 +13,14 @@ Repo:      https://github.com/RadoslawStawiszynski/Portfolio.git
 > §3 (Struktura repo) i odpowiednią fazę z §20 (Roadmap). Każdy task ma checkbox `- [ ]`.
 > Oznaczaj ukończone jako `- [x]` i dodawaj datę. Decyzje z §2 są wiążące — nie zmieniaj ich
 > bez konsultacji z człowiekiem.
+
+> **⚠️ ZASADA GIT PUSH — KRYTYCZNA:**
+> `git push` na GitHub (`origin main`) WYŁĄCZNIE po:
+> 1. Ukończeniu projektu lub konkretnej fazy
+> 2. Przejściu wszystkich testów lokalnych
+> 3. Wyraźnej zgody Radosława
+>
+> Commity lokalne są OK na bieżąco. Push = świadoma decyzja człowieka, nie agenta.
 
 ---
 
@@ -873,8 +881,9 @@ PLATFORM_DOMAIN=korp-cbm.com
 - [ ] **K12.2** Utwórz `platform/docker-compose.dev.yml` (development, hot-reload, PostgreSQL + Redis)
 - [ ] **K12.3** Utwórz `platform/.env.example` z wszystkimi zmiennymi (DATABASE_URL, REDIS_URL, R2_*, RESEND_*)
 - [ ] **K12.4** Skonfiguruj healthchecks dla PostgreSQL i Redis w docker-compose.dev.yml
-- [ ] **K12.5** GitHub Actions workflow: lint + test + Vercel deploy (via Vercel GitHub integration)
+- [ ] **K12.5** GitHub Actions workflow: lint + test (push NIE triggeruje deploy — deploy jest ręczny)
 - [ ] **K12.6** Utwórz `platform/.env.local.example` — zmienne dla lokalnego dev z Docker
+- [ ] **K12.7** Vercel: ustaw "Deploy on push" = OFF lub branch protection — deploy TYLKO po manual approve
 
 ---
 
@@ -1169,13 +1178,16 @@ Aktywna faza: [AKTUALIZUJ TU]
 ### Faza 5 — Deployment + SEO (2–3 dni)
 
 ```
-- [ ] Produkcyjny Docker Compose (K12.2)
-- [ ] Deploy na VPS (H13.6, H13.7)
-- [ ] Caddy wildcard SSL (K12.4)
+- [ ] Konfiguracja Vercel + połączenie z GitHub repo (H13.1)
+- [ ] Konfiguracja Neon, Upstash, R2, Resend (H13.2–H13.5)
+- [ ] DNS: korp-cbm.com + wildcard *.korp-cbm.com → Vercel (H13.6–H13.8)
+- [ ] Zmienne środowiskowe w Vercel Dashboard (H13.9)
 - [ ] SEO, sitemap, OG tags (P15.1–P15.14)
-- [ ] Monitoring (H13.9)
-- [ ] Backup script (K12.9)
+- [ ] Monitoring UptimeRobot (H13.11)
+- [ ] ✅ Testy lokalne PASSED → git push origin main → Vercel auto-deploy (H13.10)
 ```
+
+> **GATE przed push:** Wszystkie testy z Fazy 6 muszą przejść. Push = decyzja Radosława.
 
 ### Faza 6 — Testy i finalizacja (2–3 dni)
 
@@ -1276,6 +1288,7 @@ Aktywna faza: [AKTUALIZUJ TU]
 | ---------- | ------ | --------------------------------------------------- | ----------------- |
 | 2026-05-23 | 1.0    | Inicjalne stworzenie — pełna architektura platformy | Claude Sonnet 4.6 |
 | 2026-05-23 | 1.1    | Zatwierdzono ADR-001÷010; zmiana hostingu na Vercel; dodano DIALOG; retro-terminal theme | Radosław + Claude |
+| 2026-05-23 | 1.2    | Reorganizacja repo (commit 54fa46e); zasada git push tylko po testach i zgodzie Radosława | Radosław + Claude |
 
 ---
 

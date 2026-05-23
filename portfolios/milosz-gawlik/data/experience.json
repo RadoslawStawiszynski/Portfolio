@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "role_pl": "Tester Oprogramowania",
+    "role_en": "Software Tester",
+    "company": "Digital Warehouse – Paweł Synowiec",
+    "location": "Tychy",
+    "date_from": "09.2025",
+    "date_to": "12.2025",
+    "desc_pl": "Ręczne testowanie aplikacji webowych, identyfikacja defektów i weryfikacja poprawek. Testy API przy użyciu Insomnia GraphQL. Dokumentowanie zgłoszeń w Obsidian, współpraca z zespołem deweloperskim.",
+    "desc_en": "Performed manual testing of web applications, identifying defects and verifying fixes. Used Obsidian for test documentation and organizing test cases. API testing using Insomnia GraphQL. Collaborated with development teams to ensure quality deliverables."
+  },
+  {
+    "id": 2,
+    "role_pl": "Specjalista Wsparcia Technicznego",
+    "role_en": "Technical Support Specialist",
+    "company": "Teleperformance Poland",
+    "location": "Katowice",
+    "date_from": "01.2025",
+    "date_to": "04.2025",
+    "desc_pl": "Obsługa zgłoszeń klientów (email, chat, telefon) dotyczących problemów technicznych z urządzeniami. Zarządzanie zadaniami administracyjnymi, aktualizacja danych klientów, współpraca z zespołami wewnętrznymi i zewnętrznymi.",
+    "desc_en": "Handled customer inquiries via email, chat and calls about technical issues with devices. Managed administrative tasks such as updating customer details. Collaborated with internal and external teams to ensure smooth operations."
+  },
+  {
+    "id": 3,
+    "role_pl": "Młodszy Inżynier Infrastruktury IT",
+    "role_en": "Junior Infrastructure Engineer",
+    "company": "Capgemini Poland",
+    "location": "Katowice",
+    "date_from": "07.2021",
+    "date_to": "06.2024",
+    "desc_pl": "Zarządzanie środowiskami Linux i Windows Server, zapewnienie wysokiej dostępności. Kontrola wersji i skryptowanie Bash. Wsparcie infrastruktury IT: wirtualizacja VMware vSphere. Utrzymanie dokumentacji technicznej w Confluence.",
+    "desc_en": "Managed and maintained Linux and Windows Server environments, ensuring high availability and performance. Managed version control and scripting using Bash. Supported IT infrastructure components including virtualisation with VMware vSphere. Maintained technical documentation in Confluence."
+  },
+  {
+    "id": 4,
+    "role_pl": "Analityk Monitoringu IT",
+    "role_en": "IT Monitoring Analyst",
+    "company": "Capgemini Poland",
+    "location": "Katowice",
+    "date_from": "12.2019",
+    "date_to": "07.2021",
+    "desc_pl": "Monitoring infrastruktury IT przy użyciu Zabbix, SCOM i DX Spectrum. Zarządzanie incydentami, problemami i zmianami w ServiceNow i Jira. Wsparcie środowisk Microsoft 365 i Google Workspace. Nagroda Thank You Award za rozwiązanie krytycznego incydentu.",
+    "desc_en": "Monitored IT infrastructure health and performance using Zabbix, SCOM and DX Spectrum. Managed incidents, problems and change tickets in ServiceNow and Jira. Supported Microsoft 365 and Google Workspace environments. Thank You Award recipient."
+  },
+  {
+    "id": 5,
+    "role_pl": "Specjalista ds. Sprzedaży",
+    "role_en": "Sales Specialist",
+    "company": "Millennium Leasing",
+    "location": "Katowice",
+    "date_from": "06.2013",
+    "date_to": "06.2015",
+    "desc_pl": "Obsługa klientów w zakresie produktów leasingowych. 2-letnie doświadczenie w administracji biurowej i prowadzeniu dokumentacji.",
+    "desc_en": "Customer service for leasing products. 2 years of experience in office administration and documentation management."
+  }
+]

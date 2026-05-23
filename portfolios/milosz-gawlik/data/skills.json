@@ -1,0 +1,19 @@
+[
+  { "id": 1, "name": "Windows / Linux", "highlight": false },
+  { "id": 2, "name": "Microsoft Office 365", "highlight": false },
+  { "id": 3, "name": "Google Workspace", "highlight": false },
+  { "id": 4, "name": "ServiceNow", "highlight": false },
+  { "id": 5, "name": "Zabbix", "highlight": true },
+  { "id": 6, "name": "Jira", "highlight": true },
+  { "id": 7, "name": "Confluence", "highlight": true },
+  { "id": 8, "name": "Control-M", "highlight": false },
+  { "id": 9, "name": "ITSM", "highlight": false },
+  { "id": 10, "name": "DX Spectrum", "highlight": false },
+  { "id": 11, "name": "VMware vSphere", "highlight": true },
+  { "id": 12, "name": "SCOM", "highlight": false },
+  { "id": 13, "name": "Insomnia GraphQL", "highlight": false },
+  { "id": 14, "name": "Obsidian", "highlight": false },
+  { "id": 15, "name": "Git", "highlight": true },
+  { "id": 16, "name": "Bash scripting", "highlight": false },
+  { "id": 17, "name": "Microsoft Dynamics 365", "highlight": false }
+]

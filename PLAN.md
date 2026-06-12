@@ -1,10 +1,10 @@
 # PLAN GŁÓWNY — PortfolioHub Platform
 
 ```
-Wersja:    1.3
-Data:      2026-05-23
+Wersja:    1.4
+Data:      2026-06-12
 Autor:     Radosław Stawiszyński + Claude (Sonnet 4.6)
-Status:    ACTIVE — wszystkie ADR zatwierdzone, gotowe do Fazy 0
+Status:    ACTIVE — Faza 0 UKOŃCZONA, Faza 1 (Next.js 15 scaffold) w toku
 Repo:      https://github.com/RadoslawStawiszynski/Portfolio.git
 ```
 
@@ -813,7 +813,7 @@ Proxy:       orange-cloud ON (CDN aktywne)
 
 ### 11.4 Zadania domenowe
 
-- [ ] **D11.1** Skonfiguruj wildcard DNS `*.korp-cbm.com` w Cloudflare
+- [x] **D11.1** Skonfiguruj wildcard DNS `*.korp-cbm.com` w Cloudflare — A record → 76.76.21.21, proxied=false (2026-06-12, Agent: Claude)
 - [ ] **D11.2** Skonfiguruj Caddy/Nginx jako reverse proxy obsługujący wildcard
 - [ ] **D11.3** Implement Next.js middleware dla subdomain routing
 - [ ] **D11.4** Implement weryfikacja custom domain (DNS CNAME check)
@@ -934,9 +934,9 @@ PLATFORM_DOMAIN=korp-cbm.com
 - [x] **H13.3** Utwórz konto Upstash + Redis instance, zapisz REDIS_URL (2026-06-11)
 - [x] **H13.4** Utwórz Cloudflare R2 bucket `portfoliohub` + klucze API (2026-06-11)
 - [x] **H13.5** Utwórz konto Resend + zweryfikuj domenę korp-cbm.com (2026-06-11)
-- [ ] **H13.6** Przenieś domenę korp-cbm.com do Cloudflare — sprawdzić status nameserverów
-- [ ] **H13.7** Ustaw DNS records: A/CNAME dla korp-cbm.com → Vercel + wildcard *.korp-cbm.com
-- [ ] **H13.8** Dodaj custom domains w Vercel (korp-cbm.com, *.korp-cbm.com)
+- [x] **H13.6** Przenieś domenę korp-cbm.com do Cloudflare — nameservery już aktywne (2026-06-12, Agent: Claude)
+- [x] **H13.7** Ustaw DNS records: CNAME korp-cbm.com → cname.vercel-dns.com, A *.korp-cbm.com → 76.76.21.21 (2026-06-12, Agent: Claude)
+- [x] **H13.8** Dodaj custom domains w Vercel (korp-cbm.com, *.korp-cbm.com) (2026-06-12, Agent: Claude)
 - [x] **H13.9** Skonfiguruj zmienne środowiskowe w Vercel (14 vars) (2026-06-12, Agent: Claude)
 - [ ] **H13.10** First produkcyjny deploy (`vercel --prod` z CLI po testach)
 - [ ] **H13.11** Skonfiguruj UptimeRobot ping monitoring na korp-cbm.com
@@ -1134,13 +1134,13 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 - [x] Vercel projekt "portfolio" utworzony + linked z GitHub (2026-05-23)
 - [x] Vercel: auto-deploy wyłączony (Ignored Build Step = exit 1) (2026-05-23)
 - [x] Vercel: Root Directory = platform, Framework = Next.js (2026-05-23)
-- [ ] Neon — utwórz projekt PostgreSQL (region: eu-central-1) → DATABASE_URL (H13.2, USER ACTION)
+- [x] Neon — utwórz projekt PostgreSQL (region: eu-central-1) → DATABASE_URL (H13.2) (2026-06-12)
 - [x] Upstash — utwórz Redis instance → UPSTASH_REDIS_REST_URL + TOKEN (2026-06-11)
 - [x] Cloudflare R2 — utwórz bucket "portfoliohub" → klucze API (2026-06-11)
 - [x] Resend — zweryfikuj domenę korp-cbm.com → RESEND_API_KEY (2026-06-11)
-- [ ] Zmienne środowiskowe → vercel env add (wszystkie z .env.example) (H13.9, USER ACTION — po H13.2)
-- [ ] Przenieś domenę korp-cbm.com do Cloudflare (H13.6) — można odłożyć na Fazę 5
-- [ ] Skonfiguruj DNS wildcard *.korp-cbm.com (D11.1) — można odłożyć na Fazę 5
+- [x] Zmienne środowiskowe → vercel env add (14 vars) (H13.9) (2026-06-12, Agent: Claude)
+- [x] Przenieś domenę korp-cbm.com do Cloudflare + DNS wildcard (H13.6, H13.7, D11.1) (2026-06-12, Agent: Claude)
+- [x] Dodaj domeny w Vercel (H13.8) (2026-06-12, Agent: Claude)
 - [x] Utwórz CLAUDE.md i context files (AI19.1, AI19.2, AI19.4) (2026-06-12, Agent: Claude)
 - [x] Git branching: main/staging/dev (2026-06-12, Agent: Claude)
 - [x] CHANGELOG.md + docs/git-workflow.md (2026-06-12, Agent: Claude)
@@ -1307,6 +1307,7 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 | 2026-05-23 | 1.1    | Zatwierdzono ADR-001÷010; zmiana hostingu na Vercel; dodano DIALOG; retro-terminal theme | Radosław + Claude |
 | 2026-05-23 | 1.2    | Reorganizacja repo (commit 54fa46e); zasada git push tylko po testach i zgodzie Radosława | Radosław + Claude |
 | 2026-05-23 | 1.3    | Faza 0 częściowo ukończona: Vercel skonfigurowany, SSH GitHub, P3.1-P3.10 done | Radosław + Claude |
+| 2026-06-12 | 1.4    | Faza 0 UKOŃCZONA: DNS skonfigurowany (H13.6-H13.8, D11.1), system pamięci AI, access.md | Radosław + Claude |
 
 ---
 
@@ -1326,5 +1327,5 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 
 ---
 
-_Ostatnia aktualizacja: 2026-05-23 v1.1 — wszystkie ADR zatwierdzone_  
-_Następna aktualizacja: Po ukończeniu Fazy 0 (reorganizacja repo + konfiguracja Vercel/Neon/R2)_
+_Ostatnia aktualizacja: 2026-06-12 v1.4 — Faza 0 UKOŃCZONA_  
+_Następna aktualizacja: Po ukończeniu Fazy 1 (Next.js 15 scaffold + Payload CMS 3)_

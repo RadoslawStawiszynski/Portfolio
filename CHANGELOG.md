@@ -8,13 +8,30 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+_Faza 1 — Next.js 15 scaffold + Payload CMS 3_
+
+---
+
+## [0.4.0] — 2026-06-12 — Faza 0 ukończona
+
 ### Infrastructure
-- Git branching strategy: `main` / `staging` / `dev`
-- CHANGELOG.md initialized
-- CLAUDE.md and agent context files (AI19.1–AI19.4)
-- Docker Compose dev environment scaffold (K12.1, K12.2, K12.4)
-- `.env.example` templates (K12.3, K12.6)
-- `pino` logger architecture (platform/src/lib/logger.ts)
+- DNS skonfigurowany przez Cloudflare API: `korp-cbm.com` CNAME → `cname.vercel-dns.com`, `*.korp-cbm.com` A → `76.76.21.21` (H13.6, H13.7, D11.1)
+- Domeny `korp-cbm.com` i `*.korp-cbm.com` dodane do projektu Vercel (H13.8)
+- `CLOUDFLARE_API_TOKEN` i `CLOUDFLARE_ZONE_ID` dodane do `.env.local`
+- Neon PostgreSQL skonfigurowany, `DATABASE_URL` zapisany — pooler eu-central-1 (H13.2)
+- 14 zmiennych środowiskowych dodanych do Vercel Production (H13.9)
+
+### Project
+- `docs/access.md` — rejestr serwisów, statusów DNS i Vercel (bez sekretów)
+- System pamięci AI (`memory/`) — eliminuje powtarzanie kroków między sesjami
+
+### Documentation
+- Git branching strategy: `main` / `staging` / `dev` (local + remote)
+- CLAUDE.md i context files agentów AI (AI19.1, AI19.2, AI19.4)
+- Docker scaffold: Dockerfile, docker-compose.dev.yml, .env.example (K12.1–K12.4, K12.6)
+- `pino` logger architecture: `platform/src/lib/logger.ts`
+- CHANGELOG.md initialized, `docs/git-workflow.md`
+- PLAN.md v1.4 — status Fazy 0 zaktualizowany
 
 ---
 

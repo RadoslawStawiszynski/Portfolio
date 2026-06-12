@@ -880,13 +880,13 @@ PLATFORM_DOMAIN=korp-cbm.com
 
 ### 12.5 Zadania Docker (lokalne dev)
 
-- [ ] **K12.1** Utwórz `platform/Dockerfile` (multi-stage, Node 20 Alpine) — dla lokalnego dev
-- [ ] **K12.2** Utwórz `platform/docker-compose.dev.yml` (development, hot-reload, PostgreSQL + Redis)
-- [ ] **K12.3** Utwórz `platform/.env.example` z wszystkimi zmiennymi (DATABASE_URL, REDIS_URL, R2_*, RESEND_*)
-- [ ] **K12.4** Skonfiguruj healthchecks dla PostgreSQL i Redis w docker-compose.dev.yml
+- [x] **K12.1** Utwórz `platform/Dockerfile` (multi-stage, Node 20 Alpine) — dla lokalnego dev (2026-06-12, Agent: Claude)
+- [x] **K12.2** Utwórz `platform/docker-compose.dev.yml` (development, hot-reload, PostgreSQL + Redis) (2026-06-12, Agent: Claude)
+- [x] **K12.3** Utwórz `platform/.env.example` z wszystkimi zmiennymi (DATABASE_URL, REDIS_URL, R2_*, RESEND_*) (2026-06-12, Agent: Claude)
+- [x] **K12.4** Skonfiguruj healthchecks dla PostgreSQL i Redis w docker-compose.dev.yml (2026-06-12, Agent: Claude)
 - [ ] **K12.5** GitHub Actions workflow: lint + test (push NIE triggeruje deploy — deploy jest ręczny)
-- [ ] **K12.6** Utwórz `platform/.env.local.example` — zmienne dla lokalnego dev z Docker
-- [ ] **K12.7** Vercel: ustaw "Deploy on push" = OFF lub branch protection — deploy TYLKO po manual approve
+- [x] **K12.6** Utwórz `platform/.env.local.example` — zmienne dla lokalnego dev z Docker (2026-06-12, Agent: Claude)
+- [x] **K12.7** Vercel: ustaw "Deploy on push" = OFF lub branch protection — deploy TYLKO po manual approve (2026-05-23)
 
 ---
 
@@ -1108,15 +1108,15 @@ Repo: /home/rspro/Dokumenty/1.CODE/2.Portfolio
 Główny plik planu: PLAN.md
 Zatwierdzone decyzje: ADR-005 (Cloudflare), ADR-009 (PL+EN)
 Oczekujące decyzje: ADR-001 (framework), ADR-002 (CMS), ADR-003 (DB), ADR-004 (hosting)
-Aktywna faza: [AKTUALIZUJ TU]
+Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CMS)
 ```
 
 ### 19.3 Context files dla agentów
 
-- [ ] **AI19.1** Utwórz `CLAUDE.md` w root projektu (kontekst dla Claude Code)
-- [ ] **AI19.2** Utwórz `.agents/CONTEXT.md` z opisem projektu i stack dla agentów
+- [x] **AI19.1** Utwórz `CLAUDE.md` w root projektu (kontekst dla Claude Code) (2026-06-12, Agent: Claude)
+- [x] **AI19.2** Utwórz `.agents/CONTEXT.md` z opisem projektu i stack dla agentów (2026-06-12, Agent: Claude)
 - [ ] **AI19.3** Utwórz `OLLAMA_PROMPT.md` — gotowy do wklejenia kontekst dla Ollama
-- [ ] **AI19.4** Utwórz `.clinerules` zaktualizowane dla nowej struktury projektu
+- [x] **AI19.4** Utwórz `.clinerules/portfoliohub-rules.md` — reguły dla nowej struktury projektu (2026-06-12, Agent: Claude)
 - [ ] **AI19.5** Skonfiguruj `.agents/skills/` — skills dla poszczególnych faz (bootstrap, blok, deploy)
 
 ---
@@ -1134,14 +1134,18 @@ Aktywna faza: [AKTUALIZUJ TU]
 - [x] Vercel projekt "portfolio" utworzony + linked z GitHub (2026-05-23)
 - [x] Vercel: auto-deploy wyłączony (Ignored Build Step = exit 1) (2026-05-23)
 - [x] Vercel: Root Directory = platform, Framework = Next.js (2026-05-23)
-- [ ] Neon — utwórz projekt PostgreSQL (region: eu-central-1) → DATABASE_URL
-- [ ] Upstash — utwórz Redis instance → UPSTASH_REDIS_REST_URL + TOKEN
-- [ ] Cloudflare R2 — utwórz bucket "portfoliohub" → klucze API
-- [ ] Resend — zweryfikuj domenę korp-cbm.com → RESEND_API_KEY
-- [ ] Zmienne środowiskowe → vercel env add (wszystkie z .env.example)
-- [ ] Przenieś domenę korp-cbm.com do Cloudflare (H13.6)
-- [ ] Skonfiguruj DNS wildcard *.korp-cbm.com (D11.1)
-- [ ] Utwórz CLAUDE.md i context files (AI19.1–AI19.5)
+- [ ] Neon — utwórz projekt PostgreSQL (region: eu-central-1) → DATABASE_URL (H13.2, USER ACTION)
+- [x] Upstash — utwórz Redis instance → UPSTASH_REDIS_REST_URL + TOKEN (2026-06-11)
+- [x] Cloudflare R2 — utwórz bucket "portfoliohub" → klucze API (2026-06-11)
+- [x] Resend — zweryfikuj domenę korp-cbm.com → RESEND_API_KEY (2026-06-11)
+- [ ] Zmienne środowiskowe → vercel env add (wszystkie z .env.example) (H13.9, USER ACTION — po H13.2)
+- [ ] Przenieś domenę korp-cbm.com do Cloudflare (H13.6) — można odłożyć na Fazę 5
+- [ ] Skonfiguruj DNS wildcard *.korp-cbm.com (D11.1) — można odłożyć na Fazę 5
+- [x] Utwórz CLAUDE.md i context files (AI19.1, AI19.2, AI19.4) (2026-06-12, Agent: Claude)
+- [x] Git branching: main/staging/dev (2026-06-12, Agent: Claude)
+- [x] CHANGELOG.md + docs/git-workflow.md (2026-06-12, Agent: Claude)
+- [x] Docker scaffold: Dockerfile + docker-compose.dev.yml + .env.example (K12.1-K12.4, K12.6) (2026-06-12, Agent: Claude)
+- [x] Logger architektura: platform/src/lib/logger.ts (pino) (2026-06-12, Agent: Claude)
 ```
 
 ### Faza 1 — Fundament Docker + DB (3–5 dni)

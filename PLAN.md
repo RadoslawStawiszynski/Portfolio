@@ -779,6 +779,9 @@ Superadmin
 - [ ] **A10.12** Eksport CV do PDF (generowany z bloków experience/skills/education)
 - [ ] **A10.13** Skrzynka wiadomości z formularza kontaktowego
 - [ ] **A10.14** Backup danych (eksport JSON całego portfolio)
+- [ ] **A10.15** Panel limitów serwisów (przycisk "Sprawdź limity") — odpytuje API Neon, Upstash, Cloudflare R2 i wyświetla zużycie vs limit (storage, bandwidth, requests); wyświetla ostrzeżenie gdy zużycie > 80% limitu free tier
+- [ ] **A10.16** System alertów przekroczenia limitów — gdy zużycie > 80% free tier któregokolwiek serwisu: czerwony banner w adminie + email powiadomienie przez Resend; progi: Neon storage >80%, R2 storage/operacje >80%, Upstash bandwidth >80%
+- [ ] **A10.17** Centrum płatności i kart — sekcja w adminie wylistowująca wszystkie zewnętrzne serwisy (Neon, Upstash, R2, Resend, Vercel, Cloudflare) z: linkiem do dashboardu, datą ważności karty kredytowej (ręcznie wprowadzana), przypomnieniem 30 dni przed wygaśnięciem (email + banner), statusem free/paid
 
 ---
 
@@ -928,9 +931,9 @@ PLATFORM_DOMAIN=korp-cbm.com
 
 - [x] **H13.1** Utwórz konto Vercel + połącz z GitHub repo (2026-05-23)
 - [ ] **H13.2** Utwórz bazę PostgreSQL na Neon (lub Supabase) i zapisz DATABASE_URL
-- [ ] **H13.3** Utwórz konto Upstash + Redis instance, zapisz REDIS_URL
-- [ ] **H13.4** Utwórz Cloudflare R2 bucket `portfoliohub` + klucze API
-- [ ] **H13.5** Utwórz konto Resend + zweryfikuj domenę korp-cbm.com
+- [x] **H13.3** Utwórz konto Upstash + Redis instance, zapisz REDIS_URL (2026-06-11)
+- [x] **H13.4** Utwórz Cloudflare R2 bucket `portfoliohub` + klucze API (2026-06-11)
+- [x] **H13.5** Utwórz konto Resend + zweryfikuj domenę korp-cbm.com (2026-06-11)
 - [ ] **H13.6** Przenieś domenę korp-cbm.com do Cloudflare (lub ustaw nameservery)
 - [ ] **H13.7** Ustaw DNS records: A/CNAME dla korp-cbm.com → Vercel + wildcard *.korp-cbm.com
 - [ ] **H13.8** Dodaj custom domains w Vercel (korp-cbm.com, *.korp-cbm.com)

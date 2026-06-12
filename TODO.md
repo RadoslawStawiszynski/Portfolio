@@ -14,7 +14,7 @@ last_collected: RRRR-MM-DD
 
 ## Pilne
 
-- [ ] utworzyc .gitignore - uzupełnić terścią plik
+- [v] utworzyc .gitignore - uzupełnić terścią plik
 - [ ] posprzatac gita ze zbednych plików
 
 ## Pomysły / ulepszenia

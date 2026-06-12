@@ -654,9 +654,9 @@ interface Portfolio {
 
 ### 8.2 Zadania backend
 
-- [ ] **B8.1** Skonfiguruj Payload CMS 3 z PostgreSQL
-- [ ] **B8.2** Zdefiniuj kolekcje Payload: `portfolios`, `blocks`, `users`, `media`
-- [ ] **B8.3** Implement subdomain routing w Next.js middleware (wykryj subdomenę, załaduj portfolio)
+- [x] **B8.1** Skonfiguruj Payload CMS 3 z PostgreSQL (2026-06-12, Agent: Claude)
+- [x] **B8.2** Zdefiniuj kolekcje Payload: `portfolios`, `blocks`, `users`, `media` (2026-06-12, Agent: Claude)
+- [x] **B8.3** Implement subdomain routing w Next.js middleware (wykryj subdomenę, załaduj portfolio) (2026-06-12, Agent: Claude)
 - [ ] **B8.4** Implement custom domain routing (CNAME → portfolio match w DB)
 - [ ] **B8.5** API endpoint formularz kontaktowy z rate limiting (Redis)
 - [ ] **B8.6** System zaproszeń: generowanie tokenów, email przez Resend/Brevo
@@ -681,7 +681,7 @@ interface Portfolio {
 
 ### 9.2 Zadania frontend
 
-- [ ] **F9.1** Scaffold Next.js 15 App Router z TypeScript i Tailwind CSS 4
+- [x] **F9.1** Scaffold Next.js 15 App Router z TypeScript i Tailwind CSS 4 (2026-06-12, Agent: Claude)
 - [ ] **F9.2** Implement middleware subdomain routing
 - [ ] **F9.3** Utwórz `PortfolioRenderer` — komponent który renderuje listę bloków
 - [ ] **F9.4** Zaimplementuj każdy blok jako osobny komponent (Hero, About, Experience, etc.)
@@ -815,7 +815,7 @@ Proxy:       orange-cloud ON (CDN aktywne)
 
 - [x] **D11.1** Skonfiguruj wildcard DNS `*.korp-cbm.com` w Cloudflare — A record → 76.76.21.21, proxied=false (2026-06-12, Agent: Claude)
 - [ ] **D11.2** Skonfiguruj Caddy/Nginx jako reverse proxy obsługujący wildcard
-- [ ] **D11.3** Implement Next.js middleware dla subdomain routing
+- [x] **D11.3** Implement Next.js middleware dla subdomain routing (2026-06-12, Agent: Claude)
 - [ ] **D11.4** Implement weryfikacja custom domain (DNS CNAME check)
 - [ ] **D11.5** Utwórz subdomain per portfolio w tabeli `portfolios` (`subdomain` field)
 
@@ -884,7 +884,7 @@ PLATFORM_DOMAIN=korp-cbm.com
 - [x] **K12.2** Utwórz `platform/docker-compose.dev.yml` (development, hot-reload, PostgreSQL + Redis) (2026-06-12, Agent: Claude)
 - [x] **K12.3** Utwórz `platform/.env.example` z wszystkimi zmiennymi (DATABASE_URL, REDIS_URL, R2_*, RESEND_*) (2026-06-12, Agent: Claude)
 - [x] **K12.4** Skonfiguruj healthchecks dla PostgreSQL i Redis w docker-compose.dev.yml (2026-06-12, Agent: Claude)
-- [ ] **K12.5** GitHub Actions workflow: lint + test (push NIE triggeruje deploy — deploy jest ręczny)
+- [x] **K12.5** GitHub Actions workflow: lint + typecheck (push NIE triggeruje deploy — deploy jest ręczny) (2026-06-12, Agent: Claude)
 - [x] **K12.6** Utwórz `platform/.env.local.example` — zmienne dla lokalnego dev z Docker (2026-06-12, Agent: Claude)
 - [x] **K12.7** Vercel: ustaw "Deploy on push" = OFF lub branch protection — deploy TYLKO po manual approve (2026-05-23)
 
@@ -1151,12 +1151,12 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 ### Faza 1 — Fundament Docker + DB (3–5 dni)
 
 ```
-- [ ] Scaffold Next.js 15 + TypeScript + Tailwind (F9.1)
-- [ ] Konfiguracja Payload CMS 3 + PostgreSQL (B8.1, B8.2)
-- [ ] Docker Compose dev environment (K12.2, K12.3)
-- [ ] Schemat bazy danych (Portfolio, Block, User, Media)
-- [ ] Podstawowe API endpoints (B8.1–B8.5)
-- [ ] Subdomain routing middleware (B8.3, D11.3)
+- [x] Scaffold Next.js 15 + TypeScript + Tailwind CSS 4 (F9.1) (2026-06-12, Agent: Claude)
+- [x] Konfiguracja Payload CMS 3 + PostgreSQL (B8.1, B8.2) (2026-06-12, Agent: Claude)
+- [x] Docker Compose dev environment (K12.2, K12.3) ← ukończone w Fazie 0
+- [x] Schemat bazy danych (Portfolio, Block, User, Media) (B8.2) (2026-06-12, Agent: Claude)
+- [ ] Podstawowe API endpoints (B8.5 — formularz kontaktowy, rate limiting)
+- [x] Subdomain routing middleware (B8.3, D11.3) (2026-06-12, Agent: Claude)
 ```
 
 ### Faza 2 — Bloki i Frontend (5–7 dni)

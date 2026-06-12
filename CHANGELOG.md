@@ -8,7 +8,13 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
-_Faza 1 — Next.js 15 scaffold + Payload CMS 3_
+### Foundation (Faza 1)
+- Next.js 15 App Router scaffold — TypeScript 5, Tailwind CSS 4, 3-theme CSS token system (F9.1)
+- Payload CMS 3 configured with `@payloadcms/db-postgres` (Neon PostgreSQL) (B8.1)
+- Payload collections: Users (RBAC: superadmin/admin/owner), Portfolios, Blocks, Media (B8.2)
+- Subdomain routing middleware — extracts `x-portfolio-slug` from host header (B8.3, D11.3)
+- GitHub Actions CI: lint + typecheck on push to dev/staging (K12.5)
+- Added `graphql` dependency (required by @payloadcms/next internals)
 
 ---
 

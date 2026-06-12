@@ -59,19 +59,25 @@ platform/
 - Work on `dev` branch, PRs go to `staging` first, then `main`
 - Use `logger` from `@/lib/logger`, never `console.log` in production code
 
-## Completed (Faza 0)
+## Completed (Faza 0) — ALL DONE 2026-06-12
 
 - ADR-001..ADR-010 approved
 - Repo reorganized: platform/, portfolios/, archive/, side-quests/
 - Vercel project linked, auto-deploy disabled
-- Upstash Redis, Cloudflare R2, Resend — accounts + credentials
-- Git: main/staging/dev branches created
-- CLAUDE.md, CHANGELOG.md, git-workflow.md
-- Docker scaffold: Dockerfile, docker-compose.dev.yml
-- Logger architecture: platform/src/lib/logger.ts
+- Neon PostgreSQL configured — pooler URL eu-central-1 (H13.2)
+- Upstash Redis, Cloudflare R2, Resend — accounts + credentials (H13.3–H13.5)
+- 14 Vercel env vars set (Production) (H13.9)
+- DNS: korp-cbm.com CNAME → cname.vercel-dns.com, *.korp-cbm.com A → 76.76.21.21 (H13.6, H13.7, D11.1)
+- Vercel domains: korp-cbm.com + *.korp-cbm.com added (H13.8)
+- Git: main/staging/dev branches created (local + remote)
+- CLAUDE.md, CHANGELOG.md, docs/git-workflow.md, docs/access.md
+- Docker scaffold: Dockerfile, docker-compose.dev.yml, .env.example, .env.local.example
+- Logger architecture: platform/src/lib/logger.ts (pino)
+- Session memory system: prevents repeating steps across sessions
 
-## Pending (Faza 0 — user action required)
+## Active — Faza 1 (Next.js 15 scaffold)
 
-- H13.2: Neon PostgreSQL → DATABASE_URL (user: create at neon.tech)
-- H13.9: Vercel env vars (user: `vercel env add` for each key)
-- H13.6 + D11.1: Cloudflare DNS migration + wildcard (can defer to Faza 5)
+- F9.1: `npx create-next-app@latest` in platform/ (TypeScript, Tailwind, App Router)
+- B8.1, B8.2: Payload CMS 3 + PostgreSQL configuration
+- B8.3, D11.3: Subdomain routing middleware
+- K12.5: GitHub Actions workflow (lint + test)

@@ -930,14 +930,14 @@ PLATFORM_DOMAIN=korp-cbm.com
 ### 13.3 Zadania hosting
 
 - [x] **H13.1** Utwórz konto Vercel + połącz z GitHub repo (2026-05-23)
-- [ ] **H13.2** Utwórz bazę PostgreSQL na Neon (lub Supabase) i zapisz DATABASE_URL
+- [x] **H13.2** Utwórz bazę PostgreSQL na Neon, zapisz DATABASE_URL (2026-06-12) — ep-floral-brook.eu-central-1
 - [x] **H13.3** Utwórz konto Upstash + Redis instance, zapisz REDIS_URL (2026-06-11)
 - [x] **H13.4** Utwórz Cloudflare R2 bucket `portfoliohub` + klucze API (2026-06-11)
 - [x] **H13.5** Utwórz konto Resend + zweryfikuj domenę korp-cbm.com (2026-06-11)
-- [ ] **H13.6** Przenieś domenę korp-cbm.com do Cloudflare (lub ustaw nameservery)
+- [ ] **H13.6** Przenieś domenę korp-cbm.com do Cloudflare — sprawdzić status nameserverów
 - [ ] **H13.7** Ustaw DNS records: A/CNAME dla korp-cbm.com → Vercel + wildcard *.korp-cbm.com
 - [ ] **H13.8** Dodaj custom domains w Vercel (korp-cbm.com, *.korp-cbm.com)
-- [ ] **H13.9** Skonfiguruj zmienne środowiskowe w Vercel (vercel env add)
+- [x] **H13.9** Skonfiguruj zmienne środowiskowe w Vercel (14 vars) (2026-06-12, Agent: Claude)
 - [ ] **H13.10** First produkcyjny deploy (`vercel --prod` z CLI po testach)
 - [ ] **H13.11** Skonfiguruj UptimeRobot ping monitoring na korp-cbm.com
 

@@ -26,10 +26,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Valid portfolio subdomain — forward slug to Server Components
-  const response = NextResponse.next();
-  response.headers.set("x-portfolio-slug", subdomain);
-  return response;
+  // Valid portfolio subdomain — forward slug via request headers so
+  // Server Components can read it with `headers()` from "next/headers"
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-portfolio-slug", subdomain);
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {

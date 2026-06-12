@@ -34,10 +34,14 @@ www.korp-cbm.com   CNAME → korp-cbm.com           (proxied=false)
 ```
 
 Zachowane (nie ruszać bez decyzji Radosława):
+- NS → dns.home.pl / dns2.home.pl / dns3.home.pl (Radosław korzysta)
 - MX → post.pl (poczta)
 - SRV → post.pl (IMAP/POP3/SMTP)
 - CNAME distribution.korp-cbm.com → sklep-tom-jur.pages.dev (stary sklep)
 - CNAME dystrybucja.korp-cbm.com → sklep-tom-jur.pages.dev (stary sklep)
+
+Usunięte (2026-06-12):
+- CNAME prox.korp-cbm.com → cfargotunnel.com (nieużywany tunnel)
 
 ## Vercel — zmienne środowiskowe (14 vars, environment: Production)
 

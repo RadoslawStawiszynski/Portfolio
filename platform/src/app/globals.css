@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+/* ── Design tokens: light theme (default) ── */
+:root {
+  --color-primary: #1a1f00;
+  --color-secondary: #3a4605;
+  --color-accent: #e19d29;
+  --color-bg: #f5f3f2;
+  --color-bg-alt: #d8d2cf;
+  --color-muted: #8d8179;
+  --color-text: #1a1f00;
+}
+
+/* ── Dark theme ── */
+[data-theme="dark"] {
+  --color-bg: #1a1f00;
+  --color-bg-alt: #2a2f05;
+  --color-text: #f5f3f2;
+  --color-primary: #f5f3f2;
+  --color-secondary: #d8d2cf;
+  --color-accent: #e19d29;
+  --color-muted: #8d8179;
+}
+
+/* ── Retro terminal theme ── */
+[data-theme="retro-terminal"] {
+  --color-primary: #00ff41;
+  --color-secondary: #00cc33;
+  --color-accent: #ffcc00;
+  --color-bg: #0a0a0a;
+  --color-bg-alt: #0f1a0f;
+  --color-text: #d4e8d4;
+  --color-muted: #5a8a5a;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}

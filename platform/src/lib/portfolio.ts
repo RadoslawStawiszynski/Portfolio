@@ -12,11 +12,17 @@ export async function getPortfolioBySlug(slug: string) {
 }
 
 export async function getBlocksBySlug(slug: string) {
-  const portfolio = await getPortfolioBySlug(slug);
+  const payload = await getPayload({ config });
+
+  const portfolioResult = await payload.find({
+    collection: "portfolios",
+    where: { subdomain: { equals: slug } },
+    limit: 1,
+  });
+  const portfolio = portfolioResult.docs[0];
   if (!portfolio) return [];
 
-  const payload = await getPayload({ config });
-  const result = await payload.find({
+  const blocksResult = await payload.find({
     collection: "blocks",
     where: {
       and: [
@@ -27,5 +33,5 @@ export async function getBlocksBySlug(slug: string) {
     sort: "order",
     limit: 100,
   });
-  return result.docs;
+  return blocksResult.docs;
 }

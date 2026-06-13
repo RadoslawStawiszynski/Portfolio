@@ -683,10 +683,10 @@ interface Portfolio {
 
 - [x] **F9.1** Scaffold Next.js 15 App Router z TypeScript i Tailwind CSS 4 (2026-06-12, Agent: Claude)
 - [x] **F9.2** Implement middleware subdomain routing (2026-06-12, Agent: Claude) ← zrealizowane jako B8.3/D11.3
-- [ ] **F9.3** Utwórz `PortfolioRenderer` — komponent który renderuje listę bloków
-- [ ] **F9.4** Zaimplementuj każdy blok jako osobny komponent (Hero, About, Experience, etc.)
-- [ ] **F9.5** System motywów (CSS Custom Properties, light/dark/auto, cookie persistence)
-- [ ] **F9.6** Responsywność — mobile-first, testowane na 375px / 768px / 1280px
+- [x] **F9.3** Utwórz `PortfolioRenderer` — komponent który renderuje listę bloków (2026-06-13, Agent: Claude)
+- [x] **F9.4** Zaimplementuj każdy blok jako osobny komponent (Hero, About, Experience, Skills, Education, Contact) (2026-06-13, Agent: Claude)
+- [x] **F9.5** System motywów (CSS Custom Properties, light/dark/retro-terminal, cookie persistence) (2026-06-13, Agent: Claude)
+- [x] **F9.6** Responsywność — mobile-first, Tailwind md:/lg: breakpoints (375px/768px/1280px) (2026-06-13, Agent: Claude)
 - [ ] **F9.7** Płynne animacje (Framer Motion: fade-in, slide-up, staggered)
 - [ ] **F9.8** Nawigacja z scroll-spy (podświetlenie aktywnej sekcji)
 - [ ] **F9.9** Formularz kontaktowy z validacją Zod + Server Action
@@ -1162,10 +1162,10 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 ### Faza 2 — Bloki i Frontend (5–7 dni)
 
 ```
-- [ ] PortfolioRenderer + system bloków (F9.3, F9.4)
-- [ ] Implementacja bloków MVP: hero, about, experience, skills, education, contact
-- [ ] System motywów light/dark (F9.5, ADR-006)
-- [ ] Responsywność (F9.6)
+- [x] PortfolioRenderer + system bloków (F9.3, F9.4) (2026-06-13, Agent: Claude)
+- [x] Implementacja bloków MVP: hero, about, experience, skills, education, contact (2026-06-13, Agent: Claude)
+- [x] System motywów light/dark/retro-terminal (F9.5, ADR-006) (2026-06-13, Agent: Claude)
+- [x] Responsywność (F9.6) (2026-06-13, Agent: Claude)
 - [ ] Animacje (F9.7)
 - [ ] Cookie consent (F9.13)
 ```

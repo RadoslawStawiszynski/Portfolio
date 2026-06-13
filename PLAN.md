@@ -682,7 +682,7 @@ interface Portfolio {
 ### 9.2 Zadania frontend
 
 - [x] **F9.1** Scaffold Next.js 15 App Router z TypeScript i Tailwind CSS 4 (2026-06-12, Agent: Claude)
-- [ ] **F9.2** Implement middleware subdomain routing
+- [x] **F9.2** Implement middleware subdomain routing (2026-06-12, Agent: Claude) ← zrealizowane jako B8.3/D11.3
 - [ ] **F9.3** Utwórz `PortfolioRenderer` — komponent który renderuje listę bloków
 - [ ] **F9.4** Zaimplementuj każdy blok jako osobny komponent (Hero, About, Experience, etc.)
 - [ ] **F9.5** System motywów (CSS Custom Properties, light/dark/auto, cookie persistence)
@@ -1155,7 +1155,7 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 - [x] Konfiguracja Payload CMS 3 + PostgreSQL (B8.1, B8.2) (2026-06-12, Agent: Claude)
 - [x] Docker Compose dev environment (K12.2, K12.3) ← ukończone w Fazie 0
 - [x] Schemat bazy danych (Portfolio, Block, User, Media) (B8.2) (2026-06-12, Agent: Claude)
-- [ ] Podstawowe API endpoints (B8.5 — formularz kontaktowy, rate limiting)
+- [x] Podstawowe API endpoints (B8.5 — formularz kontaktowy, rate limiting) (2026-06-13, Agent: Claude)
 - [x] Subdomain routing middleware (B8.3, D11.3) (2026-06-12, Agent: Claude)
 ```
 

@@ -8,6 +8,12 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+### Added
+- `POST /api/contact` — endpoint formularza kontaktowego z walidacją Zod, rate limitingiem Redis (3 req/15 min per IP) i wysyłką emaili przez Resend (B8.5)
+- Pole `contactEmail` w kolekcji Portfolios — edytowalne w admin panelu
+- `lib/redis.ts` — singleton Upstash Redis
+- `lib/rate-limit.ts` — helper rate limitingu per IP
+
 ### Foundation (Faza 1)
 - Next.js 15 App Router scaffold — TypeScript 5, Tailwind CSS 4, 3-theme CSS token system (F9.1)
 - Payload CMS 3 configured with `@payloadcms/db-postgres` (Neon PostgreSQL) (B8.1)

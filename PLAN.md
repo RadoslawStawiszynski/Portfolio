@@ -658,7 +658,7 @@ interface Portfolio {
 - [x] **B8.2** Zdefiniuj kolekcje Payload: `portfolios`, `blocks`, `users`, `media` (2026-06-12, Agent: Claude)
 - [x] **B8.3** Implement subdomain routing w Next.js middleware (wykryj subdomenę, załaduj portfolio) (2026-06-12, Agent: Claude)
 - [ ] **B8.4** Implement custom domain routing (CNAME → portfolio match w DB)
-- [ ] **B8.5** API endpoint formularz kontaktowy z rate limiting (Redis)
+- [x] **B8.5** API endpoint formularz kontaktowy z rate limiting (Redis) (2026-06-13, Agent: Claude)
 - [ ] **B8.6** System zaproszeń: generowanie tokenów, email przez Resend/Brevo
 - [ ] **B8.7** Upload handler: przyjmij plik, zwaliduj (typ/rozmiar), zapisz do volume
 - [ ] **B8.8** Analytics endpoint: licznik odwiedzin per portfolio (Redis incr → PostgreSQL batch)

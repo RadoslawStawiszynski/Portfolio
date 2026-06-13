@@ -7,27 +7,29 @@ const RESERVED = new Set(["www", "admin", "api"]);
 
 export function middleware(request: NextRequest) {
   const hostname = request.headers.get("host") || "";
-
-  // Strip port (localhost:3000 → localhost)
   const host = hostname.split(":")[0];
+  const pathname = request.nextUrl.pathname;
 
-  // Local dev — no subdomain routing
+  // Local dev: /dev/[slug] → set x-portfolio-slug from URL
   if (host === "localhost" || host === "127.0.0.1") {
+    const devMatch = pathname.match(/^\/dev\/([^/]+)/);
+    if (devMatch) {
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-portfolio-slug", devMatch[1]);
+      return NextResponse.next({ request: { headers: requestHeaders } });
+    }
     return NextResponse.next();
   }
 
-  // Extract subdomain: "radek.korp-cbm.com" → "radek"
+  // Prod: subdomain routing
   const subdomain = host.endsWith(`.${PLATFORM_DOMAIN}`)
     ? host.slice(0, host.length - PLATFORM_DOMAIN.length - 1)
     : null;
 
-  // Root domain or unrecognized host — pass through
   if (!subdomain || RESERVED.has(subdomain)) {
     return NextResponse.next();
   }
 
-  // Valid portfolio subdomain — forward slug via request headers so
-  // Server Components can read it with `headers()` from "next/headers"
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-portfolio-slug", subdomain);
   return NextResponse.next({ request: { headers: requestHeaders } });
@@ -35,7 +37,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Skip Next.js static assets and internal routes
     "/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

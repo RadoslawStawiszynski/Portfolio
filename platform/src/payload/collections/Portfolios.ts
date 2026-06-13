@@ -93,5 +93,14 @@ export const Portfolios: CollectionConfig = {
       type: "checkbox",
       defaultValue: false,
     },
+    {
+      name: "contactEmail",
+      type: "email",
+      defaultValue: "biuro@korp-cbm.com",
+      admin: {
+        description:
+          "Email do odbierania wiadomości z formularza kontaktowego.",
+      },
+    },
   ],
 };

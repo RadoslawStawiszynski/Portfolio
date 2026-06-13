@@ -1,3 +1,5 @@
+// platform/src/types/blocks.ts
+
 export interface HeroData {
   title: string;
   subtitle?: string;
@@ -10,31 +12,37 @@ export interface AboutData {
   photoUrl?: string;
 }
 
+export interface ExperienceItem {
+  company: string;
+  role: string;
+  startDate: string;
+  endDate?: string;
+  description?: string;
+}
+
 export interface ExperienceData {
-  items: Array<{
-    company: string;
-    role: string;
-    startDate: string;
-    endDate?: string;
-    description?: string;
-  }>;
+  items: ExperienceItem[];
+}
+
+export interface SkillCategory {
+  name: string;
+  skills: string[];
 }
 
 export interface SkillsData {
-  categories: Array<{
-    name: string;
-    skills: string[];
-  }>;
+  categories: SkillCategory[];
+}
+
+export interface EducationItem {
+  school: string;
+  degree: string;
+  field: string;
+  startYear: number;
+  endYear?: number;
 }
 
 export interface EducationData {
-  items: Array<{
-    school: string;
-    degree: string;
-    field: string;
-    startYear: number;
-    endYear?: number;
-  }>;
+  items: EducationItem[];
 }
 
 export interface ContactData {

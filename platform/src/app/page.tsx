@@ -1,12 +1,29 @@
-export default function HomePage() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-24">
-      <h1 className="text-4xl font-bold text-[var(--color-primary)]">
-        PortfolioHub
-      </h1>
-      <p className="text-lg text-[var(--color-muted)]">
-        Multi-user portfolio platform — Faza 1 scaffold ✓
-      </p>
-    </main>
-  );
+// platform/src/app/page.tsx
+import { headers } from "next/headers";
+import { notFound } from "next/navigation";
+import { getPortfolioBySlug, getBlocksBySlug } from "@/lib/portfolio";
+import { PortfolioRenderer, type BlockDoc } from "@/components/blocks/PortfolioRenderer";
+
+export default async function PortfolioPage() {
+  const slug = (await headers()).get("x-portfolio-slug");
+
+  if (!slug) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-24">
+        <h1 className="text-4xl font-bold text-(--color-primary)">PortfolioHub</h1>
+        <p className="text-lg text-(--color-muted)">
+          Multi-user portfolio platform
+        </p>
+      </main>
+    );
+  }
+
+  const [portfolio, blocks] = await Promise.all([
+    getPortfolioBySlug(slug),
+    getBlocksBySlug(slug),
+  ]);
+
+  if (!portfolio) notFound();
+
+  return <PortfolioRenderer blocks={blocks as unknown as BlockDoc[]} portfolioSlug={slug} />;
 }

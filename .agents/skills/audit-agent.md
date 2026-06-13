@@ -131,6 +131,9 @@ git -C /home/rspro/Dokumenty/1.CODE/2.Portfolio log --oneline -15
 - Czy istnieje `platform/src/app/(payload)/api/[...slug]/route.ts`?
 - Czy istnieje `platform/src/middleware.ts`?
 - Czy istnieje `platform/src/lib/logger.ts` i `platform/src/lib/index.ts`?
+- Czy istnieje `platform/src/lib/redis.ts`? (singleton Upstash Redis — B8.5)
+- Czy istnieje `platform/src/lib/rate-limit.ts`? (helper rate limitingu — B8.5)
+- Czy istnieje `platform/src/app/api/contact/route.ts`? (POST /api/contact — B8.5)
 - Czy istnieje `platform/payload.config.ts`?
 - Czy istnieje `platform/src/payload/collections/` z 4 plikami (Users, Portfolios, Blocks, Media)?
 - Czy istnieje `.github/workflows/ci.yml`?
@@ -290,7 +293,8 @@ ls -la /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/.env.local.example
 - `F9.1` — Next.js scaffold → sprawdź czy `platform/package.json` istnieje z Next.js
 - `B8.1` — Payload config → sprawdź `platform/payload.config.ts`
 - `B8.2` — Kolekcje → sprawdź 4 pliki w `platform/src/payload/collections/`
-- `B8.3`, `D11.3` — Middleware → sprawdź `platform/src/middleware.ts`
+- `B8.3`, `D11.3`, `F9.2` — Middleware → sprawdź `platform/src/middleware.ts`
+- `B8.5` — Contact API → sprawdź `platform/src/app/api/contact/route.ts`, `lib/redis.ts`, `lib/rate-limit.ts`
 - `K12.5` — CI → sprawdź `.github/workflows/ci.yml`
 
 ```bash
@@ -474,6 +478,58 @@ grep -n "request.*headers\|headers.*request\|requestHeaders" /home/rspro/Dokumen
 
 ---
 
+## Przebieg 8 — Weryfikacja API endpoints
+
+**Cel:** Sprawdź czy zaimplementowane endpointy są poprawnie skonstruowane (statyczna analiza — bez uruchamiania serwera).
+
+```bash
+# Sprawdź czy route handler istnieje
+ls -la /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/src/app/api/contact/route.ts
+
+# Sprawdź eksport POST (musi być export async function POST)
+grep -n "export.*POST\|export.*GET\|export.*PUT\|export.*DELETE" \
+  /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/src/app/api/contact/route.ts
+
+# Sprawdź czy Zod schema jest kompletna (4 pola)
+grep -n "z\.object\|portfolioSlug\|\.email()\|\.min\|\.max" \
+  /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/src/app/api/contact/route.ts
+
+# Sprawdź czy checkRateLimit jest importowany i wywoływany
+grep -n "checkRateLimit\|rate-limit" \
+  /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/src/app/api/contact/route.ts
+
+# Sprawdź czy Resend jest importowany i wywoływany
+grep -n "Resend\|resend\.emails\.send" \
+  /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/src/app/api/contact/route.ts
+
+# Sprawdź czy logger jest używany (nie console.log)
+grep -n "logger\.\|console\." \
+  /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/src/app/api/contact/route.ts
+
+# Sprawdź rate-limit helper — logika INCR + EXPIRE
+grep -n "incr\|expire\|LIMIT\|WINDOW" \
+  /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/src/lib/rate-limit.ts
+
+# Sprawdź Redis singleton — czy waliduje env vars
+grep -n "UPSTASH_REDIS_REST_URL\|UPSTASH_REDIS_REST_TOKEN\|throw" \
+  /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/src/lib/redis.ts
+
+# Sprawdź czy contactEmail jest w kolekcji Portfolios
+grep -n "contactEmail" \
+  /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/src/payload/collections/Portfolios.ts
+```
+
+### Co sprawdzić:
+- Czy `route.ts` eksportuje `POST` (nie default)?
+- Czy Zod schema ma 4 pola z poprawnymi ograniczeniami?
+- Czy rate limiting jest PRZED zapytaniem do bazy?
+- Czy jest obsługa błędu Resend (try/catch → 500)?
+- Czy `x-forwarded-for` → split(",")[0]?.trim() ?? "unknown"?
+- Czy `contactEmail` ma fallback do "biuro@korp-cbm.com"?
+- Czy Redis waliduje env vars przy inicjalizacji?
+
+---
+
 ## Finalna sekcja: Podsumowanie i rekomendacje
 
 Po ukończeniu wszystkich 7 przebiegów:
@@ -501,34 +557,17 @@ Q10: Czy ADR-001 przez ADR-010 są przestrzegane w kodzie? [TAK/NIE + lista naru
 
 ## Jak używać tego skilla
 
-### Dla agenta Ollama:
+Szczegółowe instrukcje uruchamiania wszystkich skillów: `.agents/skills/HOW-TO-RUN.md`
 
+### Skrót dla Copilot:
+Wklej zawartość tego pliku do GitHub Copilot Chat (tryb Agent) i wyślij.
+
+### Skrót dla Cline/Continue:
 ```
-Wczytaj plik: .agents/skills/audit-agent.md
-Wykonaj wszystkie 7 przebiegów po kolei.
-Zapisz wyniki do: .agents/audit/audit-DZISIEJSZA-DATA.md
-NIE modyfikuj żadnych plików poza plikiem audytu.
-Bądź szczegółowy — lepiej za dużo niż za mało.
-Przy każdym problemie podaj: plik, linię, opis, sugestię naprawy.
+Wykonaj audit zgodnie z plikiem: .agents/skills/audit-agent.md
+Wszystkie 8 przebiegów. Zapisz wyniki do .agents/audit/audit-DZISIAJ.md
+NIE modyfikuj kodu — tylko diagnostyka.
 ```
-
-### Uruchomienie z CLI (przykład dla Ollama):
-```bash
-# Opcja 1: podaj skill bezpośrednio
-ollama run llama3.1 "$(cat .agents/skills/audit-agent.md)"
-
-# Opcja 2: z kontekstem projektu
-cat .agents/CONTEXT.md .agents/skills/audit-agent.md | ollama run llama3.1
-
-# Opcja 3: przez pipe z instrukcją
-echo "Wykonaj audit zgodnie z tymi instrukcjami:" | cat - .agents/skills/audit-agent.md | ollama run codellama
-```
-
-### Modele Ollama rekomendowane dla tego zadania:
-- `llama3.1:70b` — najlepszy dla analizy kodu
-- `qwen2.5-coder:32b` — dobry dla TypeScript/JavaScript
-- `deepseek-coder-v2` — dobry dla audytu kodu
-- `mistral-large` — dobry dla raportów tekstowych
 
 ---
 

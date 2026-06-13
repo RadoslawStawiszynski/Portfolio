@@ -53,6 +53,5 @@ coverage/
 # Payload CMS — auto-generated
 platform/src/app/(payload)/admin/importMap.js
 
-# Agent outputs (audit reports, generated plans)
+# Agent outputs (audit reports only — plans and specs are tracked)
 .agents/audit/
-docs/superpowers/plans/

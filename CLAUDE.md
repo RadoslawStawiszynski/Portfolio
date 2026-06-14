@@ -30,7 +30,9 @@ pino — structured JSON logging
 ```
 platform/          ← Next.js 15 + Payload CMS (główna aplikacja)
   src/
-    app/           ← App Router pages i layouts
+    app/           ← App Router — multiple root layouts
+      (portfolio)/ ← Portfolio pages: layout.tsx + page.tsx + dev/[slug]/
+      (payload)/   ← Payload CMS admin + API — własny layout z RootProvider
     components/    ← React components (blocks/, ui/, layout/)
     lib/           ← Utilities: logger.ts, db.ts, redis.ts
     payload/       ← Payload CMS collections i config
@@ -83,6 +85,9 @@ cp .env.local.example .env.local   # wypełnij brakujące klucze
 docker compose -f docker-compose.dev.yml up -d   # PostgreSQL + Redis
 npm install
 npm run dev                         # http://localhost:3000
+npm run typecheck                   # TypeScript check (tsc --noEmit)
+npm run lint                        # ESLint
+rm -rf .next && npm run dev         # reset cache + restart po zmianie struktury
 ```
 
 ## Zatwierdzone decyzje ADR (NIEZMIENNE)
@@ -99,6 +104,21 @@ npm run dev                         # http://localhost:3000
 | ADR-008 | Docker — TYLKO lokalne dev, nie produkcja |
 | ADR-009 | PL + EN — języki interfejsu |
 | ADR-010 | Cloudflare R2 — storage mediów |
+
+## Znane pułapki
+
+- **Multiple root layouts** — brak `app/layout.tsx` jest zamierzony. Portfolio używa
+  `(portfolio)/layout.tsx`, admin `(payload)/layout.tsx` z Payload `RootLayout`.
+  Dodanie `app/layout.tsx` zepsuje admin (ConfigProvider poza drzewem React).
+- **pino w serverExternalPackages** — `next.config.ts` musi zawierać
+  `serverExternalPackages: ["pino", "pino-pretty", "thread-stream", "sonic-boom"]`
+  inaczej worker thread crasha przy starcie.
+- **DATABASE_URL lokalnie** — użyj Docker PostgreSQL:
+  `postgresql://portfoliohub:portfoliohub@localhost:5432/portfoliohub`
+  Neon (chmura) zakomentowany w `.env.local` — odkomentuj tylko przy deploy.
+- **Port konflikty** — jeśli 3000 zajęty, Next.js auto-przełącza na 3003.
+  `pkill -f "next dev"` zabija stare instancje.
+- **Stary cache `.next`** — po zmianie struktury plików: `rm -rf .next`
 
 ## Logging aplikacji
 

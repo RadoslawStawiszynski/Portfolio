@@ -2,8 +2,18 @@
 import { logger } from "@/lib/logger";
 import { BLOCK_REGISTRY, type RegisteredBlockType } from "./registry";
 import type { BlockDoc } from "@/types/blocks";
+import { PortfolioNav } from "@/components/ui/PortfolioNav";
 
 export type { BlockDoc };
+
+const SECTION_LABELS: Partial<Record<string, string>> = {
+  hero: "Start",
+  about: "O mnie",
+  experience: "Doświadczenie",
+  skills: "Umiejętności",
+  education: "Edukacja",
+  contact: "Kontakt",
+};
 
 interface Props {
   blocks: BlockDoc[];
@@ -21,24 +31,34 @@ export function PortfolioRenderer({ blocks, portfolioSlug }: Props) {
     );
   }
 
+  const sections = blocks.map((b) => ({
+    id: b.type,
+    label: SECTION_LABELS[b.type] ?? b.type,
+  }));
+
   return (
-    <main>
-      {blocks.map((block) => {
-        const Component = BLOCK_REGISTRY[block.type as RegisteredBlockType];
-        if (!Component) {
-          logger.warn({ blockType: block.type, portfolioSlug }, "Unknown block type — skipping");
-          return null;
-        }
-        return (
-          <div
-            key={block.id}
-            data-block={block.type}
-            {...(block.themeOverride ? { "data-theme": block.themeOverride } : {})}
-          >
-            <Component data={block.data?.pl ?? {}} portfolioSlug={portfolioSlug} />
-          </div>
-        );
-      })}
-    </main>
+    <>
+      <PortfolioNav sections={sections} />
+      <main className="pt-14">
+        {blocks.map((block) => {
+          const Component = BLOCK_REGISTRY[block.type as RegisteredBlockType];
+          if (!Component) {
+            logger.warn({ blockType: block.type, portfolioSlug }, "Unknown block type — skipping");
+            return null;
+          }
+          return (
+            <div
+              key={block.id}
+              id={block.type}
+              data-block={block.type}
+              className="scroll-mt-14"
+              {...(block.themeOverride ? { "data-theme": block.themeOverride } : {})}
+            >
+              <Component data={block.data?.pl ?? {}} portfolioSlug={portfolioSlug} />
+            </div>
+          );
+        })}
+      </main>
+    </>
   );
 }

@@ -22,7 +22,7 @@
   --color-muted: #8d8179;
 }
 
-/* ── Retro terminal theme ── */
+/* ── Retro terminal (green CRT) ── */
 [data-theme="retro-terminal"] {
   --color-primary: #00ff41;
   --color-secondary: #00cc33;
@@ -31,6 +31,83 @@
   --color-bg-alt: #0f1a0f;
   --color-text: #d4e8d4;
   --color-muted: #5a8a5a;
+}
+
+/* ── Synthwave (pastel neons on deep midnight) ── */
+[data-theme="synthwave"] {
+  --color-primary: #ff79c6;
+  --color-secondary: #bd93f9;
+  --color-accent: #ffb86c;
+  --color-bg: #0d0d1a;
+  --color-bg-alt: #1a1a2e;
+  --color-text: #f8f8f2;
+  --color-muted: #6272a4;
+}
+
+/* ── Amber terminal (vintage IBM monochrome) ── */
+[data-theme="amber"] {
+  --color-primary: #ffb347;
+  --color-secondary: #e8963a;
+  --color-accent: #ffe066;
+  --color-bg: #0c0900;
+  --color-bg-alt: #1a1200;
+  --color-text: #f5deb3;
+  --color-muted: #7a6030;
+}
+
+/* ── Cyberpunk (aquamarine/teal on deep space black) ── */
+[data-theme="cyberpunk"] {
+  --color-primary: #7fffd4;
+  --color-secondary: #5ce8c8;
+  --color-accent: #ff6ac1;
+  --color-bg: #080c10;
+  --color-bg-alt: #0f1923;
+  --color-text: #c8e6e0;
+  --color-muted: #3a6b62;
+}
+
+/* ── Teal Coral (dark teal bg + coral accents) ── */
+[data-theme="teal-coral"] {
+  --color-primary: #d76144;
+  --color-secondary: #eba796;
+  --color-accent: #dfceb9;
+  --color-bg: #051214;
+  --color-bg-alt: #0c4648;
+  --color-text: #dfceb9;
+  --color-muted: #3b6061;
+}
+
+/* ── Earth (ulubiony — złoto/oliwka/ruda na ciemnym slate) ── */
+[data-theme="earth"] {
+  --color-primary: #ddc173;
+  --color-secondary: #91a16a;
+  --color-accent: #b36154;
+  --color-bg: #111a1a;
+  --color-bg-alt: #1c2727;
+  --color-text: #e5ddd0;
+  --color-muted: #8e8680;
+}
+
+/* ── Slate Rose (granatowo-szary bg + różowy pudrowy) ── */
+[data-theme="slate-rose"] {
+  --color-primary: #d9afa8;
+  --color-secondary: #b9b394;
+  --color-accent: #d9c7ab;
+  --color-bg: #1a2229;
+  --color-bg-alt: #253040;
+  --color-text: #d9c7ab;
+  --color-muted: #617d7d;
+}
+
+/* ── Olive Gold (ciemna oliwka + złoto) ── */
+[data-theme="olive-gold"] {
+  --color-primary: #e7c134;
+  --color-secondary: #9db6a5;
+  --color-accent: #fce464;
+  --color-bg: #131505;
+  --color-bg-alt: #1e2108;
+  --color-text: #ede5d0;
+  --color-muted: #a48a71;
 }
 
 body {

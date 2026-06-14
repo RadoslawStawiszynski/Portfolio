@@ -15,7 +15,7 @@ const FEATURES = [
   {
     icon: "🌐",
     title: "Własna domena",
-    body: "Subdomeny (*.korp-cbm.com) lub własna domena przez rekord CNAME — zero konfiguracji po stronie platformy.",
+    body: `Subdomeny (*.${PLATFORM_DOMAIN}) lub własna domena przez rekord CNAME — zero konfiguracji po stronie platformy.`,
   },
   {
     icon: "📬",
@@ -114,7 +114,7 @@ export function LandingPage() {
                 href={`https://${e.slug}.${PLATFORM_DOMAIN}`}
                 className="group rounded-2xl border border-[var(--color-bg-alt)] p-6 transition-colors hover:border-[var(--color-accent)]"
               >
-                <div className="mb-3 h-10 w-10 rounded-full bg-[var(--color-accent)] opacity-70 transition-opacity group-hover:opacity-100" />
+                <div className="mb-3 h-10 w-10 rounded-full bg-[var(--color-accent)] opacity-70 transition-opacity group-hover:opacity-100" aria-hidden="true" />
                 <p className="font-semibold text-[var(--color-primary)]">
                   {e.name}
                 </p>

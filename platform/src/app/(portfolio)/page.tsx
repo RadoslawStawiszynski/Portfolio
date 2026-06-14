@@ -12,7 +12,12 @@ import { LandingPage } from "@/components/landing/LandingPage";
 
 export async function generateMetadata(): Promise<Metadata> {
   const slug = (await headers()).get("x-portfolio-slug");
-  if (!slug) return {};
+  if (!slug) {
+    return {
+      title: "PortfolioHub — Platforma portfolio",
+      description: "Profesjonalne portfolio dla każdego. Własna domena, edytowalne bloki, wiele motywów.",
+    };
+  }
 
   const portfolio = await getPortfolioBySlug(slug);
   if (!portfolio) return {};

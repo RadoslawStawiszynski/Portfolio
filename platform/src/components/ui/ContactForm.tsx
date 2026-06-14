@@ -1,50 +1,20 @@
-// platform/src/components/ui/ContactForm.tsx
 "use client";
-
-import { useState } from "react";
+import { useActionState } from "react";
+import { sendContactMessage } from "@/app/(portfolio)/actions";
 
 interface Props {
   portfolioSlug: string;
 }
 
+const inputClass =
+  "w-full px-4 py-2 rounded-lg bg-[var(--color-bg)] border border-[var(--color-bg-alt)] text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]";
+
+const fieldErrorClass = "text-red-500 text-xs mt-1";
+
 export function ContactForm({ portfolioSlug }: Props) {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [state, formAction, isPending] = useActionState(sendContactMessage, null);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setStatus("loading");
-    const form = e.currentTarget;
-    const body = {
-      portfolioSlug,
-      name: (form.elements.namedItem("name") as HTMLInputElement).value,
-      email: (form.elements.namedItem("email") as HTMLInputElement).value,
-      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
-    };
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (res.ok) {
-        setStatus("success");
-      } else {
-        const json = await res.json().catch(() => ({}));
-        setErrorMsg(
-          json.error === "rate_limit_exceeded"
-            ? "Zbyt wiele wiadomości. Spróbuj za 15 minut."
-            : "Błąd wysyłania. Spróbuj ponownie."
-        );
-        setStatus("error");
-      }
-    } catch {
-      setErrorMsg("Błąd połączenia. Spróbuj ponownie.");
-      setStatus("error");
-    }
-  }
-
-  if (status === "success") {
+  if (state && "success" in state && state.success) {
     return (
       <p className="text-[var(--color-accent)] font-medium">
         Wiadomość wysłana! Odezwę się wkrótce.
@@ -52,42 +22,81 @@ export function ContactForm({ portfolioSlug }: Props) {
     );
   }
 
-  const inputClass =
-    "w-full px-4 py-2 rounded-lg bg-[var(--color-bg)] border border-[var(--color-bg-alt)] text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]";
+  const fields =
+    state && "fields" in state ? state.fields : {};
+
+  const generalError =
+    state && "error" in state && state.error !== "validation"
+      ? state.error === "rate_limit_exceeded"
+        ? "Zbyt wiele wiadomości. Spróbuj za 15 minut."
+        : "Błąd wysyłania. Spróbuj ponownie."
+      : null;
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-lg">
-      <input
-        name="name"
-        required
-        minLength={2}
-        placeholder="Imię i nazwisko"
-        className={inputClass}
-      />
-      <input
-        name="email"
-        type="email"
-        required
-        placeholder="Adres email"
-        className={inputClass}
-      />
-      <textarea
-        name="message"
-        required
-        minLength={10}
-        rows={5}
-        placeholder="Wiadomość (min. 10 znaków)"
-        className={inputClass}
-      />
-      {status === "error" && (
-        <p className="text-red-500 text-sm">{errorMsg}</p>
+    <form action={formAction} className="flex flex-col gap-4 max-w-lg">
+      <input type="hidden" name="portfolioSlug" value={portfolioSlug} />
+
+      <div>
+        <input
+          name="name"
+          required
+          minLength={2}
+          placeholder="Imię i nazwisko"
+          className={inputClass}
+          aria-describedby={fields.name ? "error-name" : undefined}
+        />
+        {fields.name && (
+          <p id="error-name" className={fieldErrorClass}>
+            {fields.name[0]}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <input
+          name="email"
+          type="email"
+          required
+          placeholder="Adres email"
+          className={inputClass}
+          aria-describedby={fields.email ? "error-email" : undefined}
+        />
+        {fields.email && (
+          <p id="error-email" className={fieldErrorClass}>
+            {fields.email[0]}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <textarea
+          name="message"
+          required
+          minLength={10}
+          rows={5}
+          placeholder="Wiadomość (min. 10 znaków)"
+          className={inputClass}
+          aria-describedby={fields.message ? "error-message" : undefined}
+        />
+        {fields.message && (
+          <p id="error-message" className={fieldErrorClass}>
+            {fields.message[0]}
+          </p>
+        )}
+      </div>
+
+      {generalError && (
+        <p className="text-red-500 text-sm" role="alert">
+          {generalError}
+        </p>
       )}
+
       <button
         type="submit"
-        disabled={status === "loading"}
+        disabled={isPending}
         className="px-8 py-3 bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
       >
-        {status === "loading" ? "Wysyłanie…" : "Wyślij wiadomość"}
+        {isPending ? "Wysyłanie…" : "Wyślij wiadomość"}
       </button>
     </form>
   );

@@ -1,5 +1,7 @@
+// platform/src/components/blocks/AboutBlock.tsx
 import Image from "next/image";
 import type { AboutData } from "@/types/blocks";
+import { AnimatedSection } from "@/components/ui/AnimatedSection";
 
 interface Props {
   data: unknown;
@@ -10,7 +12,7 @@ export function AboutBlock({ data }: Props) {
   const d = data as AboutData;
   return (
     <section className="py-16 px-4 bg-[var(--color-bg-alt)]">
-      <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-10 items-center">
+      <AnimatedSection className="max-w-4xl mx-auto flex flex-col md:flex-row gap-10 items-center">
         {d.photoUrl && (
           <Image
             src={d.photoUrl}
@@ -28,7 +30,7 @@ export function AboutBlock({ data }: Props) {
             {d.bio}
           </p>
         </div>
-      </div>
+      </AnimatedSection>
     </section>
   );
 }

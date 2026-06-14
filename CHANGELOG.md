@@ -10,6 +10,7 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ### Added
 - Animacje wejścia Framer Motion 12: fade-in + slide-up dla wszystkich 6 bloków portfolio (F9.7)
+- `PortfolioNav` — sticky top navigation bar z scroll-spy: `IntersectionObserver` podświetla aktywną sekcję podczas scrollowania, klik płynnie przewija do sekcji (F9.8)
 - `AnimatedSection` — współdzielony klient wrapper (`whileInView`, `once: true`) używany przez HeroBlock, AboutBlock, ContactBlock
 - Staggered list animations: ExperienceBlock (timeline items), SkillsBlock (kategorie + tagi scale-in), EducationBlock (karty)
 - `PortfolioRenderer` Server Component + `BLOCK_REGISTRY` — renderuje portfolio z listy bloków Payload (F9.3)

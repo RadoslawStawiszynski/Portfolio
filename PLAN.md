@@ -687,7 +687,7 @@ interface Portfolio {
 - [x] **F9.4** Zaimplementuj każdy blok jako osobny komponent (Hero, About, Experience, Skills, Education, Contact) (2026-06-13, Agent: Claude)
 - [x] **F9.5** System motywów (CSS Custom Properties, light/dark/retro-terminal, cookie persistence) (2026-06-13, Agent: Claude)
 - [x] **F9.6** Responsywność — mobile-first, Tailwind md:/lg: breakpoints (375px/768px/1280px) (2026-06-13, Agent: Claude)
-- [ ] **F9.7** Płynne animacje (Framer Motion: fade-in, slide-up, staggered)
+- [x] **F9.7** Płynne animacje (Framer Motion: fade-in, slide-up, staggered) (2026-06-14, Agent: Claude)
 - [ ] **F9.8** Nawigacja z scroll-spy (podświetlenie aktywnej sekcji)
 - [ ] **F9.9** Formularz kontaktowy z validacją Zod + Server Action
 - [ ] **F9.10** OG / OpenGraph meta tagi per portfolio (SEO)
@@ -1166,7 +1166,7 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 - [x] Implementacja bloków MVP: hero, about, experience, skills, education, contact (2026-06-13, Agent: Claude)
 - [x] System motywów light/dark/retro-terminal (F9.5, ADR-006) (2026-06-13, Agent: Claude)
 - [x] Responsywność (F9.6) (2026-06-13, Agent: Claude)
-- [ ] Animacje (F9.7)
+- [x] Animacje (F9.7) (2026-06-14, Agent: Claude)
 - [ ] Cookie consent (F9.13)
 ```
 

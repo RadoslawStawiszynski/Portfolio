@@ -1,5 +1,6 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
+import type { BlockDoc } from "@/types/blocks";
 
 export async function getPortfolioBySlug(slug: string) {
   const payload = await getPayload({ config });
@@ -33,5 +34,10 @@ export async function getBlocksBySlug(slug: string) {
     sort: "order",
     limit: 100,
   });
-  return blocksResult.docs;
+  return blocksResult.docs.map((doc) => ({
+    id: String(doc.id),
+    type: doc.type as string,
+    themeOverride: (doc.themeOverride as string | null | undefined) ?? null,
+    data: doc.data as { pl: unknown; en?: unknown },
+  })) satisfies BlockDoc[];
 }

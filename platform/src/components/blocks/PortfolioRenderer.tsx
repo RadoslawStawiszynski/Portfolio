@@ -1,13 +1,9 @@
 // platform/src/components/blocks/PortfolioRenderer.tsx
 import { logger } from "@/lib/logger";
 import { BLOCK_REGISTRY, type RegisteredBlockType } from "./registry";
+import type { BlockDoc } from "@/types/blocks";
 
-export interface BlockDoc {
-  id: string;
-  type: string;
-  themeOverride?: string | null;
-  data: { pl: unknown; en?: unknown };
-}
+export type { BlockDoc };
 
 interface Props {
   blocks: BlockDoc[];

@@ -2,7 +2,7 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getPortfolioBySlug, getBlocksBySlug } from "@/lib/portfolio";
-import { PortfolioRenderer, type BlockDoc } from "@/components/blocks/PortfolioRenderer";
+import { PortfolioRenderer } from "@/components/blocks/PortfolioRenderer";
 
 export default async function PortfolioPage() {
   const slug = (await headers()).get("x-portfolio-slug");
@@ -25,5 +25,5 @@ export default async function PortfolioPage() {
 
   if (!portfolio) notFound();
 
-  return <PortfolioRenderer blocks={blocks as unknown as BlockDoc[]} portfolioSlug={slug} />;
+  return <PortfolioRenderer blocks={blocks} portfolioSlug={slug} />;
 }

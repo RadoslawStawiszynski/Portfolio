@@ -29,7 +29,10 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URL || "",
+      connectionString: (() => {
+        if (!process.env.DATABASE_URL) throw new Error("Missing DATABASE_URL env var");
+        return process.env.DATABASE_URL;
+      })(),
     },
   }),
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000",

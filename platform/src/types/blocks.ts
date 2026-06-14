@@ -1,5 +1,12 @@
 // platform/src/types/blocks.ts
 
+export interface BlockDoc {
+  id: string;
+  type: string;
+  themeOverride?: string | null;
+  data: { pl: unknown; en?: unknown };
+}
+
 export interface HeroData {
   title: string;
   subtitle?: string;

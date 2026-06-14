@@ -1,7 +1,7 @@
 // platform/src/app/(portfolio)/dev/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { getPortfolioBySlug, getBlocksBySlug } from "@/lib/portfolio";
-import { PortfolioRenderer, type BlockDoc } from "@/components/blocks/PortfolioRenderer";
+import { PortfolioRenderer } from "@/components/blocks/PortfolioRenderer";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -17,5 +17,5 @@ export default async function DevPortfolioPage({ params }: Props) {
 
   if (!portfolio) notFound();
 
-  return <PortfolioRenderer blocks={blocks as unknown as BlockDoc[]} portfolioSlug={slug} />;
+  return <PortfolioRenderer blocks={blocks} portfolioSlug={slug} />;
 }

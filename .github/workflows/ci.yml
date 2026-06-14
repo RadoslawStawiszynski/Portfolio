@@ -38,3 +38,5 @@ jobs:
           PAYLOAD_SECRET: ci-test-secret-not-real-min-32-chars-xx
           NEXT_PUBLIC_SERVER_URL: http://localhost:3000
           NEXT_PUBLIC_PLATFORM_DOMAIN: korp-cbm.com
+          UPSTASH_REDIS_REST_URL: https://ci-dummy.upstash.io
+          UPSTASH_REDIS_REST_TOKEN: ci-dummy-token-not-real

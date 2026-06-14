@@ -34,15 +34,15 @@ export default async function PortfolioLayout({
     const portfolio = await getPortfolioBySlug(slug);
     const payloadTheme = (portfolio?.theme as string | undefined) ?? "light";
     theme = cookieTheme ?? payloadTheme;
-    cvPdfPl = (portfolio?.cvPdfPl as string | undefined) ?? undefined;
-    cvPdfEn = (portfolio?.cvPdfEn as string | undefined) ?? undefined;
+    cvPdfPl = portfolio?.cvPdfPl as string | undefined;
+    cvPdfEn = portfolio?.cvPdfEn as string | undefined;
     portfolioLang =
       (portfolio?.language as "pl" | "en" | "pl-en" | undefined) ?? "pl";
   }
 
   return (
     <html
-      lang="pl"
+      lang={portfolioLang === "en" ? "en" : "pl"}
       data-theme={slug ? theme : undefined}
       suppressHydrationWarning
     >

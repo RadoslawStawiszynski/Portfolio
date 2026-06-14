@@ -9,6 +9,7 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Added
+- `sendContactMessage` Server Action — walidacja Zod z komunikatami po polsku, rate limiting per IP (`next/headers`), Resend email, zwraca `ContactState` (F9.9)
 - Animacje wejścia Framer Motion 12: fade-in + slide-up dla wszystkich 6 bloków portfolio (F9.7)
 - `PortfolioNav` — sticky top navigation bar z scroll-spy: `IntersectionObserver` podświetla aktywną sekcję podczas scrollowania, klik płynnie przewija do sekcji (F9.8)
 - `AnimatedSection` — współdzielony klient wrapper (`whileInView`, `once: true`) używany przez HeroBlock, AboutBlock, ContactBlock
@@ -26,6 +27,7 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - `.nvmrc` — Node.js 20 pinned, zgodnie z CI
 
 ### Changed
+- `ContactForm` — migracja z `fetch("/api/contact")` na `useActionState` + Server Action; Zod field-level błędy wyświetlane per pole z `aria-invalid` i `aria-describedby` (F9.9)
 - Reorganizacja route groups: `app/` → `app/(portfolio)/` i `app/(payload)/` dla czystszego podziału CMS/portfolio
 - `next.config.ts`: dodano `serverExternalPackages` dla pino (poprawny SSR bundling)
 - `tsconfig.json`: ustawiono `target: "ES2017"`

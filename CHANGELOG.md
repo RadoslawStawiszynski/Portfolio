@@ -9,6 +9,7 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Added
+- `(portfolio)/sitemap.ts` — dynamiczny `sitemap.xml` per portfolio: tylko opublikowane (`isPublished`), URL z `customDomain` lub `{slug}.korp-cbm.com` (F9.11)
 - `buildPortfolioMetadata` helper w `lib/portfolio.ts` — generuje Next.js `Metadata` (og:title, og:description, og:image, twitter:card) z pól Payload: `seoTitle`, `seoDescription`, `seoImage` (F9.10)
 - `generateMetadata` w `(portfolio)/page.tsx` i `dev/[slug]/page.tsx` — per-portfolio OpenGraph i Twitter meta tagi (F9.10)
 - `sendContactMessage` Server Action — walidacja Zod z komunikatami po polsku, rate limiting per IP (`next/headers`), Resend email, zwraca `ContactState` (F9.9)

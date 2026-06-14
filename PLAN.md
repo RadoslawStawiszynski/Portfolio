@@ -691,7 +691,7 @@ interface Portfolio {
 - [x] **F9.8** Nawigacja z scroll-spy (podświetlenie aktywnej sekcji) (2026-06-14, Agent: Claude)
 - [x] **F9.9** Formularz kontaktowy z validacją Zod + Server Action (2026-06-14, Agent: Claude)
 - [x] **F9.10** OG / OpenGraph meta tagi per portfolio (SEO) (2026-06-14, Agent: Claude)
-- [ ] **F9.11** Sitemap.xml generowane dynamicznie per portfolio
+- [x] **F9.11** Sitemap.xml generowane dynamicznie per portfolio (2026-06-14, Agent: Claude)
 - [ ] **F9.12** "Pobierz CV" — pobiera PDF w aktywnym języku (fallback PL)
 - [ ] **F9.13** Cookie consent banner (GDPR) z preferencjami zapisanymi w cookie
 - [ ] **F9.14** Landing page platformy (korp-cbm.com) z prezentacją możliwości

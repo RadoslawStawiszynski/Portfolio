@@ -1,6 +1,7 @@
 // platform/src/components/blocks/ContactBlock.tsx
 import type { ContactData } from "@/types/blocks";
 import { ContactForm } from "@/components/ui/ContactForm";
+import { AnimatedSection } from "@/components/ui/AnimatedSection";
 
 interface Props {
   data: unknown;
@@ -11,7 +12,7 @@ export function ContactBlock({ data, portfolioSlug }: Props) {
   const d = data as ContactData;
   return (
     <section className="py-16 px-4 bg-[var(--color-bg-alt)]">
-      <div className="max-w-3xl mx-auto">
+      <AnimatedSection className="max-w-3xl mx-auto">
         <h2 className="text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-8">
           Kontakt
         </h2>
@@ -52,7 +53,7 @@ export function ContactBlock({ data, portfolioSlug }: Props) {
           </div>
           {d.showForm && <ContactForm portfolioSlug={portfolioSlug} />}
         </div>
-      </div>
+      </AnimatedSection>
     </section>
   );
 }

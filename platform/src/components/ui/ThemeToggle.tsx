@@ -29,7 +29,15 @@ function setTheme(theme: Theme) {
 
 export function ThemeToggle({ currentTheme }: { currentTheme: string }) {
   const [panelOpen, setPanelOpen] = useState(false);
-  const isRetro = RETRO_THEMES.some((t) => t.value === currentTheme);
+  const [active, setActive] = useState(currentTheme);
+
+  const isRetro = RETRO_THEMES.some((t) => t.value === active);
+
+  function handleSelect(theme: Theme) {
+    setTheme(theme);
+    setActive(theme);
+    setPanelOpen(false);
+  }
 
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
@@ -38,11 +46,11 @@ export function ThemeToggle({ currentTheme }: { currentTheme: string }) {
           {RETRO_THEMES.map((t) => (
             <button
               key={t.value}
-              onClick={() => { setTheme(t.value); setPanelOpen(false); }}
+              onClick={() => handleSelect(t.value)}
               title={t.label}
-              aria-pressed={currentTheme === t.value}
+              aria-pressed={active === t.value}
               className={`w-10 h-10 rounded-lg text-xl flex items-center justify-center transition-transform hover:scale-110 ${
-                currentTheme === t.value
+                active === t.value
                   ? "bg-(--color-accent)/30 ring-2 ring-(--color-accent)"
                   : "hover:bg-(--color-bg)"
               }`}
@@ -57,11 +65,11 @@ export function ThemeToggle({ currentTheme }: { currentTheme: string }) {
         {BASE_THEMES.map((t) => (
           <button
             key={t.value}
-            onClick={() => { setTheme(t.value); setPanelOpen(false); }}
+            onClick={() => handleSelect(t.value)}
             title={t.label}
-            aria-pressed={currentTheme === t.value}
+            aria-pressed={active === t.value}
             className={`w-8 h-8 rounded-full text-sm transition-colors ${
-              currentTheme === t.value
+              active === t.value
                 ? "bg-(--color-accent) text-(--color-bg)"
                 : "hover:bg-(--color-bg) text-(--color-text)"
             }`}

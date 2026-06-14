@@ -2,8 +2,13 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import { getPortfolioBySlug, getBlocksBySlug, buildPortfolioMetadata } from "@/lib/portfolio";
+import {
+  getPortfolioBySlug,
+  getBlocksBySlug,
+  buildPortfolioMetadata,
+} from "@/lib/portfolio";
 import { PortfolioRenderer } from "@/components/blocks/PortfolioRenderer";
+import { LandingPage } from "@/components/landing/LandingPage";
 
 export async function generateMetadata(): Promise<Metadata> {
   const slug = (await headers()).get("x-portfolio-slug");
@@ -19,14 +24,7 @@ export default async function PortfolioPage() {
   const slug = (await headers()).get("x-portfolio-slug");
 
   if (!slug) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-24">
-        <h1 className="text-4xl font-bold text-(--color-primary)">PortfolioHub</h1>
-        <p className="text-lg text-(--color-muted)">
-          Multi-user portfolio platform
-        </p>
-      </main>
-    );
+    return <LandingPage />;
   }
 
   const [portfolio, blocks] = await Promise.all([

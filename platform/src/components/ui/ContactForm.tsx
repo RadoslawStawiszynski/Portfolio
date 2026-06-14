@@ -23,7 +23,9 @@ export function ContactForm({ portfolioSlug }: Props) {
   }
 
   const fields =
-    state && "fields" in state ? state.fields : {};
+    state && "error" in state && state.error === "validation"
+      ? state.fields
+      : ({} as Record<string, string[]>);
 
   const generalError =
     state && "error" in state && state.error !== "validation"
@@ -44,6 +46,7 @@ export function ContactForm({ portfolioSlug }: Props) {
           placeholder="Imię i nazwisko"
           className={inputClass}
           aria-describedby={fields.name ? "error-name" : undefined}
+          aria-invalid={!!fields.name || undefined}
         />
         {fields.name && (
           <p id="error-name" className={fieldErrorClass}>
@@ -60,6 +63,7 @@ export function ContactForm({ portfolioSlug }: Props) {
           placeholder="Adres email"
           className={inputClass}
           aria-describedby={fields.email ? "error-email" : undefined}
+          aria-invalid={!!fields.email || undefined}
         />
         {fields.email && (
           <p id="error-email" className={fieldErrorClass}>
@@ -77,6 +81,7 @@ export function ContactForm({ portfolioSlug }: Props) {
           placeholder="Wiadomość (min. 10 znaków)"
           className={inputClass}
           aria-describedby={fields.message ? "error-message" : undefined}
+          aria-invalid={!!fields.message || undefined}
         />
         {fields.message && (
           <p id="error-message" className={fieldErrorClass}>

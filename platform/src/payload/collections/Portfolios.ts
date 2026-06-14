@@ -109,5 +109,19 @@ export const Portfolios: CollectionConfig = {
           "Email do odbierania wiadomości z formularza kontaktowego.",
       },
     },
+    {
+      name: "cvPdfPl",
+      type: "text",
+      admin: {
+        description: "URL do CV PDF po polsku (np. link z Cloudflare R2)",
+      },
+    },
+    {
+      name: "cvPdfEn",
+      type: "text",
+      admin: {
+        description: "URL do CV PDF po angielsku (opcjonalne, fallback PL jeśli brak)",
+      },
+    },
   ],
 };

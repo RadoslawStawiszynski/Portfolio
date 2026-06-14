@@ -695,7 +695,7 @@ interface Portfolio {
 - [x] **F9.12** "Pobierz CV" — pobiera PDF w aktywnym języku (fallback PL) (2026-06-14, Agent: Claude)
 - [x] **F9.13** Cookie consent banner (GDPR) z preferencjami zapisanymi w cookie (2026-06-14, Agent: Claude)
 - [x] **F9.14** Landing page platformy (korp-cbm.com) z prezentacją możliwości (2026-06-14, Agent: Claude)
-- [ ] **F9.15** Strona 404 per portfolio
+- [x] **F9.15** Strona 404 per portfolio (2026-06-14, Agent: Claude)
 
 ### 9.3 Wymagania UX
 

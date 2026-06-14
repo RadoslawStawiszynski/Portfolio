@@ -9,10 +9,27 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Added
+- `PortfolioRenderer` Server Component + `BLOCK_REGISTRY` — renderuje portfolio z listy bloków Payload (F9.3)
+- 6 bloków MVP: HeroBlock, AboutBlock, ExperienceBlock, SkillsBlock, EducationBlock, ContactBlock (F9.4)
+- `ContactForm` client component z obsługą formularza (F9.4)
+- `ThemeToggle` client component — przełącznik motywów z zapisem do cookie (F9.5)
+- `/dev/[slug]` route — lokalny podgląd portfolio bez subdomeny (F9.3)
+- `getPortfolioBySlug` + `getBlocksBySlug` — helpery do odczytu danych portfolio z Payload (F9.3)
 - `POST /api/contact` — endpoint formularza kontaktowego z walidacją Zod, rate limitingiem Redis (3 req/15 min per IP) i wysyłką emaili przez Resend (B8.5)
 - Pole `contactEmail` w kolekcji Portfolios — edytowalne w admin panelu
 - `lib/redis.ts` — singleton Upstash Redis
 - `lib/rate-limit.ts` — helper rate limitingu per IP
+- `.nvmrc` — Node.js 20 pinned, zgodnie z CI
+
+### Changed
+- Reorganizacja route groups: `app/` → `app/(portfolio)/` i `app/(payload)/` dla czystszego podziału CMS/portfolio
+- `next.config.ts`: dodano `serverExternalPackages` dla pino (poprawny SSR bundling)
+- `tsconfig.json`: ustawiono `target: "ES2017"`
+
+### Fixed
+- Zamieniono `<img>` na `<Image />` (next/image) w `AboutBlock` i `HeroBlock` — poprawa LCP (W3)
+- Dodano guard `PAYLOAD_SECRET` z `throw` w `payload.config.ts` — analogicznie do `redis.ts` (I1)
+- Poprawiono dokumentację S14.3 w PLAN.md: "5 req" → "3 req/15 min" — zgodność z implementacją (W6)
 
 ### Foundation (Faza 1)
 - Next.js 15 App Router scaffold — TypeScript 5, Tailwind CSS 4, 3-theme CSS token system (F9.1)

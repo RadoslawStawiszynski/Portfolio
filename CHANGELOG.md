@@ -9,6 +9,8 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Added
+- `DownloadCvButton` — fixed bottom-left button dla pobierania CV; EN portfolio preferuje `cvPdfEn`, fallback `cvPdfPl`; ukryty gdy brak URL (F9.12)
+- Pola `cvPdfPl` i `cvPdfEn` w kolekcji Portfolios — URL do CV PDF edytowalne w Payload admin (F9.12)
 - `(portfolio)/sitemap.ts` — dynamiczny `sitemap.xml` per portfolio: tylko opublikowane (`isPublished`), URL z `customDomain` lub `{slug}.korp-cbm.com` (F9.11)
 - `buildPortfolioMetadata` helper w `lib/portfolio.ts` — generuje Next.js `Metadata` (og:title, og:description, og:image, twitter:card) z pól Payload: `seoTitle`, `seoDescription`, `seoImage` (F9.10)
 - `generateMetadata` w `(portfolio)/page.tsx` i `dev/[slug]/page.tsx` — per-portfolio OpenGraph i Twitter meta tagi (F9.10)
@@ -30,6 +32,7 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - `.nvmrc` — Node.js 20 pinned, zgodnie z CI
 
 ### Changed
+- `(portfolio)/layout.tsx` — dynamiczny atrybut `lang` na `<html>` wg `portfolioLang` (EN portfolio → `lang="en"`) (F9.12)
 - `ContactForm` — migracja z `fetch("/api/contact")` na `useActionState` + Server Action; Zod field-level błędy wyświetlane per pole z `aria-invalid` i `aria-describedby` (F9.9)
 - Reorganizacja route groups: `app/` → `app/(portfolio)/` i `app/(payload)/` dla czystszego podziału CMS/portfolio
 - `next.config.ts`: dodano `serverExternalPackages` dla pino (poprawny SSR bundling)

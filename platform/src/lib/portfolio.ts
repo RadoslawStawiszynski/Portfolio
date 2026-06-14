@@ -47,8 +47,8 @@ export function buildPortfolioMetadata(
   portfolio: NonNullable<Awaited<ReturnType<typeof getPortfolioBySlug>>>,
   slug: string
 ): Metadata {
-  const title = (portfolio.seoTitle as string | undefined) ?? slug;
-  const description = (portfolio.seoDescription as string | undefined) ?? undefined;
+  const title = (portfolio.seoTitle as string | null | undefined) ?? slug;
+  const description = (portfolio.seoDescription as string | null | undefined) ?? undefined;
 
   const seoImageRaw = portfolio.seoImage;
   const seoImageUrl =
@@ -62,14 +62,14 @@ export function buildPortfolioMetadata(
     openGraph: {
       title,
       description,
-      type: "profile",
-      ...(seoImageUrl ? { images: [{ url: seoImageUrl }] } : {}),
+      type: "website",
+      images: seoImageUrl ? [{ url: seoImageUrl }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      ...(seoImageUrl ? { images: [seoImageUrl] } : {}),
+      images: seoImageUrl ? [seoImageUrl] : undefined,
     },
   };
 }

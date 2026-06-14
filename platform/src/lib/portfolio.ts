@@ -1,6 +1,7 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
 import type { BlockDoc } from "@/types/blocks";
+import type { Metadata } from "next";
 
 export async function getPortfolioBySlug(slug: string) {
   const payload = await getPayload({ config });
@@ -40,4 +41,35 @@ export async function getBlocksBySlug(slug: string) {
     themeOverride: (doc.themeOverride as string | null | undefined) ?? null,
     data: doc.data as { pl: unknown; en?: unknown },
   })) satisfies BlockDoc[];
+}
+
+export function buildPortfolioMetadata(
+  portfolio: NonNullable<Awaited<ReturnType<typeof getPortfolioBySlug>>>,
+  slug: string
+): Metadata {
+  const title = (portfolio.seoTitle as string | undefined) ?? slug;
+  const description = (portfolio.seoDescription as string | undefined) ?? undefined;
+
+  const seoImageRaw = portfolio.seoImage;
+  const seoImageUrl =
+    typeof seoImageRaw === "object" && seoImageRaw !== null
+      ? ((seoImageRaw as { url?: string }).url ?? undefined)
+      : undefined;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "profile",
+      ...(seoImageUrl ? { images: [{ url: seoImageUrl }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(seoImageUrl ? { images: [seoImageUrl] } : {}),
+    },
+  };
 }

@@ -5,6 +5,7 @@ import "../globals.css";
 import { getPortfolioBySlug } from "@/lib/portfolio";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { DownloadCvButton } from "@/components/ui/DownloadCvButton";
+import { CookieConsentBanner } from "@/components/ui/CookieConsentBanner";
 
 export const metadata: Metadata = {
   title: {
@@ -48,6 +49,7 @@ export default async function PortfolioLayout({
     >
       <body>
         {children}
+        {slug && <CookieConsentBanner />}
         {slug && <ThemeToggle currentTheme={theme} />}
         {slug && (cvPdfPl || cvPdfEn) && (
           <DownloadCvButton

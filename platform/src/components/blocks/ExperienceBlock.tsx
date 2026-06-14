@@ -1,9 +1,22 @@
+// platform/src/components/blocks/ExperienceBlock.tsx
+"use client";
+import { motion } from "framer-motion";
 import type { ExperienceData } from "@/types/blocks";
 
 interface Props {
   data: unknown;
   portfolioSlug: string;
 }
+
+const listVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" as const } },
+};
 
 function formatPeriod(startDate: string, endDate?: string): string {
   const fmt = (d: string) => {
@@ -22,9 +35,15 @@ export function ExperienceBlock({ data }: Props) {
         <h2 className="text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-8">
           Doświadczenie
         </h2>
-        <ol className="relative border-l border-[var(--color-bg-alt)] space-y-10">
+        <motion.ol
+          variants={listVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="relative border-l border-[var(--color-bg-alt)] space-y-10"
+        >
           {d.items.map((item, i) => (
-            <li key={i} className="ml-6">
+            <motion.li key={i} variants={itemVariants} className="ml-6">
               <span className="absolute -left-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)]" />
               <p className="text-sm text-[var(--color-muted)] mb-1">
                 {formatPeriod(item.startDate, item.endDate)}
@@ -40,9 +59,9 @@ export function ExperienceBlock({ data }: Props) {
                   {item.description}
                 </p>
               )}
-            </li>
+            </motion.li>
           ))}
-        </ol>
+        </motion.ol>
       </div>
     </section>
   );

@@ -251,44 +251,6 @@ Efekty opcjonalne: migający kursor, CSS scanlines, typewriter na hero.
 **Data decyzji:** 2026-05-23
 
 ---
-Opcja A — Synthwave / Retrowave
-Neonowe różowo-fioletowe, inspirowane Vaporwave/Miami Vice. Pastelowe nony na deep purple.
-
-Token	HEX	Wygląd
---color-primary	#FF79C6	pastelowy róż
---color-secondary	#BD93F9	lawendowy fiolet
---color-accent	#FFB86C	ciepły amber
---color-bg	#0D0D1A	deep midnight
---color-bg-alt	#1A1A2E	navy dark
---color-text	#F8F8F2	miękka biel
---color-muted	#6272A4	steel blue-grey
-Opcja B — Amber terminal
-Vintage IBM 5151 / Monochrome amber. Ciepłe złoto/pomarańcz na czarnym.
-
-Token	HEX	Wygląd
---color-primary	#FFB347	pastelowy amber
---color-secondary	#E8963A	ciemniejszy pomarańcz
---color-accent	#FFE066	jasny żółty
---color-bg	#0C0900	prawie czarny warm
---color-bg-alt	#1A1200	ciemno-bursztynowy
---color-text	#F5DEB3	wheat / kremowy
---color-muted	#7A6030	przyciemniony amber
-Opcja C — Cyberpunk Teal
-Cyan/turkusowe akcenty, klimat Blade Runner / DOS na dark navy.
-
-Token	HEX	Wygląd
---color-primary	#7FFFD4	aquamarine pastel
---color-secondary	#5CE8C8	cyjan
---color-accent	#FF6AC1	pink neon
---color-bg	#080C10	deep space black
---color-bg-alt	#0F1923	dark navy
---color-text	#C8E6E0	miękki teal-white
---color-muted	#3A6B62	muted teal
-
-
-
-
----
 
 ### ADR-009 — Język platformy
 
@@ -728,7 +690,7 @@ interface Portfolio {
 - [x] **F9.7** Płynne animacje (Framer Motion: fade-in, slide-up, staggered) (2026-06-14, Agent: Claude)
 - [x] **F9.8** Nawigacja z scroll-spy (podświetlenie aktywnej sekcji) (2026-06-14, Agent: Claude)
 - [x] **F9.9** Formularz kontaktowy z validacją Zod + Server Action (2026-06-14, Agent: Claude)
-- [ ] **F9.10** OG / OpenGraph meta tagi per portfolio (SEO)
+- [x] **F9.10** OG / OpenGraph meta tagi per portfolio (SEO) (2026-06-14, Agent: Claude)
 - [ ] **F9.11** Sitemap.xml generowane dynamicznie per portfolio
 - [ ] **F9.12** "Pobierz CV" — pobiera PDF w aktywnym języku (fallback PL)
 - [ ] **F9.13** Cookie consent banner (GDPR) z preferencjami zapisanymi w cookie

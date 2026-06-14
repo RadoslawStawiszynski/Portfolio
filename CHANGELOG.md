@@ -9,6 +9,8 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Added
+- `buildPortfolioMetadata` helper w `lib/portfolio.ts` — generuje Next.js `Metadata` (og:title, og:description, og:image, twitter:card) z pól Payload: `seoTitle`, `seoDescription`, `seoImage` (F9.10)
+- `generateMetadata` w `(portfolio)/page.tsx` i `dev/[slug]/page.tsx` — per-portfolio OpenGraph i Twitter meta tagi (F9.10)
 - `sendContactMessage` Server Action — walidacja Zod z komunikatami po polsku, rate limiting per IP (`next/headers`), Resend email, zwraca `ContactState` (F9.9)
 - Animacje wejścia Framer Motion 12: fade-in + slide-up dla wszystkich 6 bloków portfolio (F9.7)
 - `PortfolioNav` — sticky top navigation bar z scroll-spy: `IntersectionObserver` podświetla aktywną sekcję podczas scrollowania, klik płynnie przewija do sekcji (F9.8)

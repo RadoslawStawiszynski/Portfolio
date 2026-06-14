@@ -21,10 +21,13 @@ export type ContactState =
   | { error: "portfolio_not_found" }
   | { error: "email_failed" };
 
+if (!process.env.RESEND_API_KEY) {
+  logger.warn("RESEND_API_KEY is not set — contact emails will fail");
+}
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendContactMessage(
-  prevState: ContactState | null,
+  _prevState: ContactState | null,
   formData: FormData
 ): Promise<ContactState> {
   const raw = {

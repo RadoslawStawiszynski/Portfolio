@@ -8,7 +8,7 @@ export default async function NotFound() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center bg-[var(--color-bg)]">
-      <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+      <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]" aria-hidden="true">
         404
       </p>
       <h1 className="text-5xl font-bold text-[var(--color-primary)] md:text-7xl">
@@ -22,7 +22,7 @@ export default async function NotFound() {
       <div className="mt-8 flex flex-wrap justify-center gap-4">
         {slug && (
           <a
-            href="/"
+            href={process.env.NODE_ENV === "development" ? `/dev/${slug}` : "/"}
             className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] shadow hover:opacity-90 transition-opacity"
           >
             Strona główna
@@ -30,6 +30,7 @@ export default async function NotFound() {
         )}
         <a
           href={`https://${PLATFORM_DOMAIN}`}
+          rel="noopener noreferrer"
           className="rounded-full border border-[var(--color-bg-alt)] px-6 py-3 text-sm font-semibold text-[var(--color-text)] hover:bg-[var(--color-bg-alt)] transition-colors"
         >
           PortfolioHub →

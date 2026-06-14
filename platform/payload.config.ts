@@ -20,7 +20,10 @@ export default buildConfig({
   },
   collections: [Users, Portfolios, Blocks, Media],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || "",
+  secret: (() => {
+    if (!process.env.PAYLOAD_SECRET) throw new Error("Missing PAYLOAD_SECRET env var");
+    return process.env.PAYLOAD_SECRET;
+  })(),
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },

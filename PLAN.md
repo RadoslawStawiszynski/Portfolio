@@ -947,7 +947,7 @@ PLATFORM_DOMAIN=korp-cbm.com
 
 - [ ] **S14.1** HTTPS everywhere (Caddy auto SSL, Cloudflare)
 - [ ] **S14.2** CSRF protection (Payload CMS wbudowane + Next.js CSRF tokens)
-- [ ] **S14.3** Rate limiting na formularzu kontaktowym (Redis — max 5 req/15min per IP)
+- [x] **S14.3** Rate limiting na formularzu kontaktowym (Redis — max 3 req/15min per IP) (2026-06-13, Agent: Claude)
 - [ ] **S14.4** Rate limiting na logowaniu admina (max 10 prób/15min)
 - [ ] **S14.5** Sanityzacja danych wejściowych (Zod na wszystkich formach)
 - [ ] **S14.6** XSS protection — React domyślnie, sanityzacja custom HTML (DOMPurify)

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { HeroData } from "@/types/blocks";
 
 interface Props {
@@ -10,9 +11,11 @@ export function HeroBlock({ data }: Props) {
   return (
     <section className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 py-16 lg:py-24 bg-[var(--color-bg)]">
       {d.avatarUrl && (
-        <img
+        <Image
           src={d.avatarUrl}
           alt={d.title}
+          width={128}
+          height={128}
           className="w-24 h-24 lg:w-32 lg:h-32 rounded-full mb-6 object-cover border-4 border-[var(--color-accent)]"
         />
       )}

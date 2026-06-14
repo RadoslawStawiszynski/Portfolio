@@ -258,6 +258,12 @@ grep -rn "TODO\|FIXME\|HACK\|XXX" src/ --include="*.ts" --include="*.tsx" 2>/dev
 # Szukaj any typowania
 grep -rn ": any\|as any\|<any>" src/ --include="*.ts" --include="*.tsx" 2>/dev/null
 
+# Szukaj podwójnych type assertions (wskazuje na niezgodność typów)
+grep -rn "as unknown as" src/ --include="*.ts" --include="*.tsx" 2>/dev/null
+
+# Sprawdź czy BlockDoc jest w @/types/blocks (nie definiowany lokalnie w komponencie)
+grep -rn "interface BlockDoc\|export interface BlockDoc" src/components/ 2>/dev/null && echo "⚠️ BlockDoc w komponencie — powinien być w @/types/blocks"
+
 # Sprawdź czy logger jest importowany poprawnie (nie console.log)
 grep -rn "import.*logger\|from.*logger" src/ --include="*.ts" --include="*.tsx" 2>/dev/null
 
@@ -270,6 +276,8 @@ grep -rn "CollectionConfig" src/payload/ 2>/dev/null
 - Czy `npm run lint` nie ma błędów (warningi są OK)?
 - Czy jest jakiś `console.log` w plikach produkcyjnych?
 - Czy `any` typing pojawia się bez uzasadnienia?
+- Czy `as unknown as` pojawia się w plikach page/component? (wskazuje na niezgodność typów — napraw w warstwie danych)
+- Czy `BlockDoc` jest w `src/types/blocks.ts` (NIE w komponencie)?
 - Czy wszystkie kolekcje Payload importują `CollectionConfig`?
 
 ### Sprawdź poszczególne pliki kolekcji:
@@ -496,9 +504,10 @@ grep -n "request.*headers\|headers.*request\|requestHeaders" /home/rspro/Dokumen
 ```
 
 ### Co sprawdzić:
-- Czy Node.js ≥ 20?
+- Czy Node.js ≥ 20? (`.nvmrc` istnieje z wartością `20`?)
 - Czy `graphql` jest zainstalowany (nie tylko w package.json)?
 - Czy nie ma CRITICAL npm audit issues?
+- Czy CI ma `UPSTASH_REDIS_REST_URL` i `UPSTASH_REDIS_REST_TOKEN` w env? (brak → crash `npm run build`)
 - Czy middleware ustawia `x-portfolio-slug` na **request** headers (przez `NextResponse.next({ request: { headers: requestHeaders } })`)?
 
 ---
@@ -576,6 +585,11 @@ Q7: Czy graphql jest zainstalowany jako dependency? [TAK/NIE]
 Q8: Czy .env.local jest w gitignore i nie jest w repo? [TAK/NIE]
 Q9: Czy wersje @payloadcms/* są spójne? [TAK/NIE + wersje]
 Q10: Czy ADR-001 przez ADR-010 są przestrzegane w kodzie? [TAK/NIE + lista naruszeń]
+Q11: Czy PAYLOAD_SECRET i DATABASE_URL mają guard z throw (nie || "")? [TAK/NIE]
+Q12: Czy UPSTASH_REDIS_REST_URL w .env.local.example zaczyna się od https:// (nie redis://)? [TAK/NIE]
+Q13: Czy CI ma dummy Upstash vars (UPSTASH_REDIS_REST_URL + TOKEN)? [TAK/NIE]
+Q14: Czy nie ma as unknown as w plikach pages/components? [TAK/NIE + pliki]
+Q15: Czy BlockDoc interface jest w @/types/blocks (NIE w komponencie)? [TAK/NIE]
 ```
 
 ---

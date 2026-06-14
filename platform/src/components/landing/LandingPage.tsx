@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const PLATFORM_DOMAIN =
   process.env.NEXT_PUBLIC_PLATFORM_DOMAIN ?? "korp-cbm.com";
 
@@ -65,12 +67,12 @@ export function LandingPage() {
           >
             Zobacz przykład →
           </a>
-          <a
+          <Link
             href="/admin"
             className="rounded-full border border-[var(--color-bg-alt)] px-6 py-3 text-sm font-semibold text-[var(--color-text)] hover:bg-[var(--color-bg-alt)] transition-colors"
           >
             Panel admina
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -134,12 +136,12 @@ export function LandingPage() {
       <footer className="border-t border-[var(--color-bg-alt)] px-6 py-8 text-center text-sm text-[var(--color-muted)]">
         <p>
           PortfolioHub &copy; {new Date().getFullYear()} &mdash;{" "}
-          <a
+          <Link
             href="/admin"
             className="transition-colors hover:text-[var(--color-accent)]"
           >
             Panel admina
-          </a>
+          </Link>
         </p>
       </footer>
     </div>

@@ -34,7 +34,7 @@ platform/          ← Next.js 15 + Payload CMS (główna aplikacja)
       (portfolio)/ ← Portfolio pages: layout.tsx + page.tsx + dev/[slug]/
       (payload)/   ← Payload CMS admin + API — własny layout z RootProvider
     components/    ← React components (blocks/, ui/, layout/)
-    lib/           ← Utilities: logger.ts, db.ts, redis.ts
+    lib/           ← Utilities: logger.ts, redis.ts, portfolio.ts, rate-limit.ts
     payload/       ← Payload CMS collections i config
     middleware.ts  ← Subdomain routing
   docker-compose.dev.yml

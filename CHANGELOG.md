@@ -9,6 +9,7 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Added
+- `CookieConsentBanner` — GDPR bottom bar; `cookie-consent` cookie (1 rok); "Akceptuję" / "Odrzuć"; pojawia się tylko przy braku zgody; `role="dialog"`, `aria-live="polite"`, `focus-visible` na przyciskach (F9.13)
 - `DownloadCvButton` — fixed bottom-left button dla pobierania CV; EN portfolio preferuje `cvPdfEn`, fallback `cvPdfPl`; ukryty gdy brak URL (F9.12)
 - Pola `cvPdfPl` i `cvPdfEn` w kolekcji Portfolios — URL do CV PDF edytowalne w Payload admin (F9.12)
 - `(portfolio)/sitemap.ts` — dynamiczny `sitemap.xml` per portfolio: tylko opublikowane (`isPublished`), URL z `customDomain` lub `{slug}.korp-cbm.com` (F9.11)

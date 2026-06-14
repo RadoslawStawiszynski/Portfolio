@@ -693,7 +693,7 @@ interface Portfolio {
 - [x] **F9.10** OG / OpenGraph meta tagi per portfolio (SEO) (2026-06-14, Agent: Claude)
 - [x] **F9.11** Sitemap.xml generowane dynamicznie per portfolio (2026-06-14, Agent: Claude)
 - [x] **F9.12** "Pobierz CV" — pobiera PDF w aktywnym języku (fallback PL) (2026-06-14, Agent: Claude)
-- [ ] **F9.13** Cookie consent banner (GDPR) z preferencjami zapisanymi w cookie
+- [x] **F9.13** Cookie consent banner (GDPR) z preferencjami zapisanymi w cookie (2026-06-14, Agent: Claude)
 - [ ] **F9.14** Landing page platformy (korp-cbm.com) z prezentacją możliwości
 - [ ] **F9.15** Strona 404 per portfolio
 

@@ -1,7 +1,7 @@
-// platform/src/app/layout.tsx
+// platform/src/app/(portfolio)/layout.tsx
 import type { Metadata } from "next";
 import { headers, cookies } from "next/headers";
-import "./globals.css";
+import "../globals.css";
 import { getPortfolioBySlug } from "@/lib/portfolio";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: "Multi-user portfolio platform",
 };
 
-export default async function RootLayout({
+export default async function PortfolioLayout({
   children,
 }: {
   children: React.ReactNode;

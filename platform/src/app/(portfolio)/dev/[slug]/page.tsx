@@ -1,4 +1,4 @@
-// platform/src/app/dev/[slug]/page.tsx
+// platform/src/app/(portfolio)/dev/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { getPortfolioBySlug, getBlocksBySlug } from "@/lib/portfolio";
 import { PortfolioRenderer, type BlockDoc } from "@/components/blocks/PortfolioRenderer";

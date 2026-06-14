@@ -1,4 +1,4 @@
-// platform/src/app/page.tsx
+// platform/src/app/(portfolio)/page.tsx
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getPortfolioBySlug, getBlocksBySlug } from "@/lib/portfolio";

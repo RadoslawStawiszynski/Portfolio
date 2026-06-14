@@ -27,6 +27,10 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - `tsconfig.json`: ustawiono `target: "ES2017"`
 
 ### Fixed
+- Przeniesiono `BlockDoc` do `@/types/blocks` + `getBlocksBySlug` mapuje do `BlockDoc[]` — eliminuje podwójne asercje `as unknown as BlockDoc[]` na stronach
+- Dodano guard `DATABASE_URL` z `throw` w `payload.config.ts` — fail fast przy brakującym env (W1)
+- Poprawiono `.env.local.example`: `@upstash/redis` wymaga HTTPS REST URL, nie TCP (C1)
+- Dodano dummy Upstash vars do CI env — zapobiega crashowi build step przy brakujących zmiennych (C2)
 - Zamieniono `<img>` na `<Image />` (next/image) w `AboutBlock` i `HeroBlock` — poprawa LCP (W3)
 - Dodano guard `PAYLOAD_SECRET` z `throw` w `payload.config.ts` — analogicznie do `redis.ts` (I1)
 - Poprawiono dokumentację S14.3 w PLAN.md: "5 req" → "3 req/15 min" — zgodność z implementacją (W6)

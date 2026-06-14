@@ -1,9 +1,27 @@
+// platform/src/components/blocks/SkillsBlock.tsx
+"use client";
+import { motion } from "framer-motion";
 import type { SkillsData } from "@/types/blocks";
 
 interface Props {
   data: unknown;
   portfolioSlug: string;
 }
+
+const gridVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+};
+
+const categoryVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
+};
+
+const tagVariants = {
+  hidden: { opacity: 0, scale: 0.85 },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.25, ease: "easeOut" as const } },
+};
 
 export function SkillsBlock({ data }: Props) {
   const d = data as SkillsData;
@@ -13,25 +31,35 @@ export function SkillsBlock({ data }: Props) {
         <h2 className="text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-8">
           Umiejętności
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <motion.div
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+        >
           {d.categories.map((cat, i) => (
-            <div key={i}>
+            <motion.div key={i} variants={categoryVariants}>
               <h3 className="text-sm font-semibold uppercase tracking-widest text-[var(--color-muted)] mb-3">
                 {cat.name}
               </h3>
-              <div className="flex flex-wrap gap-2">
+              <motion.div
+                variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05 } } }}
+                className="flex flex-wrap gap-2"
+              >
                 {cat.skills.map((skill, j) => (
-                  <span
+                  <motion.span
                     key={j}
+                    variants={tagVariants}
                     className="px-3 py-1 text-sm rounded-full bg-[var(--color-bg)] text-[var(--color-text)] border border-[var(--color-bg-alt)]"
                   >
                     {skill}
-                  </span>
+                  </motion.span>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

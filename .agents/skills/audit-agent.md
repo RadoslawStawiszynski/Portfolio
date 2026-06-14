@@ -126,17 +126,30 @@ git -C /home/rspro/Dokumenty/1.CODE/2.Portfolio log --oneline -15
 ```
 
 ### Co sprawdzić:
-- Czy istnieje `platform/src/app/globals.css`, `layout.tsx`, `page.tsx`?
+
+**⚠️ ROUTE GROUPS — brak `app/layout.tsx` jest ZAMIERZONY:**
+- `app/(portfolio)/layout.tsx` + `app/(portfolio)/page.tsx` + `app/(portfolio)/dev/[slug]/page.tsx` — portfolio
+- `app/(payload)/layout.tsx` (Payload RootProvider) + `app/(payload)/admin/[[...segments]]/page.tsx` + `app/(payload)/api/[...slug]/route.ts` — CMS
+- Dodanie `app/layout.tsx` zepsuje admin (ConfigProvider poza drzewem React)
+
+**Pliki kluczowe:**
+- Czy istnieje `platform/src/app/globals.css`?
+- Czy istnieje `platform/src/app/(portfolio)/layout.tsx` i `(portfolio)/page.tsx`?
+- Czy istnieje `platform/src/app/(portfolio)/dev/[slug]/page.tsx`?
+- Czy istnieje `platform/src/app/(payload)/layout.tsx`?
 - Czy istnieje `platform/src/app/(payload)/admin/[[...segments]]/page.tsx`?
 - Czy istnieje `platform/src/app/(payload)/api/[...slug]/route.ts`?
 - Czy istnieje `platform/src/middleware.ts`?
 - Czy istnieje `platform/src/lib/logger.ts` i `platform/src/lib/index.ts`?
 - Czy istnieje `platform/src/lib/redis.ts`? (singleton Upstash Redis — B8.5)
 - Czy istnieje `platform/src/lib/rate-limit.ts`? (helper rate limitingu — B8.5)
+- Czy istnieje `platform/src/lib/portfolio.ts`? (getPortfolioBySlug + getBlocksBySlug — F9.3)
+- Czy istnieje `platform/src/types/blocks.ts` z interfejsem `BlockDoc`? (nie w komponencie)
 - Czy istnieje `platform/src/app/api/contact/route.ts`? (POST /api/contact — B8.5)
 - Czy istnieje `platform/payload.config.ts`?
 - Czy istnieje `platform/src/payload/collections/` z 4 plikami (Users, Portfolios, Blocks, Media)?
 - Czy istnieje `.github/workflows/ci.yml`?
+- Czy istnieje `.nvmrc` z wartością `20`?
 - Czy `platform/.env.local` jest w `.gitignore` i NIE jest w repo?
 - Czy `platform/node_modules/` jest w `.gitignore`?
 
@@ -190,10 +203,22 @@ diff <(grep -E "^[A-Z_]+" /home/rspro/Dokumenty/1.CODE/2.Portfolio/platform/.env
 - Czy `strict: true` jest ustawiony?
 
 **payload.config.ts:**
-- Czy używa `process.env.PAYLOAD_SECRET`?
-- Czy używa `process.env.DATABASE_URL`?
+- Czy `PAYLOAD_SECRET` ma guard z `throw` (NIE `|| ""`)?
+- Czy `DATABASE_URL` ma guard z `throw` (NIE `|| ""`)?
 - Czy używa `process.env.NEXT_PUBLIC_SERVER_URL`?
 - Czy `upload.limits.fileSize` jest ustawiony?
+
+**next.config.ts:**
+- Czy `serverExternalPackages` zawiera `["pino", "pino-pretty", "thread-stream", "sonic-boom"]`?
+- Czy `output: "standalone"` jest ustawiony (wymagane przez Vercel SSR)?
+
+**CI — .github/workflows/ci.yml:**
+- Czy env section zawiera `UPSTASH_REDIS_REST_URL` i `UPSTASH_REDIS_REST_TOKEN`?
+  (brak → `redis.ts` crashnie przy `npm run build`)
+
+**.env.local.example:**
+- Czy `UPSTASH_REDIS_REST_URL` zaczyna się od `https://` (NIE `redis://`)?
+  (`@upstash/redis` wymaga REST HTTPS, lokalny Docker Redis TCP jest niekompatybilny)
 
 **Zmienne środowiskowe — sprawdź co jest w .env.local.example ale nie w .env.example i odwrotnie:**
 ```bash

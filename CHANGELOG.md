@@ -9,6 +9,7 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Added
+- `LandingPage` — landing page platformy na `korp-cbm.com`; sekcje: Hero (tagline + CTA), Funkcje (4 karty), Aktywne portfolio (3 przykłady), Footer; metadane SEO (title + description); CSS Custom Properties `:root` light theme (F9.14)
 - `CookieConsentBanner` — GDPR bottom bar; `cookie-consent` cookie (1 rok); "Akceptuję" / "Odrzuć"; pojawia się tylko przy braku zgody; `role="dialog"`, `aria-live="polite"`, `focus-visible` na przyciskach (F9.13)
 - `DownloadCvButton` — fixed bottom-left button dla pobierania CV; EN portfolio preferuje `cvPdfEn`, fallback `cvPdfPl`; ukryty gdy brak URL (F9.12)
 - Pola `cvPdfPl` i `cvPdfEn` w kolekcji Portfolios — URL do CV PDF edytowalne w Payload admin (F9.12)

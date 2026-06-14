@@ -1,9 +1,22 @@
+// platform/src/components/blocks/EducationBlock.tsx
+"use client";
+import { motion } from "framer-motion";
 import type { EducationData } from "@/types/blocks";
 
 interface Props {
   data: unknown;
   portfolioSlug: string;
 }
+
+const listVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
+};
 
 export function EducationBlock({ data }: Props) {
   const d = data as EducationData;
@@ -13,10 +26,17 @@ export function EducationBlock({ data }: Props) {
         <h2 className="text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-8">
           Wykształcenie
         </h2>
-        <div className="space-y-6">
+        <motion.div
+          variants={listVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="space-y-6"
+        >
           {d.items.map((item, i) => (
-            <div
+            <motion.div
               key={i}
+              variants={cardVariants}
               className="p-6 rounded-xl bg-[var(--color-bg-alt)]"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
@@ -30,9 +50,9 @@ export function EducationBlock({ data }: Props) {
               <p className="text-[var(--color-text)]">
                 {item.degree} · {item.field}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

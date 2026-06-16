@@ -18,6 +18,15 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      graphics: {
+        Logo: "/src/payload/components/Logo#AdminLogo",
+        Icon: "/src/payload/components/Logo#AdminIcon",
+      },
+    },
+    meta: {
+      titleSuffix: " — PortfolioHub",
+    },
   },
   collections: [Users, Portfolios, Blocks, Media],
   editor: lexicalEditor(),

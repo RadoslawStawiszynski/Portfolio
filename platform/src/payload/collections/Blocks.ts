@@ -20,6 +20,14 @@ const BLOCK_TYPES = [
 
 export const Blocks: CollectionConfig = {
   slug: "blocks",
+  access: {
+    read: ({ req }) => Boolean(req.user),
+    create: ({ req }) => Boolean(req.user),
+    update: ({ req }) => Boolean(req.user),
+    delete: ({ req }) => {
+      return req.user?.role === "superadmin" || req.user?.role === "admin";
+    },
+  },
   admin: {
     useAsTitle: "type",
     defaultColumns: ["type", "portfolio", "order", "visible"],

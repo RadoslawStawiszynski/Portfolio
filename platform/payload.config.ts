@@ -37,6 +37,14 @@ export default buildConfig({
     },
   }),
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000",
+  localization: {
+    locales: [
+      { label: "Polski", code: "pl" },
+      { label: "English", code: "en" },
+    ],
+    defaultLocale: "pl",
+    fallback: true,
+  },
   upload: {
     limits: {
       fileSize: 10_000_000,

@@ -54,7 +54,7 @@ export function PortfolioRenderer({ blocks, portfolioSlug }: Props) {
               className="scroll-mt-14"
               {...(block.themeOverride ? { "data-theme": block.themeOverride } : {})}
             >
-              <Component data={block.data?.pl ?? {}} portfolioSlug={portfolioSlug} />
+              <Component data={block.data} portfolioSlug={portfolioSlug} />
             </div>
           );
         })}

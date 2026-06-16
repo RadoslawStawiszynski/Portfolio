@@ -1166,8 +1166,15 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 - [x] Implementacja bloków MVP: hero, about, experience, skills, education, contact (2026-06-13, Agent: Claude)
 - [x] System motywów light/dark/retro-terminal (F9.5, ADR-006) (2026-06-13, Agent: Claude)
 - [x] Responsywność (F9.6) (2026-06-13, Agent: Claude)
-- [x] Animacje (F9.7) (2026-06-14, Agent: Claude)
-- [ ] Cookie consent (F9.13)
+- [x] Animacje Framer Motion (F9.7) (2026-06-14, Agent: Claude)
+- [x] Scroll-spy nav (F9.8) (2026-06-14, Agent: Claude)
+- [x] Contact Server Action — Zod + Resend (F9.9) (2026-06-14, Agent: Claude)
+- [x] OpenGraph / SEO meta (F9.10) (2026-06-14, Agent: Claude)
+- [x] Sitemap dynamiczny (F9.11) (2026-06-14, Agent: Claude)
+- [x] Download CV button (F9.12) (2026-06-14, Agent: Claude)
+- [x] Cookie consent GDPR (F9.13) (2026-06-14, Agent: Claude)
+- [x] Landing page platformy (F9.14) (2026-06-14, Agent: Claude)
+- [x] Custom 404 per portfolio (F9.15) (2026-06-14, Agent: Claude)
 ```
 
 ### Faza 3 — Panel Admina (5–7 dni)

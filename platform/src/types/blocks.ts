@@ -4,7 +4,7 @@ export interface BlockDoc {
   id: string;
   type: string;
   themeOverride?: string | null;
-  data: { pl: unknown; en?: unknown };
+  data: HeroData | AboutData | ExperienceData | SkillsData | EducationData | ContactData | Record<string, unknown>;
 }
 
 export interface HeroData {

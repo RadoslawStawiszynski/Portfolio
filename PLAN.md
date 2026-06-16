@@ -1024,10 +1024,15 @@ PLATFORM_DOMAIN=korp-cbm.com
 
 ### 17.3 Martyna Stawiszyńska — Portfolio Autorki
 
-**Źródło danych:** Do zebrania od Martyny  
-**Status:** Brak danych — do zebrania.
+**Źródło danych:** `portfolios/martyna-stawiszynska/v1-nancy-card/` (prototyp Next.js + Supabase) + dane w `v1-nancy-card/dane-nancy-ai/`
+**Status:** v1 przeniesione z `1.CODE/nancy_card/` — research i dane gotowe, do wdrożenia na platformie.
 
-- [ ] **M17.12** Zbierz dane od Martyny: bio, zdjęcia, lista książek (tytuł, rok, opis, okładka, linki)
+> **v1-nancy-card** to standalone prototyp (Next.js + Supabase Auth, panel admin, CRUD postów i palet kolorów).
+> Zawiera `dane-nancy-ai/dane.md` i `dane-nancy-ai/zrodla.md` — gotowe treści i źródła do użycia w platformie.
+> Docelowo portfolio Martyny będzie częścią PortfolioHub — v1 zostaje jako archiwum referencyje i bank danych.
+
+- [x] **M17.11** Przenieś `nancy_card` do `portfolios/martyna-stawiszynska/v1-nancy-card/` (2026-06-16, Claude)
+- [ ] **M17.12** Przejrzyj `v1-nancy-card/dane-nancy-ai/dane.md` i przenieś gotowe treści do `portfolios/martyna-stawiszynska/data/`
 - [ ] **M17.13** Utwórz `portfolios/martyna-stawiszynska/data/`
 - [ ] **M17.14** Ustaw bloki: hero, about (bio literackie), books, gallery, contact
 - [ ] **M17.15** Motyw dla autorki (estetyczny, literacki — do uzgodnienia z Martyną)
@@ -1078,6 +1083,57 @@ PLATFORM_DOMAIN=korp-cbm.com
 
 - [ ] **SQ18.11** Mini dashboard statusu pipeline — widoczny w panelu admina
 - [ ] **SQ18.12** GitHub webhooks → powiadomienie w panelu o nowym deploy
+
+### 18.5 Lokalny Asystent AI — Ollama + Qwen (`side-quests/local-ai-assistant/`)
+
+**Źródło:** `1.CODE/API_test_v1/` → przeniesiono do `side-quests/local-ai-assistant/`
+**Co to jest:** eksperyment z lokalnym LLM — custom Modelfile dla Qwen3-Coder-30B z polskim promptem systemowym + skrypt diagnostyczny środowiska ML (torch, tensorflow, scikit-learn, numpy, pandas).
+
+- [x] **SQ18.13** Przenieś `API_test_v1/` do `side-quests/local-ai-assistant/` (2026-06-16, Claude)
+- [x] **SQ18.14** Napisz README: co to jest, po co, jak uruchomić (Ollama + `ollama create MyAsystent`) (2026-06-16, Claude)
+- [ ] **SQ18.15** Opisz stos: Python, Ollama, Qwen3-Coder, psutil — jako showcase "Local AI Dev Setup"
+- [ ] **SQ18.16** Dodaj jako projekt w portfolio Radosława: "Lokalny asystent AI" z tagami `AI`, `Ollama`, `Python`, `LLM`
+
+### 18.6 DB Connector — GUI do baz danych (`side-quests/db-connector/`)
+
+**Źródło:** `1.CODE/App_LogDB/` → przeniesiono do `side-quests/db-connector/`
+**Co to jest:** desktopowa aplikacja Python/Tkinter do łączenia z PostgreSQL, MSSQL i IBM DB2. 3-warstwowa architektura, szyfrowanie Fernet, walidacja, logger, PyInstaller packaging.
+
+- [x] **SQ18.24** Przenieś `App_LogDB/` do `side-quests/db-connector/` (2026-06-16, Claude)
+- [x] **SQ18.25** Napisz README z opisem architektury i instrukcją uruchomienia (2026-06-16, Claude)
+- [ ] **SQ18.26** Dodaj screenshot okna aplikacji do README
+- [ ] **SQ18.27** Dodaj jako projekt w portfolio Radosława z tagami `Python`, `Desktop`, `Database`
+
+### 18.7 Profesjonalizacja projektów — upgrade do CV/portfolio
+
+> Wszystkie projekty w `side-quests/` i `portfolios/` są aktualnie słabe lub szkieletowe. Ten punkt pilnuje żeby każdy z nich był gotowy do pokazania rekruterowi.
+
+**Kryteria "projekt gotowy do CV":**
+- ma README z opisem, technologiami, screenshotami/linkami
+- ma działający deploy lub instrukcję uruchomienia
+- ma wyraźnie opisany "problem który rozwiązuje" i "czego się nauczyłem"
+- kod jest posprzątany (usunięte debug prints, komentarze po polsku zastąpione angielskim)
+
+**Checklist per projekt:**
+
+- [ ] **SQ18.17** `side-quests/games/` — 4 gry HTML: dodaj screenshoty, deploy na GH Pages, opis mechaniki
+- [ ] **SQ18.18** `side-quests/python-programs/` — 4 programy Python: README, opis algorytmu, przykład uruchomienia
+- [ ] **SQ18.19** `side-quests/local-ai-assistant/` — Ollama setup: README gotowe ✓, dodaj diagram architektury
+- [ ] **SQ18.20** `portfolios/radek-stawiszynski/` — uzupełnij dane JSON: projekty, doświadczenie, umiejętności z CV
+- [ ] **SQ18.21** Zrób research `side-quests/` i oceń które projekty mają potencjał CV vs które tylko archiwizować
+- [ ] **SQ18.22** Dla każdego projektu wybranego do CV: napisz 2-3 zdania pitch po angielsku (do sekcji projects na portfolio)
+- [x] **SQ18.23** Zbadaj projekty w `1.CODE/` — App_LogDB → db-connector, nancy_card → portfolios/martyna/v1, Nowy_system → system-setup, mmtychy.pl — osobny duży projekt (nie ruszamy), pozostałe do oceny (2026-06-16, Claude)
+
+### 18.8 System Setup Assistant (`side-quests/system-setup/`)
+
+**Źródło:** `1.CODE/Nowy_system/` → przeniesiono do `side-quests/system-setup/`
+**Co to jest:** punkt startowy do aplikacji/skryptu uruchamianego po świeżej instalacji systemu — lista aplikacji do zainstalowania (Windows, `lista_aplikacji.txt`).
+
+- [x] **SQ18.28** Przenieś `Nowy_system/` do `side-quests/system-setup/` (2026-06-16, Claude)
+- [ ] **SQ18.29** Przepisz listę aplikacji na skrypt instalacyjny (Winget / Chocolatey lub Bash dla Linux)
+- [ ] **SQ18.30** Dodaj konfiguracje: `.gitconfig`, VS Code extensions (`extensions.json`), terminal settings
+- [ ] **SQ18.31** Napisz README: "post-install setup for a developer workstation"
+- [ ] **SQ18.32** Opcjonalnie: prosta TUI w Pythonie (menu checkboxów aplikacji do zainstalowania)
 
 ---
 
@@ -1180,14 +1236,13 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 ### Faza 3 — Panel Admina (5–7 dni)
 
 ```
-- [ ] Payload CMS admin customization (A10.1, A10.2)
-- [ ] Drag-drop reorder bloków (A10.3)
-- [ ] Formularze edycji per blok (A10.4)
-- [ ] Upload mediów (A10.5)
-- [ ] Statystyki (A10.6)
-- [ ] Todo list (A10.8)
-- [ ] System zaproszeń (A10.10)
-- [ ] Zmiana motywu z podglądem (A10.9)
+- [x] Payload CMS admin customization (A10.1, A10.2) (2026-06-16, Agent: Claude)
+- [x] Drag-drop reorder bloków — order field (A10.3) (2026-06-16, Agent: Claude)
+- [x] Formularze edycji per blok — typed Payload fields (A10.4) (2026-06-16, Agent: Claude)
+- [x] Upload mediów — R2 via @payloadcms/storage-s3 (A10.5) (2026-06-16, Agent: Claude)
+- [x] Statystyki — Vercel Analytics (A10.6) (2026-06-16, Agent: Claude)
+- [x] Todo list (A10.8) (2026-06-16, Agent: Claude)
+- [x] Zmiana motywu z podglądem — Payload livePreview (A10.9) (2026-06-16, Agent: Claude)
 ```
 
 ### Faza 4 — Migracja portfeli (3–5 dni)

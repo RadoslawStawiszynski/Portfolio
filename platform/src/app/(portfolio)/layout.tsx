@@ -1,5 +1,6 @@
 // platform/src/app/(portfolio)/layout.tsx
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { headers, cookies } from "next/headers";
 import "../globals.css";
 import { getPortfolioBySlug } from "@/lib/portfolio";
@@ -58,6 +59,7 @@ export default async function PortfolioLayout({
             portfolioLang={portfolioLang}
           />
         )}
+        <Analytics />
       </body>
     </html>
   );

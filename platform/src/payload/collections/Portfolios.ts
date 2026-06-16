@@ -4,9 +4,32 @@ export const Portfolios: CollectionConfig = {
   slug: "portfolios",
   admin: {
     useAsTitle: "subdomain",
+    livePreview: {
+      url: ({ data, req }) => {
+        const host = req.headers.get("host") ?? "localhost:3000";
+        const protocol = host.includes("localhost") ? "http" : "https";
+        const slug = (data.subdomain as string) ?? "";
+        return `${protocol}://${host}/dev/${slug}`;
+      },
+    },
   },
   access: {
-    read: () => true,
+    read: ({ req }) => {
+      if (!req.user) return true;
+      if (req.user.role === "superadmin" || req.user.role === "admin") return true;
+      return { owner: { equals: req.user.id } };
+    },
+    create: ({ req }) => {
+      return req.user?.role === "superadmin" || req.user?.role === "admin";
+    },
+    update: ({ req }) => {
+      if (!req.user) return false;
+      if (req.user.role === "superadmin" || req.user.role === "admin") return true;
+      return { owner: { equals: req.user.id } };
+    },
+    delete: ({ req }) => {
+      return req.user?.role === "superadmin" || req.user?.role === "admin";
+    },
   },
   fields: [
     {

@@ -1,6 +1,7 @@
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { s3Storage } from "@payloadcms/storage-s3";
 import { Users } from "@/payload/collections/Users";
 import { Portfolios } from "@/payload/collections/Portfolios";
 import { Blocks } from "@/payload/collections/Blocks";
@@ -41,4 +42,24 @@ export default buildConfig({
       fileSize: 10_000_000,
     },
   },
+  plugins: [
+    s3Storage({
+      collections: {
+        media: {
+          prefix: "media",
+          generateFileURL: ({ filename: fname, prefix }) =>
+            `${process.env.R2_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${prefix}/${fname}`,
+        },
+      },
+      bucket: process.env.R2_BUCKET_NAME!,
+      config: {
+        credentials: {
+          accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+        },
+        region: "auto",
+        endpoint: process.env.R2_ENDPOINT,
+      },
+    }),
+  ],
 });

@@ -914,17 +914,25 @@ PLATFORM_DOMAIN=korp-cbm.com
 
 ### 13.2 Cloudflare konfiguracja
 
+> ⚠️ **UWAGA:** Ta sekcja była pierwotnie napisana z myślą o VPS (Caddy). Po wyborze Vercel (ADR-004)
+> instrukcje DNS zostały zaktualizowane. Nie używamy VPS ani Caddy — hosting to Vercel.
+
 ```
-1. Dodaj domenę korp-cbm.com do Cloudflare
-2. Nameservery: podmień u rejestratora na ns1.cloudflare.com / ns2.cloudflare.com
-3. DNS Records:
-   - A    korp-cbm.com        → [IP VPS]  (proxied ✓)
-   - A    *.korp-cbm.com      → [IP VPS]  (proxied ✓)
-   - MX   korp-cbm.com        → mail.korp-cbm.com (opcjonalnie)
-4. SSL: Full (strict) — wymaga ważnego certa na serwerze (Caddy to robi)
-5. Page Rules:
-   - korp-cbm.com/* → Cache Level: Standard
-   - admin.korp-cbm.com/* → Cache Level: Bypass
+1. Nameservery: ns1.cloudflare.com / ns2.cloudflare.com (już aktywne ✓)
+2. DNS Records (Cloudflare jako proxy przed Vercel):
+   - CNAME  korp-cbm.com    → cname.vercel-dns.com  (proxied 🟠)
+   - CNAME  *.korp-cbm.com  → cname.vercel-dns.com  (proxied 🟠)
+   - MX     korp-cbm.com    → mail.korp-cbm.com (opcjonalnie)
+3. SSL/TLS mode w Cloudflare: Full
+   (NIE Strict — Vercel nie ma własnego certa dla wildcard *.korp-cbm.com
+    gdy ruch przechodzi przez Cloudflare proxy; Full szyfruje tunel CF→Vercel)
+4. Cache Rules (Cloudflare):
+   - *.korp-cbm.com/*         → Cache Level: Standard
+   - admin.korp-cbm.com/*     → Cache Level: Bypass
+
+Jak to działa:
+  Przeglądarka → Cloudflare (SSL wildcard, CDN) → Vercel (Next.js + Payload)
+  Cloudflare terminuje SSL swoim wildcard certem — Vercel nie musi mieć certa dla *.korp-cbm.com
 ```
 
 ### 13.3 Zadania hosting
@@ -935,7 +943,7 @@ PLATFORM_DOMAIN=korp-cbm.com
 - [x] **H13.4** Utwórz Cloudflare R2 bucket `portfoliohub` + klucze API (2026-06-11)
 - [x] **H13.5** Utwórz konto Resend + zweryfikuj domenę korp-cbm.com (2026-06-11)
 - [x] **H13.6** Przenieś domenę korp-cbm.com do Cloudflare — nameservery już aktywne (2026-06-12, Agent: Claude)
-- [x] **H13.7** Ustaw DNS records: CNAME korp-cbm.com → cname.vercel-dns.com, A *.korp-cbm.com → 76.76.21.21 (2026-06-12, Agent: Claude)
+- [x] **H13.7** Ustaw DNS records w Cloudflare: CNAME korp-cbm.com + CNAME *.korp-cbm.com → cname.vercel-dns.com (proxied 🟠), SSL mode: Full (2026-06-18, poprawione — było A/proxied=false)
 - [x] **H13.8** Dodaj custom domains w Vercel (korp-cbm.com, *.korp-cbm.com) (2026-06-12, Agent: Claude)
 - [x] **H13.9** Skonfiguruj zmienne środowiskowe w Vercel (14 vars) (2026-06-12, Agent: Claude)
 - [ ] **H13.10** First produkcyjny deploy (`vercel --prod` z CLI po testach)

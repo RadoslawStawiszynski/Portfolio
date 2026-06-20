@@ -1,4 +1,4 @@
-import type { CollectionConfig } from "payload";
+import type { CollectionConfig, Where } from "payload";
 
 export const Portfolios: CollectionConfig = {
   slug: "portfolios",
@@ -14,7 +14,7 @@ export const Portfolios: CollectionConfig = {
     },
   },
   access: {
-    read: ({ req }) => {
+    read: ({ req }): boolean | Where => {
       if (!req.user) return { isPublished: { equals: true } };
       if (req.user.role === "superadmin" || req.user.role === "admin") return true;
       return { owner: { equals: req.user.id } };

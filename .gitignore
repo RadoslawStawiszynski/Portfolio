@@ -8,6 +8,10 @@ node_modules/
 .env.local
 .env.*.local
 .env.production
+platform/.env.vercel.*
+
+# Continue IDE (lokalne ustawienia)
+.continue/
 
 # Next.js
 .next/

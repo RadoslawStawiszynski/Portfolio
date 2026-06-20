@@ -1011,42 +1011,42 @@ Jak to działa:
 
 ### 17.1 Miłosz Gawlik — CV Portfolio
 
-**Źródło danych:** `kopia/data/*.json` (gotowe!) + `kopia/CV Miłosz Gawlik.pdf`  
-**Status istniejącego kodu:** Kompletny PHP portfolio w `kopia/` — do zmigowania do blokowego systemu.
+**Źródło danych:** `portfolios/milosz-gawlik/data/*.json` (gotowe) + `kopia/CV Miłosz Gawlik.pdf`  
+**Status:** Zaseedowane — 6 bloków aktywnych na `milosz.localhost:3000`, konto owner: `milosz@portfoliohub.dev`
 
-- [ ] **M17.1** Utwórz `portfolios/milosz-gawlik/data/` z plikami JSON (skopiuj z `kopia/data/`)
-- [ ] **M17.2** Napisz skrypt migracji JSON → PostgreSQL dla portfolio Miłosza
-- [ ] **M17.3** Skopiuj CV PDF do `portfolios/milosz-gawlik/assets/`
-- [ ] **M17.4** Przetestuj portfolio na `milosz.korp-cbm.com` (dev)
-- [ ] **M17.5** Ustaw bloki: hero, about, experience, skills, education, contact
+- [x] **M17.1** Dane JSON dostępne w `portfolios/milosz-gawlik/data/` (przeniesione z `kopia/data/`) (2026-06-16)
+- [x] **M17.2** Seed script `scripts/seed-milosz.ts` — JSON → PostgreSQL (2026-06-20, Agent: Claude)
+- [ ] **M17.3** Skopiuj CV PDF do `portfolios/milosz-gawlik/assets/` + wgraj do R2
+- [x] **M17.4** Portfolio działa na `milosz.localhost:3000` (dev) (2026-06-20, Agent: Claude)
+- [x] **M17.5** Bloki: hero, about, experience (5 pozycji), skills (4 kat.), education, contact (2026-06-20, Agent: Claude)
 - [ ] **M17.6** Dodaj dwujęzyczność PL/EN
 
 ### 17.2 Radosław Stawiszyński — CV + PM Portfolio
 
-**Źródło danych:** `CV_RadekS/` + `PLAN_1.md`, `PLAN_2.md`  
-**Status:** Plany gotowe, kod NIE zaimplementowany.
+**Źródło danych:** CV Radosława (pełne dane zaseedowane) + `portfolios/radek-stawiszynski/`  
+**Status:** Zaseedowane — 6 bloków z pełnym CV, `radek.localhost:3000` działa, owner=superadmin.
 
-- [ ] **M17.7** Utwórz `portfolios/radek-stawiszynski/data/` z plikami JSON na podstawie CV
-- [ ] **M17.8** Skopiuj CV PDF (PL + EN) do `portfolios/radek-stawiszynski/assets/`
-- [ ] **M17.9** Ustaw bloki: hero (PM positioning), about, experience (PM timeline), skills (PM + Tech), education, contact
-- [ ] **M17.10** Dodaj sekcję projektów PM (z PLAN_1 §6.2)
-- [ ] **M17.11** Motyw: ciemna zieleń + złoto (paleta z PLAN_1 §5)
+- [x] **M17.7** Dane CV zaseedowane przez `scripts/seed-radek.ts` (2026-06-20, Agent: Claude)
+- [ ] **M17.8** Skopiuj CV PDF (PL + EN) do `portfolios/radek-stawiszynski/assets/` + wgraj do R2
+- [x] **M17.9** Bloki: hero, about, experience (5 pozycji PM), skills (6 kat.), education (3 wpisy), contact (2026-06-20, Agent: Claude)
+- [ ] **M17.10** Dodaj sekcję projektów PM (z PLAN_1 §6.2) — blok `projects`
+- [ ] **M17.11** Ustaw motyw `retro-terminal` w `/admin` dla portfolio radek (teraz: `light` w DB)
 
 ### 17.3 Martyna Stawiszyńska — Portfolio Autorki
 
-**Źródło danych:** `portfolios/martyna-stawiszynska/v1-nancy-card/` (prototyp Next.js + Supabase) + dane w `v1-nancy-card/dane-nancy-ai/`
-**Status:** v1 przeniesione z `1.CODE/nancy_card/` — research i dane gotowe, do wdrożenia na platformie.
+**Źródło danych:** `portfolios/martyna-stawiszynska/v1-nancy-card/dane-nancy-ai/dane.md`  
+**Status:** Zaseedowane — 4 bloki (hero, about, skills, contact), konto: `martyna.stawiszynska@gmail.com`
 
 > **v1-nancy-card** to standalone prototyp (Next.js + Supabase Auth, panel admin, CRUD postów i palet kolorów).
 > Zawiera `dane-nancy-ai/dane.md` i `dane-nancy-ai/zrodla.md` — gotowe treści i źródła do użycia w platformie.
 > Docelowo portfolio Martyny będzie częścią PortfolioHub — v1 zostaje jako archiwum referencyje i bank danych.
 
 - [x] **M17.11** Przenieś `nancy_card` do `portfolios/martyna-stawiszynska/v1-nancy-card/` (2026-06-16, Claude)
-- [ ] **M17.12** Przejrzyj `v1-nancy-card/dane-nancy-ai/dane.md` i przenieś gotowe treści do `portfolios/martyna-stawiszynska/data/`
-- [ ] **M17.13** Utwórz `portfolios/martyna-stawiszynska/data/`
-- [ ] **M17.14** Ustaw bloki: hero, about (bio literackie), books, gallery, contact
-- [ ] **M17.15** Motyw dla autorki (estetyczny, literacki — do uzgodnienia z Martyną)
-- [ ] **M17.16** Social media linki (Facebook, Instagram, Goodreads)
+- [x] **M17.12** Treści z `dane-nancy-ai/dane.md` użyte w seed-martyna.ts (2026-06-20, Agent: Claude)
+- [x] **M17.13** Seed script `scripts/seed-martyna.ts` + bloki w DB (2026-06-20, Agent: Claude)
+- [ ] **M17.14** Dodaj blok `books` (lista książek) i `gallery` (okładki) — nowe typy bloków
+- [ ] **M17.15** Motyw dla autorki — ustal z Martyną (propozycja: `slate-rose` lub custom)
+- [ ] **M17.16** Social media linki (Facebook, Instagram, Goodreads) w bloku contact
 
 ### 17.4 CBM — Portfolio Firmy
 
@@ -1258,10 +1258,16 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 ### Faza 4 — Migracja portfeli (3–5 dni)
 
 ```
-- [ ] Miłosz Gawlik portfolio (M17.1–M17.6)
-- [ ] Radosław Stawiszyński portfolio (M17.7–M17.11)
-- [ ] Dane od Martyny + jej portfolio (M17.12–M17.16)
-- [ ] CBM portfolio (M17.17–M17.20)
+- [x] Miłosz Gawlik — seed + 6 bloków + konto owner (M17.1, M17.2, M17.4, M17.5) (2026-06-20, Agent: Claude)
+- [x] Radosław Stawiszyński — pełne CV, 6 bloków + retro UI (M17.7, M17.9) (2026-06-20, Agent: Claude)
+- [x] Martyna Stawiszyńska — 4 bloki + konto owner (M17.11–M17.13) (2026-06-20, Agent: Claude)
+- [x] Konta owner Miłosz + Martyna z RBAC (Blocks per-portfolio access) (2026-06-20, Agent: Claude)
+- [x] Subdomain routing dev: *.localhost (D11.3b) (2026-06-20, Agent: Claude)
+- [ ] PDF CV → R2 dla Radka i Miłosza (M17.3, M17.8)
+- [ ] Blok `projects` dla Radka (M17.10)
+- [ ] Motyw retro-terminal dla radek w /admin (M17.11)
+- [ ] Bloki `books` + `gallery` dla Martyny (M17.14)
+- [ ] CBM portfolio (M17.17–M17.20) — po połączeniu z tom-jur
 ```
 
 ### Faza 5 — Deployment + SEO (2–3 dni)
@@ -1302,27 +1308,35 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 ## 21. STATUS — CO ZBUDOWANE / CO NIE
 
-> Ostatnia aktualizacja: 2026-06-20. Fazy 0–3 ukończone, produkcja live.
+> Ostatnia aktualizacja: 2026-06-20. Fazy 0–4 (częściowo) ukończone, produkcja live na korp-cbm.com.
 
-### ✅ Zbudowane (Fazy 0–3, prod live na korp-cbm.com)
+### ✅ Zbudowane (Fazy 0–4, prod live)
 
 | Element                       | Lokalizacja                              | Opis                                                             |
 | ----------------------------- | ---------------------------------------- | ---------------------------------------------------------------- |
-| Next.js 15 scaffold           | `platform/`                              | App Router, TypeScript 5, Tailwind CSS 4, 3-theme system         |
+| Next.js 15 scaffold           | `platform/`                              | App Router, TypeScript 5, Tailwind CSS 4                         |
 | Payload CMS 3                 | `platform/src/payload/`                  | Collections: Users, Portfolios, Blocks, Media, Todos             |
-| Subdomain routing middleware  | `platform/src/middleware.ts`             | x-portfolio-slug z subdomeny, dev /dev/[slug]                    |
+| Subdomain routing middleware  | `platform/src/middleware.ts`             | Prod: x-portfolio-slug z subdomeny; Dev: *.localhost + /dev/[slug] |
 | System bloków                 | `platform/src/components/blocks/`        | Hero, About, Experience, Skills, Education, Contact              |
 | Portfolio renderer            | `platform/src/app/(portfolio)/`          | PortfolioRenderer + BLOCK_REGISTRY + 404 per portfolio           |
-| System motywów                | CSS Custom Properties                    | light / dark / retro-terminal + cookie persistence               |
+| Retro UI accents              | `globals.css` + bloki                    | Typewriter, glitch heading, scanlines, terminal-card, live-dot, cursor-blink |
+| Identity w navbarze           | `PortfolioNav`                           | Avatar + imię pojawia się po prawej po przewinięciu poza hero    |
+| System motywów (10 wariantów) | CSS Custom Properties                    | light / dark / retro-terminal + 7 dodatkowych; --scanline-color per motyw |
 | Animacje Framer Motion        | AnimatedSection + staggered              | fade-in + slide-up, whileInView once:true                        |
 | Scroll-spy nav                | PortfolioNav                             | IntersectionObserver, smooth scroll                              |
+| Contact 2-col layout          | ContactBlock                             | Links (LinkedIn/GitHub) po lewej, formularz po prawej; telefon w CV |
 | Contact Server Action         | sendContactMessage                       | Zod + Resend + rate limiting Redis (3 req/15min)                 |
 | OpenGraph / SEO               | buildPortfolioMetadata                   | og:title, og:description, og:image, twitter:card                 |
 | Sitemap dynamiczny            | `(portfolio)/sitemap.ts`                 | Per portfolio, tylko isPublished                                  |
 | Download CV button            | DownloadCvButton                         | cvPdfPl / cvPdfEn fallback, fixowany bottom-left                 |
 | Cookie consent GDPR           | CookieConsentBanner                      | 1-rok cookie, role=dialog, aria-live                             |
 | Landing page                  | `(portfolio)/page.tsx` (root)            | Hero + Funkcje + Aktywne portfolio + Footer                      |
-| Panel admina (Payload)        | `korp-cbm.com/admin`                     | Custom branding, RBAC (superadmin/admin/owner), live preview      |
+| Panel admina (Payload)        | `/admin`                                 | Custom branding PortfolioHub, RBAC, live preview                  |
+| RBAC per portfolio            | `Blocks.access`                          | Owner widzi/edytuje tylko własne bloki (async portfolio lookup)  |
+| Konta użytkowników            | `scripts/seed-users.ts`                  | Miłosz (owner), Martyna (owner) + seed scripts per portfolio     |
+| Portfolio radek               | DB + `milosz.localhost:3000`             | 6 bloków, pełne CV (5 miejsc pracy, 6 kat. umiejętności)        |
+| Portfolio milosz              | DB + `milosz.localhost:3000`             | 6 bloków (5 doświadczeń, 4 kat. umiejętności)                   |
+| Portfolio martyna             | DB + `martyna.localhost:3000`            | 4 bloki (hero, about, skills, contact)                           |
 | Cloudflare R2 storage         | @payloadcms/storage-s3                   | Bucket: portfoliohub, media upload                               |
 | Vercel Analytics              | @vercel/analytics                        | Page views w admin dashboardzie                                   |
 | Todo list                     | Todos collection                         | CRUD w Payload admin                                             |
@@ -1332,20 +1346,24 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | CI                            | `.github/workflows/`                     | Lint + typecheck na push dev/staging                             |
 | Logger                        | `platform/src/lib/logger.ts`             | pino, structured JSON, pretty-print dev                          |
 
-### ⏳ Do zrobienia (Faza 4+)
+### ⏳ Do zrobienia (Faza 4 pozostałe + Fazy 5–7)
 
-| Element                      | Faza   | Priority |
-| ---------------------------- | ------ | -------- |
-| Portfolio Radosława (treść)  | Faza 4 | 🔴       |
-| Portfolio Miłosza (treść)    | Faza 4 | 🔴       |
-| Portfolio Martyny (treść)    | Faza 4 | 🟡       |
-| Portfolio CBM (treść)        | Faza 4 | 🟡       |
-| Konto admina w Neon/prod     | Faza 4 | 🔴       |
-| UptimeRobot monitoring       | Faza 5 | 🟡       |
-| B8.4 Custom domain routing   | Faza 5 | 🟡       |
-| Testy E2E                    | Faza 6 | 🟡       |
-| Generator CV PDF             | Faza 7 | ⚪       |
-| Blog per portfolio           | Faza 7 | ⚪       |
+| Element                                    | Faza   | Priority |
+| ------------------------------------------ | ------ | -------- |
+| PDF CV → R2 (radek PL/EN, milosz)          | Faza 4 | 🔴       |
+| Motyw retro-terminal dla radek w /admin    | Faza 4 | 🟡       |
+| Blok `projects` dla radka (PM portfolio)   | Faza 4 | 🟡       |
+| Bloki `books` + `gallery` dla Martyny      | Faza 4 | 🟡       |
+| Motyw + treść dla Martyny (z Martyną)      | Faza 4 | 🟡       |
+| Portfolio CBM — dane + bloki               | Faza 4 | 🟡 czeka |
+| Seed portfeli na Neon (prod DB)            | Faza 4 | 🔴       |
+| UptimeRobot monitoring (H13.11)            | Faza 5 | 🟡       |
+| Custom domain routing (D11.4)              | Faza 5 | 🟡       |
+| Testy E2E (T16.1–T16.10)                   | Faza 6 | 🟡       |
+| Lighthouse audit                           | Faza 6 | 🟡       |
+| UAT z Miłoszem i Martyną                  | Faza 6 | 🔴       |
+| Generator CV PDF z bloków                 | Faza 7 | ⚪       |
+| Blog per portfolio                         | Faza 7 | ⚪       |
 
 ---
 

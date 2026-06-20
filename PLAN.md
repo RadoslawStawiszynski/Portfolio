@@ -1313,7 +1313,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 ## 21. STATUS — CO ZBUDOWANE / CO NIE
 
-> Ostatnia aktualizacja: 2026-06-20 (wieczór). Fazy 0–4 (większość) ukończone. Neon zaseedowany. Produkcja live na korp-cbm.com. Jutro: UAT z Miłoszem i Martyną + bloki dla Martyny.
+> Ostatnia aktualizacja: 2026-06-20 (noc). Fazy 0–4 (większość) ukończone. Audyt kodu faz 0–3 zakończony — §24 zawiera 25 zadań TD. TD-16 i TD-21 naprawione. Jutro: UAT z Miłoszem i Martyną + bloki books/gallery dla Martyny.
 
 ### ✅ Zbudowane (Fazy 0–4, prod live)
 

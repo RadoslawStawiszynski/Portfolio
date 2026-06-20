@@ -9,6 +9,18 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Fixed
+- `Portfolios` API access control (TD-16): goście API widzą tylko `isPublished: true` portfolia zamiast wszystkich (`Portfolios.ts:18`)
+- CI workflow (TD-21): dodano job `build` uruchamiany po lint+typecheck — build failures są teraz wykrywane w CI zanim dotrą do Vercel (`.github/workflows/ci.yml`)
+
+### Added
+- §24 Dług techniczny w PLAN.md — 25 zadań TD z priorytetami (przed deployem / Faza 6 / opcjonalne); wynik audytu kodu faz 0–3 obejmujący jakość kodu, bezpieczeństwo, CI/CD i brakujące bloki
+
+### Docs
+- Usunięto hasła z `TODO.md` (plaintext credentials nie powinny być w git)
+
+---
+
+### Fixed (poprzednia sesja)
 - DNS/SSL konfiguracja: PLAN.md §13.2 zaktualizowany z VPS-era na Vercel (CNAME proxied 🟠, SSL Full zamiast Strict) — błąd w H13.7 gdzie użyto A record + proxied=false zamiast CNAME + proxied=true
 
 ### Added

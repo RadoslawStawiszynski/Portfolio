@@ -12,6 +12,7 @@ const SECTION_LABELS: Partial<Record<string, string>> = {
   experience: "Doświadczenie",
   skills: "Umiejętności",
   education: "Edukacja",
+  projects: "Projekty",
   contact: "Kontakt",
 };
 

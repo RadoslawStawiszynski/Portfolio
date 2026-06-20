@@ -4,7 +4,7 @@ export interface BlockDoc {
   id: string;
   type: string;
   themeOverride?: string | null;
-  data: HeroData | AboutData | ExperienceData | SkillsData | EducationData | ContactData | Record<string, unknown>;
+  data: HeroData | AboutData | ExperienceData | SkillsData | EducationData | ContactData | ProjectsData | Record<string, unknown>;
 }
 
 export interface HeroData {
@@ -58,4 +58,17 @@ export interface ContactData {
   linkedin?: string;
   github?: string;
   showForm: boolean;
+}
+
+export interface ProjectItem {
+  title: string;
+  description?: string;
+  tags: string[];
+  url?: string;
+  githubUrl?: string;
+  status?: "completed" | "in-progress" | "archived";
+}
+
+export interface ProjectsData {
+  items: ProjectItem[];
 }

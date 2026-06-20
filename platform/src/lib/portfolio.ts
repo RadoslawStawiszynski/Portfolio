@@ -78,6 +78,23 @@ function extractBlockData(doc: Record<string, unknown>, type: string): Record<st
         showForm: Boolean(c.showForm ?? true),
       };
     }
+    case "projects": {
+      const p = (doc.projectsData ?? {}) as Record<string, unknown>;
+      const items = (p.items as Record<string, unknown>[] | undefined) ?? [];
+      return {
+        items: items.map((item) => ({
+          title: item.title ?? "",
+          description: item.description as string | undefined,
+          tags: String(item.tags ?? "")
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean),
+          url: item.url as string | undefined,
+          githubUrl: item.githubUrl as string | undefined,
+          status: (item.status as string | undefined) ?? "completed",
+        })),
+      };
+    }
     default:
       return {};
   }

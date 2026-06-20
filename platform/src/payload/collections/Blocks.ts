@@ -290,6 +290,60 @@ export const Blocks: CollectionConfig = {
       ],
     },
 
+    // ─── PROJECTS ────────────────────────────────────────────────
+    {
+      name: "projectsData",
+      type: "group",
+      admin: {
+        condition: (data) => data.type === "projects",
+      },
+      fields: [
+        {
+          name: "items",
+          type: "array",
+          admin: { description: "Lista projektów — od najnowszego" },
+          fields: [
+            {
+              name: "title",
+              type: "text",
+              required: true,
+              localized: true,
+            },
+            {
+              name: "description",
+              type: "textarea",
+              localized: true,
+            },
+            {
+              name: "tags",
+              type: "text",
+              admin: { description: "Tagi/technologie oddzielone przecinkiem (np. React, TypeScript, Next.js)" },
+            },
+            {
+              name: "url",
+              type: "text",
+              admin: { description: "Link do projektu (opcjonalny)" },
+            },
+            {
+              name: "githubUrl",
+              type: "text",
+              admin: { description: "Link do GitHub (opcjonalny)" },
+            },
+            {
+              name: "status",
+              type: "select",
+              defaultValue: "completed",
+              options: [
+                { label: "Ukończony", value: "completed" },
+                { label: "W trakcie", value: "in-progress" },
+                { label: "Zarchiwizowany", value: "archived" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
     // ─── CONTACT ─────────────────────────────────────────────────
     {
       name: "contactData",

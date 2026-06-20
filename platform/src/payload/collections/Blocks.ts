@@ -21,9 +21,44 @@ const BLOCK_TYPES = [
 export const Blocks: CollectionConfig = {
   slug: "blocks",
   access: {
-    read: ({ req }) => Boolean(req.user),
-    create: ({ req }) => Boolean(req.user),
-    update: ({ req }) => Boolean(req.user),
+    read: async ({ req }) => {
+      if (!req.user) return false;
+      if (req.user.role === "superadmin" || req.user.role === "admin") return true;
+      const owned = await req.payload.find({
+        collection: "portfolios",
+        where: { owner: { equals: req.user.id } },
+        limit: 100,
+        overrideAccess: true,
+        select: { id: true },
+      });
+      const ids = owned.docs.map((p) => p.id);
+      return ids.length > 0 ? { portfolio: { in: ids } } : false;
+    },
+    create: async ({ req }) => {
+      if (!req.user) return false;
+      if (req.user.role === "superadmin" || req.user.role === "admin") return true;
+      const owned = await req.payload.find({
+        collection: "portfolios",
+        where: { owner: { equals: req.user.id } },
+        limit: 1,
+        overrideAccess: true,
+        select: { id: true },
+      });
+      return owned.docs.length > 0;
+    },
+    update: async ({ req }) => {
+      if (!req.user) return false;
+      if (req.user.role === "superadmin" || req.user.role === "admin") return true;
+      const owned = await req.payload.find({
+        collection: "portfolios",
+        where: { owner: { equals: req.user.id } },
+        limit: 100,
+        overrideAccess: true,
+        select: { id: true },
+      });
+      const ids = owned.docs.map((p) => p.id);
+      return ids.length > 0 ? { portfolio: { in: ids } } : false;
+    },
     delete: ({ req }) => {
       return req.user?.role === "superadmin" || req.user?.role === "admin";
     },

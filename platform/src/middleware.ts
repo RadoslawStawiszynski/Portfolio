@@ -10,6 +10,17 @@ export function middleware(request: NextRequest) {
   const host = hostname.split(":")[0];
   const pathname = request.nextUrl.pathname;
 
+  // Local dev: radek.localhost → subdomain routing (requires /etc/hosts entries)
+  if (host.endsWith(".localhost")) {
+    const subdomain = host.slice(0, host.length - ".localhost".length);
+    if (subdomain && !RESERVED.has(subdomain)) {
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-portfolio-slug", subdomain);
+      return NextResponse.next({ request: { headers: requestHeaders } });
+    }
+    return NextResponse.next();
+  }
+
   // Local dev: /dev/[slug] → set x-portfolio-slug from URL
   if (host === "localhost" || host === "127.0.0.1") {
     const devMatch = pathname.match(/^\/dev\/([^/]+)/);

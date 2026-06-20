@@ -613,7 +613,7 @@ interface Portfolio {
 
 **Cechy specyficzne:**
 
-- Logo firmy prominentne
+- Logo firmy pominentne
 - Blok `services` z ikonami i cenami (opcjonalnie)
 - Portfolio realizacji (blok `projects`)
 - Dane firmowe (NIP, adres, godziny pracy)
@@ -817,8 +817,9 @@ Proxy:       orange-cloud ON (CDN aktywne) — Cloudflare terminuje SSL, Vercel 
 - [x] **D11.1** Skonfiguruj wildcard DNS `*.korp-cbm.com` w Cloudflare — CNAME → cname.vercel-dns.com, proxied 🟠 (2026-06-18, poprawione — pierwotnie A record/proxied=false)
 - [x] **D11.2** Reverse proxy — obsługiwany przez Vercel (nie Caddy/Nginx; ADR-004) (2026-06-16)
 - [x] **D11.3** Implement Next.js middleware dla subdomain routing (2026-06-12, Agent: Claude)
+- [x] **D11.3b** Subdomain routing na dev — `radek.localhost`, `milosz.localhost`, `martyna.localhost` działają lokalnie bez `/etc/hosts` (2026-06-20, Agent: Claude)
 - [ ] **D11.4** Implement weryfikacja custom domain (DNS CNAME check)
-- [ ] **D11.5** Utwórz subdomain per portfolio w tabeli `portfolios` (`subdomain` field)
+- [x] **D11.5** Subdomain field w tabeli `portfolios` — pole `subdomain` istnieje od początku (Faza 1) (2026-06-12, Agent: Claude)
 
 ---
 

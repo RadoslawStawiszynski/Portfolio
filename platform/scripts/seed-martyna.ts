@@ -204,7 +204,7 @@ async function seed() {
       order: 40,
       visible: true,
       contactData: {
-        email: "kontakt@nancym.pl",
+        email: "martyna.stawiszynska@gmail.com",
         showForm: true,
       },
     },

@@ -27,7 +27,10 @@ export function SkillsBlock({ data }: Props) {
   return (
     <section className="py-16 px-4 bg-[var(--color-bg-alt)]">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-10">
+        <h2
+          className="glitch-heading text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-10"
+          data-text="Umiejętności"
+        >
           Umiejętności
         </h2>
         <motion.div
@@ -35,32 +38,28 @@ export function SkillsBlock({ data }: Props) {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {d.categories.map((cat, i) => (
-            <motion.div
-              key={i}
-              variants={categoryVariants}
-              className="p-5 rounded-2xl bg-[var(--color-bg)] border border-[var(--color-bg-alt)]"
-            >
-              <h3 className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] mb-4">
-                {cat.name}
-              </h3>
-              <motion.div
-                variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05 } } }}
-                className="flex flex-wrap gap-2"
-              >
-                {cat.skills.map((skill, j) => (
-                  <motion.span
-                    key={j}
-                    variants={tagVariants}
-                    whileHover={{ scale: 1.07, y: -2 }}
-                    className="px-3 py-1.5 text-sm rounded-full bg-[var(--color-bg-alt)] text-[var(--color-text)] border border-transparent hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:shadow-sm cursor-default transition-colors duration-150"
-                  >
-                    {skill}
-                  </motion.span>
-                ))}
-              </motion.div>
+            <motion.div key={i} variants={categoryVariants} className="terminal-card">
+              <div className="terminal-card-header">{cat.name}</div>
+              <div className="p-4 bg-[var(--color-bg)]">
+                <motion.div
+                  variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05 } } }}
+                  className="flex flex-wrap gap-2"
+                >
+                  {cat.skills.map((skill, j) => (
+                    <motion.span
+                      key={j}
+                      variants={tagVariants}
+                      whileHover={{ scale: 1.07, y: -2 }}
+                      className="px-3 py-1 text-sm font-mono rounded bg-[var(--color-bg-alt)] text-[var(--color-text)] border border-transparent hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] cursor-default transition-colors duration-150"
+                    >
+                      {skill}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              </div>
             </motion.div>
           ))}
         </motion.div>

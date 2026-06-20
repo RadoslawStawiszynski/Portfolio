@@ -23,7 +23,10 @@ export function EducationBlock({ data }: Props) {
   return (
     <section className="py-16 px-4 bg-[var(--color-bg)]">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-8">
+        <h2
+          className="glitch-heading text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-8"
+          data-text="Wykształcenie"
+        >
           Wykształcenie
         </h2>
         <motion.div

@@ -71,12 +71,10 @@ export function PortfolioNav({ sections, identity }: Props) {
           ))}
         </ul>
 
-        {/* Identity — appears after scrolling past hero */}
+        {/* Identity — collapses to zero-width when not visible so nav links always get full space */}
         <div
-          className={`flex items-center gap-2 shrink-0 transition-all duration-300 ${
-            showIdentity
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 translate-x-4 pointer-events-none"
+          className={`flex items-center gap-2 overflow-hidden transition-all duration-300 ${
+            showIdentity ? "max-w-[200px] opacity-100" : "max-w-0 opacity-0 pointer-events-none"
           }`}
           aria-hidden={!showIdentity}
         >
@@ -89,8 +87,8 @@ export function PortfolioNav({ sections, identity }: Props) {
               className="w-7 h-7 rounded-full object-cover border border-[var(--color-accent)] shrink-0"
             />
           )}
-          <div className="hidden sm:block text-right">
-            <p className="text-xs font-bold text-[var(--color-primary)] font-mono leading-none">
+          <div className="hidden sm:block text-right shrink-0">
+            <p className="text-xs font-bold text-[var(--color-primary)] font-mono leading-none whitespace-nowrap">
               {identity?.name}<span className="cursor-blink">_</span>
             </p>
             {identity?.subtitle && (

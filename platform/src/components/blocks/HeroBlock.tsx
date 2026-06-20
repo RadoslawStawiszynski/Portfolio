@@ -47,7 +47,7 @@ export function HeroBlock({ data }: Props) {
         </AnimatedSection>
       )}
       <AnimatedSection delay={0.1} className="relative z-10">
-        <h1 className="text-4xl lg:text-6xl font-bold text-[var(--color-primary)] mb-3 max-w-3xl font-mono">
+        <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[var(--color-primary)] mb-3 max-w-3xl font-mono break-words">
           {d.title}<span className="cursor-blink">_</span>
         </h1>
       </AnimatedSection>

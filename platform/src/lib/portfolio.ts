@@ -100,7 +100,7 @@ function extractBlockData(doc: Record<string, unknown>, type: string): Record<st
   }
 }
 
-export async function getBlocksBySlug(slug: string) {
+export async function getBlocksBySlug(slug: string, locale: "pl" | "en" = "pl") {
   const payload = await getPayload({ config });
 
   const portfolioResult = await payload.find({
@@ -121,8 +121,8 @@ export async function getBlocksBySlug(slug: string) {
     },
     sort: "order",
     limit: 100,
-    locale: "pl",
-    fallbackLocale: "en",
+    locale,
+    fallbackLocale: "pl",
     overrideAccess: true,
   });
 

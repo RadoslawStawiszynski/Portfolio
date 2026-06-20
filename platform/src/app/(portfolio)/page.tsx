@@ -1,6 +1,6 @@
 // platform/src/app/(portfolio)/page.tsx
 import type { Metadata } from "next";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import {
   getPortfolioBySlug,
@@ -32,9 +32,12 @@ export default async function PortfolioPage() {
     return <LandingPage />;
   }
 
+  const cookieStore = await cookies();
+  const cookieLang = cookieStore.get("portfolio-lang")?.value as "pl" | "en" | undefined;
+
   const [portfolio, blocks] = await Promise.all([
     getPortfolioBySlug(slug),
-    getBlocksBySlug(slug),
+    getBlocksBySlug(slug, cookieLang ?? "pl"),
   ]);
 
   if (!portfolio) notFound();

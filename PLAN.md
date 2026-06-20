@@ -1016,7 +1016,7 @@ Jak to działa:
 
 - [x] **M17.1** Dane JSON dostępne w `portfolios/milosz-gawlik/data/` (przeniesione z `kopia/data/`) (2026-06-16)
 - [x] **M17.2** Seed script `scripts/seed-milosz.ts` — JSON → PostgreSQL (2026-06-20, Agent: Claude)
-- [ ] **M17.3** Skopiuj CV PDF do `portfolios/milosz-gawlik/assets/` + wgraj do R2
+- [x] **M17.3** Skopiuj CV PDF do `portfolios/milosz-gawlik/assets/` + wgraj do R2 (2026-06-20, Agent: Claude — upload-cv.ts, R2 key: milosz/cv/cv-milosz-pl.pdf)
 - [x] **M17.4** Portfolio działa na `milosz.localhost:3000` (dev) (2026-06-20, Agent: Claude)
 - [x] **M17.5** Bloki: hero, about, experience (5 pozycji), skills (4 kat.), education, contact (2026-06-20, Agent: Claude)
 - [ ] **M17.6** Dodaj dwujęzyczność PL/EN
@@ -1027,10 +1027,10 @@ Jak to działa:
 **Status:** Zaseedowane — 6 bloków z pełnym CV, `radek.localhost:3000` działa, owner=superadmin.
 
 - [x] **M17.7** Dane CV zaseedowane przez `scripts/seed-radek.ts` (2026-06-20, Agent: Claude)
-- [ ] **M17.8** Skopiuj CV PDF (PL + EN) do `portfolios/radek-stawiszynski/assets/` + wgraj do R2
+- [x] **M17.8** Skopiuj CV PDF (PL + EN) do `portfolios/radek-stawiszynski/assets/` + wgraj do R2 (2026-06-20, Agent: Claude — R2 keys: radek/cv/cv-radek-pl.pdf, radek/cv/cv-radek-en.pdf)
 - [x] **M17.9** Bloki: hero, about, experience (5 pozycji PM), skills (6 kat.), education (3 wpisy), contact (2026-06-20, Agent: Claude)
-- [ ] **M17.10** Dodaj sekcję projektów PM (z PLAN_1 §6.2) — blok `projects`
-- [ ] **M17.11** Ustaw motyw `retro-terminal` w `/admin` dla portfolio radek (teraz: `light` w DB)
+- [x] **M17.10** Dodaj sekcję projektów PM — blok `projects` (2026-06-20, Agent: Claude — 4 projekty: PortfolioHub, AI, DB Connector, Nancy Card)
+- [x] **M17.11** Ustaw motyw `retro-terminal` dla portfolio radek (2026-06-20, Agent: Claude — ustawiony w upload-cv.ts + seed-neon.ts)
 
 ### 17.3 Martyna Stawiszyńska — Portfolio Autorki
 
@@ -1263,10 +1263,15 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - [x] Martyna Stawiszyńska — 4 bloki + konto owner (M17.11–M17.13) (2026-06-20, Agent: Claude)
 - [x] Konta owner Miłosz + Martyna z RBAC (Blocks per-portfolio access) (2026-06-20, Agent: Claude)
 - [x] Subdomain routing dev: *.localhost (D11.3b) (2026-06-20, Agent: Claude)
-- [ ] PDF CV → R2 dla Radka i Miłosza (M17.3, M17.8)
-- [ ] Blok `projects` dla Radka (M17.10)
-- [ ] Motyw retro-terminal dla radek w /admin (M17.11)
+- [x] PDF CV → R2 dla Radka (PL+EN) i Miłosza (PL) (M17.3, M17.8) (2026-06-20, Agent: Claude)
+- [x] Blok `projects` dla Radka — 4 projekty, terminal-card grid (M17.10) (2026-06-20, Agent: Claude)
+- [x] Motyw retro-terminal dla radek (M17.11) (2026-06-20, Agent: Claude)
+- [x] Seed pełny na Neon (prod DB) — 3 portfolia, 17 bloków, 3 userów (2026-06-20, Agent: Claude — seed-neon.ts)
+- [x] PL/EN przełącznik języka — LangToggle (cookie-based, tylko dla pl-en portfolios) (2026-06-20, Agent: Claude)
+- [x] Responsywność — PortfolioNav identity collapse, HeroBlock mobile font (2026-06-20, Agent: Claude)
 - [ ] Bloki `books` + `gallery` dla Martyny (M17.14)
+- [ ] Motyw + social media dla Martyny — ustal z Martyną (M17.15, M17.16)
+- [ ] UAT z Miłoszem i Martyną — logowanie, edycja bloków w /admin
 - [ ] CBM portfolio (M17.17–M17.20) — po połączeniu z tom-jur
 ```
 
@@ -1308,7 +1313,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 ## 21. STATUS — CO ZBUDOWANE / CO NIE
 
-> Ostatnia aktualizacja: 2026-06-20. Fazy 0–4 (częściowo) ukończone, produkcja live na korp-cbm.com.
+> Ostatnia aktualizacja: 2026-06-20 (wieczór). Fazy 0–4 (większość) ukończone. Neon zaseedowany. Produkcja live na korp-cbm.com. Jutro: UAT z Miłoszem i Martyną + bloki dla Martyny.
 
 ### ✅ Zbudowane (Fazy 0–4, prod live)
 
@@ -1334,9 +1339,13 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | Panel admina (Payload)        | `/admin`                                 | Custom branding PortfolioHub, RBAC, live preview                  |
 | RBAC per portfolio            | `Blocks.access`                          | Owner widzi/edytuje tylko własne bloki (async portfolio lookup)  |
 | Konta użytkowników            | `scripts/seed-users.ts`                  | Miłosz (owner), Martyna (owner) + seed scripts per portfolio     |
-| Portfolio radek               | DB + `milosz.localhost:3000`             | 6 bloków, pełne CV (5 miejsc pracy, 6 kat. umiejętności)        |
-| Portfolio milosz              | DB + `milosz.localhost:3000`             | 6 bloków (5 doświadczeń, 4 kat. umiejętności)                   |
-| Portfolio martyna             | DB + `martyna.localhost:3000`            | 4 bloki (hero, about, skills, contact)                           |
+| Portfolio radek               | DB lokalnie + Neon prod                  | 7 bloków: hero, about, experience (5), skills (6 kat.), education, projects (4), contact; motyw retro-terminal; CV PL+EN w R2 |
+| Portfolio milosz              | DB lokalnie + Neon prod                  | 6 bloków: hero, about, experience (5), skills (4 kat.), education, contact; CV PL w R2 |
+| Portfolio martyna             | DB lokalnie + Neon prod                  | 4 bloki: hero, about, skills, contact; motyw slate-rose         |
+| Seed Neon (prod DB)           | `platform/scripts/seed-neon.ts`          | Idempotentny pełny seed: 3 portfolia, 17 bloków, 3 userów, CV URLs z R2 |
+| Blok `projects`               | `platform/src/components/blocks/ProjectsBlock.tsx` | Terminal-card grid, status badge, tag pills, github/demo links |
+| PL/EN przełącznik             | `LangToggle.tsx`                         | Cookie-based, page reload, widoczny tylko dla portfolios z pl-en |
+| Responsywność nav             | `PortfolioNav.tsx`                       | Identity collapse do max-w-0 gdy niewidoczna; HeroBlock text-3xl mobile |
 | Cloudflare R2 storage         | @payloadcms/storage-s3                   | Bucket: portfoliohub, media upload                               |
 | Vercel Analytics              | @vercel/analytics                        | Page views w admin dashboardzie                                   |
 | Todo list                     | Todos collection                         | CRUD w Payload admin                                             |
@@ -1346,22 +1355,20 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | CI                            | `.github/workflows/`                     | Lint + typecheck na push dev/staging                             |
 | Logger                        | `platform/src/lib/logger.ts`             | pino, structured JSON, pretty-print dev                          |
 
-### ⏳ Do zrobienia (Faza 4 pozostałe + Fazy 5–7)
+### ⏳ Do zrobienia (Faza 4 finał + Fazy 5–7)
 
 | Element                                    | Faza   | Priority |
 | ------------------------------------------ | ------ | -------- |
-| PDF CV → R2 (radek PL/EN, milosz)          | Faza 4 | 🔴       |
-| Motyw retro-terminal dla radek w /admin    | Faza 4 | 🟡       |
-| Blok `projects` dla radka (PM portfolio)   | Faza 4 | 🟡       |
-| Bloki `books` + `gallery` dla Martyny      | Faza 4 | 🟡       |
-| Motyw + treść dla Martyny (z Martyną)      | Faza 4 | 🟡       |
-| Portfolio CBM — dane + bloki               | Faza 4 | 🟡 czeka |
-| Seed portfeli na Neon (prod DB)            | Faza 4 | 🔴       |
+| **UAT z Miłoszem i Martyną** — logowanie, edycja bloków w /admin | Faza 4 | 🔴 jutro |
+| Bloki `books` + `gallery` dla Martyny (M17.14) | Faza 4 | 🟡 jutro |
+| Motyw + social media dla Martyny (M17.15, M17.16) | Faza 4 | 🟡 jutro |
+| PDF CV dla Martyny do R2                   | Faza 4 | 🟡       |
+| Portfolio CBM — dane + bloki (M17.17–M17.20) | Faza 4 | 🟡 czeka |
 | UptimeRobot monitoring (H13.11)            | Faza 5 | 🟡       |
-| Custom domain routing (D11.4)              | Faza 5 | 🟡       |
-| Testy E2E (T16.1–T16.10)                   | Faza 6 | 🟡       |
-| Lighthouse audit                           | Faza 6 | 🟡       |
-| UAT z Miłoszem i Martyną                  | Faza 6 | 🔴       |
+| Custom domain routing per portfolio (D11.4) | Faza 5 | 🟡       |
+| Testy E2E Playwright (T16.1–T16.10)        | Faza 6 | 🟡       |
+| Lighthouse audit (Performance, A11y, SEO)  | Faza 6 | 🟡       |
+| Push `dev → main` + Vercel prod deploy     | Faza 5 | 🔴 po UAT|
 | Generator CV PDF z bloków                 | Faza 7 | ⚪       |
 | Blog per portfolio                         | Faza 7 | ⚪       |
 
@@ -1418,6 +1425,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | 2026-06-16 | 1.6    | Faza 3 UKOŃCZONA: A10.1–A10.9 (admin branding, R2, Analytics, Todos, livePreview), deploy na Vercel prod | Radosław + Claude |
 | 2026-06-18 | 1.7    | DNS poprawiony: A record/proxied=false → CNAME/proxied🟠, SSL mode Full (H13.7 fix) | Radosław + Claude |
 | 2026-06-20 | 1.8    | Audyt: §21 status zaktualizowany, §11.2 DNS poprawione, D11.1/D11.2/H13.10 zaznaczone, Faza 5 checkboxy | Radosław + Claude |
+| 2026-06-20 | 1.9    | Faza 4 (większość done): seed Neon, blok projects, CV→R2, motyw radek, LangToggle PL/EN, responsywność; §17 M17.3/M17.8/M17.10/M17.11 done; §21 zaktualizowane | Radosław + Claude |
 
 ---
 

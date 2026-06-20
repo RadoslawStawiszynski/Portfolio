@@ -799,9 +799,10 @@ Superadmin
 ### 11.2 Konfiguracja Cloudflare (subdomain wildcard)
 
 ```
-Rekord DNS:  *.korp-cbm.com  →  CNAME → serwer (A record VPS IP)
-SSL:         Wildcard certificate przez Cloudflare (auto)
-Proxy:       orange-cloud ON (CDN aktywne)
+Rekord DNS:  *.korp-cbm.com  →  CNAME → cname.vercel-dns.com  (proxied 🟠)
+             korp-cbm.com    →  CNAME → cname.vercel-dns.com  (proxied 🟠)
+SSL:         Wildcard certificate przez Cloudflare (auto, mode: Full)
+Proxy:       orange-cloud ON (CDN aktywne) — Cloudflare terminuje SSL, Vercel serwuje Next.js
 ```
 
 ### 11.3 Custom domain (dla portfolio premium)
@@ -813,8 +814,8 @@ Proxy:       orange-cloud ON (CDN aktywne)
 
 ### 11.4 Zadania domenowe
 
-- [x] **D11.1** Skonfiguruj wildcard DNS `*.korp-cbm.com` w Cloudflare — A record → 76.76.21.21, proxied=false (2026-06-12, Agent: Claude)
-- [ ] **D11.2** Skonfiguruj Caddy/Nginx jako reverse proxy obsługujący wildcard
+- [x] **D11.1** Skonfiguruj wildcard DNS `*.korp-cbm.com` w Cloudflare — CNAME → cname.vercel-dns.com, proxied 🟠 (2026-06-18, poprawione — pierwotnie A record/proxied=false)
+- [x] **D11.2** Reverse proxy — obsługiwany przez Vercel (nie Caddy/Nginx; ADR-004) (2026-06-16)
 - [x] **D11.3** Implement Next.js middleware dla subdomain routing (2026-06-12, Agent: Claude)
 - [ ] **D11.4** Implement weryfikacja custom domain (DNS CNAME check)
 - [ ] **D11.5** Utwórz subdomain per portfolio w tabeli `portfolios` (`subdomain` field)
@@ -914,17 +915,25 @@ PLATFORM_DOMAIN=korp-cbm.com
 
 ### 13.2 Cloudflare konfiguracja
 
+> ⚠️ **UWAGA:** Ta sekcja była pierwotnie napisana z myślą o VPS (Caddy). Po wyborze Vercel (ADR-004)
+> instrukcje DNS zostały zaktualizowane. Nie używamy VPS ani Caddy — hosting to Vercel.
+
 ```
-1. Dodaj domenę korp-cbm.com do Cloudflare
-2. Nameservery: podmień u rejestratora na ns1.cloudflare.com / ns2.cloudflare.com
-3. DNS Records:
-   - A    korp-cbm.com        → [IP VPS]  (proxied ✓)
-   - A    *.korp-cbm.com      → [IP VPS]  (proxied ✓)
-   - MX   korp-cbm.com        → mail.korp-cbm.com (opcjonalnie)
-4. SSL: Full (strict) — wymaga ważnego certa na serwerze (Caddy to robi)
-5. Page Rules:
-   - korp-cbm.com/* → Cache Level: Standard
-   - admin.korp-cbm.com/* → Cache Level: Bypass
+1. Nameservery: ns1.cloudflare.com / ns2.cloudflare.com (już aktywne ✓)
+2. DNS Records (Cloudflare jako proxy przed Vercel):
+   - CNAME  korp-cbm.com    → cname.vercel-dns.com  (proxied 🟠)
+   - CNAME  *.korp-cbm.com  → cname.vercel-dns.com  (proxied 🟠)
+   - MX     korp-cbm.com    → mail.korp-cbm.com (opcjonalnie)
+3. SSL/TLS mode w Cloudflare: Full
+   (NIE Strict — Vercel nie ma własnego certa dla wildcard *.korp-cbm.com
+    gdy ruch przechodzi przez Cloudflare proxy; Full szyfruje tunel CF→Vercel)
+4. Cache Rules (Cloudflare):
+   - *.korp-cbm.com/*         → Cache Level: Standard
+   - admin.korp-cbm.com/*     → Cache Level: Bypass
+
+Jak to działa:
+  Przeglądarka → Cloudflare (SSL wildcard, CDN) → Vercel (Next.js + Payload)
+  Cloudflare terminuje SSL swoim wildcard certem — Vercel nie musi mieć certa dla *.korp-cbm.com
 ```
 
 ### 13.3 Zadania hosting
@@ -935,10 +944,10 @@ PLATFORM_DOMAIN=korp-cbm.com
 - [x] **H13.4** Utwórz Cloudflare R2 bucket `portfoliohub` + klucze API (2026-06-11)
 - [x] **H13.5** Utwórz konto Resend + zweryfikuj domenę korp-cbm.com (2026-06-11)
 - [x] **H13.6** Przenieś domenę korp-cbm.com do Cloudflare — nameservery już aktywne (2026-06-12, Agent: Claude)
-- [x] **H13.7** Ustaw DNS records: CNAME korp-cbm.com → cname.vercel-dns.com, A *.korp-cbm.com → 76.76.21.21 (2026-06-12, Agent: Claude)
+- [x] **H13.7** Ustaw DNS records w Cloudflare: CNAME korp-cbm.com + CNAME *.korp-cbm.com → cname.vercel-dns.com (proxied 🟠), SSL mode: Full (2026-06-18, poprawione — było A/proxied=false)
 - [x] **H13.8** Dodaj custom domains w Vercel (korp-cbm.com, *.korp-cbm.com) (2026-06-12, Agent: Claude)
 - [x] **H13.9** Skonfiguruj zmienne środowiskowe w Vercel (14 vars) (2026-06-12, Agent: Claude)
-- [ ] **H13.10** First produkcyjny deploy (`vercel --prod` z CLI po testach)
+- [x] **H13.10** First produkcyjny deploy — app live na korp-cbm.com (2026-06-16, Agent: Claude)
 - [ ] **H13.11** Skonfiguruj UptimeRobot ping monitoring na korp-cbm.com
 
 ---
@@ -1163,8 +1172,8 @@ Stack: Next.js 15, TypeScript, Tailwind CSS 4, Payload CMS 3, PostgreSQL, Docker
 Repo: /home/rspro/Dokumenty/1.CODE/2.Portfolio
 Główny plik planu: PLAN.md
 Zatwierdzone decyzje: ADR-005 (Cloudflare), ADR-009 (PL+EN)
-Oczekujące decyzje: ADR-001 (framework), ADR-002 (CMS), ADR-003 (DB), ADR-004 (hosting)
-Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CMS)
+Oczekujące decyzje: (wszystkie ADR-001÷010 zatwierdzone)
+Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, martyna, cbm)
 ```
 
 ### 19.3 Context files dla agentów
@@ -1257,13 +1266,13 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 ### Faza 5 — Deployment + SEO (2–3 dni)
 
 ```
-- [ ] Konfiguracja Vercel + połączenie z GitHub repo (H13.1)
-- [ ] Konfiguracja Neon, Upstash, R2, Resend (H13.2–H13.5)
-- [ ] DNS: korp-cbm.com + wildcard *.korp-cbm.com → Vercel (H13.6–H13.8)
-- [ ] Zmienne środowiskowe w Vercel Dashboard (H13.9)
-- [ ] SEO, sitemap, OG tags (P15.1–P15.14)
+- [x] Konfiguracja Vercel + połączenie z GitHub repo (H13.1) (2026-05-23)
+- [x] Konfiguracja Neon, Upstash, R2, Resend (H13.2–H13.5) (2026-06-11/12)
+- [x] DNS: korp-cbm.com + wildcard *.korp-cbm.com → Vercel CNAME proxied (H13.6–H13.8) (2026-06-18)
+- [x] Zmienne środowiskowe w Vercel Dashboard (14 vars) (H13.9) (2026-06-12)
+- [x] SEO, sitemap, OG tags (F9.10, F9.11) (2026-06-14)
+- [x] First deploy — app live na korp-cbm.com (H13.10) (2026-06-16)
 - [ ] Monitoring UptimeRobot (H13.11)
-- [ ] ✅ Testy lokalne PASSED → git push origin main → Vercel auto-deploy (H13.10)
 ```
 
 > **GATE przed push:** Wszystkie testy z Fazy 6 muszą przejść. Push = decyzja Radosława.
@@ -1292,32 +1301,48 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 
 ## 21. STATUS — CO ZBUDOWANE / CO NIE
 
-### ✅ Zbudowane (istniejący kod)
+> Ostatnia aktualizacja: 2026-06-20. Fazy 0–3 ukończone, produkcja live.
 
-| Element               | Lokalizacja                         | Opis                                                         |
-| --------------------- | ----------------------------------- | ------------------------------------------------------------ |
-| PHP Portfolio Miłosza | `kopia/`                            | Kompletne: index.php, admin, data/JSON, Docker, testy, PL+EN |
-| Architektura globalna | `PROJECT_MANAGEMENT/docs/PLAN_1.md` | Next.js, stack, ADR (draft)                                  |
-| Frontend plan         | `PROJECT_MANAGEMENT/docs/PLAN_2.md` | Komponenty, struktura, animacje (draft)                      |
-| Stare HTML portfolio  | root                                | index.html, styles.css (korp-cbm.com stary)                  |
-| CV Radosława          | `CV_RadekS/`                        | PDF PL + EN + DOCX                                           |
-| CV Quick View         | `CV_RadekS_Qiuck_view_update/`      | index.html z quick view                                      |
+### ✅ Zbudowane (Fazy 0–3, prod live na korp-cbm.com)
 
-### ❌ Nie zbudowane (do implementacji)
+| Element                       | Lokalizacja                              | Opis                                                             |
+| ----------------------------- | ---------------------------------------- | ---------------------------------------------------------------- |
+| Next.js 15 scaffold           | `platform/`                              | App Router, TypeScript 5, Tailwind CSS 4, 3-theme system         |
+| Payload CMS 3                 | `platform/src/payload/`                  | Collections: Users, Portfolios, Blocks, Media, Todos             |
+| Subdomain routing middleware  | `platform/src/middleware.ts`             | x-portfolio-slug z subdomeny, dev /dev/[slug]                    |
+| System bloków                 | `platform/src/components/blocks/`        | Hero, About, Experience, Skills, Education, Contact              |
+| Portfolio renderer            | `platform/src/app/(portfolio)/`          | PortfolioRenderer + BLOCK_REGISTRY + 404 per portfolio           |
+| System motywów                | CSS Custom Properties                    | light / dark / retro-terminal + cookie persistence               |
+| Animacje Framer Motion        | AnimatedSection + staggered              | fade-in + slide-up, whileInView once:true                        |
+| Scroll-spy nav                | PortfolioNav                             | IntersectionObserver, smooth scroll                              |
+| Contact Server Action         | sendContactMessage                       | Zod + Resend + rate limiting Redis (3 req/15min)                 |
+| OpenGraph / SEO               | buildPortfolioMetadata                   | og:title, og:description, og:image, twitter:card                 |
+| Sitemap dynamiczny            | `(portfolio)/sitemap.ts`                 | Per portfolio, tylko isPublished                                  |
+| Download CV button            | DownloadCvButton                         | cvPdfPl / cvPdfEn fallback, fixowany bottom-left                 |
+| Cookie consent GDPR           | CookieConsentBanner                      | 1-rok cookie, role=dialog, aria-live                             |
+| Landing page                  | `(portfolio)/page.tsx` (root)            | Hero + Funkcje + Aktywne portfolio + Footer                      |
+| Panel admina (Payload)        | `korp-cbm.com/admin`                     | Custom branding, RBAC (superadmin/admin/owner), live preview      |
+| Cloudflare R2 storage         | @payloadcms/storage-s3                   | Bucket: portfoliohub, media upload                               |
+| Vercel Analytics              | @vercel/analytics                        | Page views w admin dashboardzie                                   |
+| Todo list                     | Todos collection                         | CRUD w Payload admin                                             |
+| DNS + SSL                     | Cloudflare → Vercel                      | CNAME proxied 🟠, SSL Full, wildcard *.korp-cbm.com             |
+| PostgreSQL (Neon)             | eu-central-1                             | Schemat Payload: migrations, users, portfolios, blocks, media    |
+| Redis (Upstash)               | eu-west-1                                | Rate limiting formularza kontaktowego                            |
+| CI                            | `.github/workflows/`                     | Lint + typecheck na push dev/staging                             |
+| Logger                        | `platform/src/lib/logger.ts`             | pino, structured JSON, pretty-print dev                          |
+
+### ⏳ Do zrobienia (Faza 4+)
 
 | Element                      | Faza   | Priority |
 | ---------------------------- | ------ | -------- |
-| Platform Next.js 15 scaffold | Faza 1 | 🔴       |
-| Payload CMS 3 konfiguracja   | Faza 1 | 🔴       |
-| System bloków                | Faza 2 | 🔴       |
-| Panel admina (nowy)          | Faza 3 | 🔴       |
-| Subdomain routing            | Faza 1 | 🔴       |
-| Docker prod stack            | Faza 5 | 🔴       |
-| Portfolio Radosława          | Faza 4 | 🟡       |
-| Portfolio Martyny            | Faza 4 | 🟡       |
-| Portfolio CBM                | Faza 4 | 🟡       |
-| System zaproszeń email       | Faza 3 | 🟡       |
-| Statystyki odwiedzin         | Faza 3 | 🟡       |
+| Portfolio Radosława (treść)  | Faza 4 | 🔴       |
+| Portfolio Miłosza (treść)    | Faza 4 | 🔴       |
+| Portfolio Martyny (treść)    | Faza 4 | 🟡       |
+| Portfolio CBM (treść)        | Faza 4 | 🟡       |
+| Konto admina w Neon/prod     | Faza 4 | 🔴       |
+| UptimeRobot monitoring       | Faza 5 | 🟡       |
+| B8.4 Custom domain routing   | Faza 5 | 🟡       |
+| Testy E2E                    | Faza 6 | 🟡       |
 | Generator CV PDF             | Faza 7 | ⚪       |
 | Blog per portfolio           | Faza 7 | ⚪       |
 
@@ -1370,6 +1395,10 @@ Aktywna faza: Faza 1 — Fundament Docker + DB (Next.js 15 scaffold + Payload CM
 | 2026-05-23 | 1.2    | Reorganizacja repo (commit 54fa46e); zasada git push tylko po testach i zgodzie Radosława | Radosław + Claude |
 | 2026-05-23 | 1.3    | Faza 0 częściowo ukończona: Vercel skonfigurowany, SSH GitHub, P3.1-P3.10 done | Radosław + Claude |
 | 2026-06-12 | 1.4    | Faza 0 UKOŃCZONA: DNS skonfigurowany (H13.6-H13.8, D11.1), system pamięci AI, access.md | Radosław + Claude |
+| 2026-06-14 | 1.5    | Faza 2 UKOŃCZONA: F9.7–F9.15 (Framer Motion, nav, contact SA, SEO, sitemap, CV, GDPR, landing, 404) | Radosław + Claude |
+| 2026-06-16 | 1.6    | Faza 3 UKOŃCZONA: A10.1–A10.9 (admin branding, R2, Analytics, Todos, livePreview), deploy na Vercel prod | Radosław + Claude |
+| 2026-06-18 | 1.7    | DNS poprawiony: A record/proxied=false → CNAME/proxied🟠, SSL mode Full (H13.7 fix) | Radosław + Claude |
+| 2026-06-20 | 1.8    | Audyt: §21 status zaktualizowany, §11.2 DNS poprawione, D11.1/D11.2/H13.10 zaznaczone, Faza 5 checkboxy | Radosław + Claude |
 
 ---
 

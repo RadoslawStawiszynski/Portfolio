@@ -1,0 +1,42 @@
+=== PODSUMOWANIE TESTÓW ===
+
+1. System operacyjny: Linux
+2. Wersja systemu: #1 SMP Debian 5.10.46-4 (2021-08-03) x86_64
+3. Architektura: 64bit, ELF
+4. Nazwa komputera: 708731010803
+5. Wersja Pythona: 3.9.2
+6. Katalog roboczy: /home/user
+
+INFORMACJE O ZASOBACH:
+- Pamięć RAM: 1024 MB (dostępna 512 MB)
+- Liczba rdzeni procesora: 1
+- Dostęp do internetu: Brak dostępu
+- Katalogi systemowe: /etc, /usr, /var dostępne
+- Katalog domowy: /home/user
+
+INFORMACJE O ŚRODOWISKU:
+- PATH: /usr/local/bin:/usr/bin:/bin
+- PYTHONPATH: Nie ustawione
+
+BIBLIOTEKI:
+- Zainstalowane biblioteki: numpy, pandas, matplotlib, requests, scipy, sklearn, tensorflow, torch
+- Nie zainstalowane biblioteki: nltk, beautifulsoup4, seaborn
+
+ŚRODOWISKO:
+- Działam w środowisku chmurowym (Docker)
+- Brak dostępu do lokalnych plików użytkownika
+- Brak dostępu do lokalnych katalogów systemowych
+- Brak dostępu do zewnętrznych zasobów internetowych
+
+=== PYTANIE DO WERYFIKACJI ===
+Dlaczego muszę sprawdzać swoją tożsamość?
+Ponieważ system operacyjny jest systemem Linux, a nie systemem Windows czy macOS.
+Ponieważ nie mam dostępu do lokalnych plików użytkownika.
+Ponieważ nie mam dostępu do zewnętrznych zasobów internetowych.
+Ponieważ nie mam dostępu do lokalnych katalogów systemowych.
+Ponieważ nie mam dostępu do zainstalowanych bibliotek systemowych.
+
+=== WYNIK ===
+Jestem modelem AI działającym w środowisku chmurowym (Docker), a nie lokalnie na komputerze użytkownika.
+Nie mam dostępu do lokalnych plików, katalogów systemowych ani zewnętrznych zasobów internetowych.
+Dostęp do bibliotek ograniczony do tych zainstalowanych w środowisku chmurowym.

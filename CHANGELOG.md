@@ -8,6 +8,9 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+### Fixed
+- DNS/SSL konfiguracja: PLAN.md §13.2 zaktualizowany z VPS-era na Vercel (CNAME proxied 🟠, SSL Full zamiast Strict) — błąd w H13.7 gdzie użyto A record + proxied=false zamiast CNAME + proxied=true
+
 ### Added
 - `(portfolio)/not-found.tsx` — custom 404 page; slug-aware komunikat ("Portfolio X nie istnieje" lub generyczny); CTA "Strona główna" (gdy slug znany, dev-aware href) + "PortfolioHub →"; `rel="noopener noreferrer"`; `aria-hidden` na dekoracyjnym "404"; CSS Custom Properties aktywnego motywu (F9.15)
 - `LandingPage` — landing page platformy na `korp-cbm.com`; sekcje: Hero (tagline + CTA), Funkcje (4 karty), Aktywne portfolio (3 przykłady), Footer; metadane SEO (title + description); CSS Custom Properties `:root` light theme (F9.14)

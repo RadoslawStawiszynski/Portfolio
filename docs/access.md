@@ -25,13 +25,18 @@
 | **Cloudflare DNS** | ✅ aktywny | `CLOUDFLARE_API_TOKEN` | korp-cbm.com, DNS:Edit na strefie |
 | **GitHub** | ✅ SSH | brak tokena — SSH key | repo: RadoslawStawiszynski/Portfolio |
 
-## Cloudflare DNS — aktualny stan (po H13.6/H13.7)
+## Cloudflare DNS — aktualny stan (po H13.7 poprawione 2026-06-18)
 
 ```
-korp-cbm.com       CNAME → cname.vercel-dns.com  (proxied=false)
-*.korp-cbm.com     A     → 76.76.21.21            (proxied=false)
-www.korp-cbm.com   CNAME → korp-cbm.com           (proxied=false)
+korp-cbm.com       CNAME → cname.vercel-dns.com  (proxied 🟠)
+*.korp-cbm.com     CNAME → cname.vercel-dns.com  (proxied 🟠)
 ```
+
+SSL/TLS mode w Cloudflare: Full
+(NIE Strict — Cloudflare terminuje SSL, Vercel serwuje Next.js za proxy)
+
+Weryfikacja: dig korp-cbm.com → 104.21.22.126 / 172.67.205.8 (Cloudflare Anycast) ✅
+SSL: TLS 1.3, cert *.korp-cbm.com (Google Trust Services, ważny do 2026-08-16) ✅
 
 Zachowane (nie ruszać bez decyzji Radosława):
 - NS → dns.home.pl / dns2.home.pl / dns3.home.pl (Radosław korzysta)
@@ -55,8 +60,14 @@ NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_PLATFORM_DOMAIN, LOG_LEVEL
 - `korp-cbm.com` ✅
 - `*.korp-cbm.com` ✅
 
+## Stan produkcji (2026-06-20)
+
+- `korp-cbm.com` → 200 ✅ (Landing Page — PortfolioHub)
+- `korp-cbm.com/admin` → 200 ✅ (Payload CMS Dashboard)
+- `www.korp-cbm.com` → 200 ✅
+- `radek.korp-cbm.com` → 404 (oczekiwane — brak portfolio `radek` w DB)
+
 ## Co NIE jest jeszcze zrobione
 
-- H13.10: pierwszy `vercel --prod` deploy (po scaffoldzie Next.js)
 - H13.11: UptimeRobot monitoring
-- Faza 1: scaffold Next.js 15 + Payload CMS 3
+- Faza 4: stworzenie konta admina + dodanie portfeli (radek, milosz, martyna, cbm)

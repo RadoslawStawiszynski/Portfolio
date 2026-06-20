@@ -8,6 +8,10 @@ node_modules/
 .env.local
 .env.*.local
 .env.production
+platform/.env.vercel.*
+
+# Continue IDE (lokalne ustawienia)
+.continue/
 
 # Next.js
 .next/
@@ -55,3 +59,7 @@ platform/src/app/(payload)/admin/importMap.js
 
 # Agent outputs (audit reports only — plans and specs are tracked)
 .agents/audit/
+
+# Encryption keys / secrets
+*.key
+secret.key

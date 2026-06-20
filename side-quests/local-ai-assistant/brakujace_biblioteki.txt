@@ -1,0 +1,10 @@
+=== BRAKUJĄCE BIBLIOTEKI ===
+Biblioteki kluczowe dla API i AI:
+- fastapi, uvicorn (API)
+- pydantic (walidacja danych)
+- sqlalchemy, alembic (bazy danych)
+- transformers, torch, accelerate (AI lokalne)
+- black, flake8, mypy (jakość kodu)
+- pytest, httpx (testowanie)
+- python-dotenv (konfiguracja)
+- langchain, ollama (integracja LLM)

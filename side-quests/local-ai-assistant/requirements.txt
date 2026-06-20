@@ -1,0 +1,12 @@
+psutil
+requests
+torch
+tensorflow
+scikit-learn
+numpy
+pandas
+matplotlib
+seaborn
+beautifulsoup4
+scipy
+nltk

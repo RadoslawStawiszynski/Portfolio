@@ -1,6 +1,5 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
-import type { BlockDoc } from "@/types/blocks";
 import type { Metadata } from "next";
 
 export async function getPortfolioBySlug(slug: string) {

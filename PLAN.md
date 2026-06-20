@@ -1412,6 +1412,246 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 ---
 
+## 23. PROPOZYCJE ROZWOJU — PERSPEKTYWA AGENTA (Claude Sonnet 4.6)
+
+> Ta sekcja to moje osobiste propozycje i obserwacje po miesiącu pracy z tym projektem.
+> Nie są to zadania do natychmiastowego zrobienia — to materiał do przemyślenia i dyskusji.
+> Zapisuję je jako agent który widzi kod, architekturę i kontekst użytkownika od środka.
+>
+> — Claude Sonnet 4.6, 2026-06-20
+
+---
+
+### 23.1 Rzeczy które zrobiłbym natychmiast (niski koszt, duży efekt)
+
+#### ISR zamiast pełnego SSR dla stron portfolio
+Aktualnie każde wejście na `radek.korp-cbm.com` wykonuje dwa zapytania do Neon (getPortfolioBySlug + getBlocksBySlug). Neon w free tierze ma zimny start ~200ms. Portfolio zmienia się rzadko — raz dziennie lub rzadziej.
+
+**Propozycja:** `export const revalidate = 300` w `page.tsx` (portal) + Payload hook `afterChange` na kolekcji `blocks`, który wywołuje `revalidateTag("portfolio-{slug}")`. Efekt: pierwsze wejście w ciągu 5 minut jest z cache CDN Vercel, zmiany widoczne w maks. 5 minut.
+
+```typescript
+// page.tsx
+export const revalidate = 300; // 5 minut
+
+// payload/hooks/revalidatePortfolio.ts
+afterChange: async ({ doc, req }) => {
+  const slug = ...; // pobierz subdomain z portfolio
+  await fetch(`${process.env.NEXT_PUBLIC_URL}/api/revalidate?tag=portfolio-${slug}`, ...);
+}
+```
+
+To jedna z najważniejszych optymalizacji — Neon free tier ma limit połączeń (10), ISR redukuje liczbę zapytań 100×.
+
+#### Redis cache dla getBlocksBySlug
+Bloki zmieniają się rzadko, ale są czytane przy każdym odświeżeniu nawigacji. Upstash Redis już jest w projekcie jako rate limiter — dodanie cache `blocks:{slug}:{locale}` z TTL 60s to ~20 linii kodu i eliminuje bottleneck Neon przy ruchu.
+
+```typescript
+const cached = await redis.get(`blocks:${slug}:${locale}`);
+if (cached) return JSON.parse(cached);
+// ... fetch from Neon
+await redis.set(`blocks:${slug}:${locale}`, JSON.stringify(result), { ex: 60 });
+```
+
+#### Powiadomienie email gdy ktoś wyśle formularz kontaktowy
+Resend jest podłączony. Właściciel portfolio wie że ktoś napisał dopiero jak zajrzy na skrzynkę — co może być za późno. Warto dodać natychmiastowe powiadomienie na email właściciela z treścią wiadomości (1 dodatkowe `resend.emails.send` w `actions.ts`). Kosztuje 0 linii infrastruktury, tylko 5 linii kodu.
+
+---
+
+### 23.2 Ulepszenia UX które zauważyłem jako użytkownik kodu
+
+#### Drag & drop kolejności bloków w adminie
+Payload CMS ma wbudowany `@payloadcms/richtext-lexical` i sortable arrays — ale pole `order` w kolekcji `Blocks` jest ręczne (liczba). Użytkownik musi wchodzić w każdy blok osobno i zmieniać `order: 10 → 20 → 30`. 
+
+Lepiej: Custom List View w admin z `@dnd-kit/sortable` który po drop wywołuje bulk update `order`. To jeden z bólów przy zarządzaniu treścią który będzie narastać gdy bloków będzie więcej.
+
+#### Podgląd motywu bez przeładowania strony
+Aktualnie ThemeToggle zmienia `document.documentElement.dataset.theme` — to działa bez przeładowania. Ale zmiana bloku w `/admin` wymaga ręcznego odświeżenia strony portfolio żeby zobaczyć efekt. Payload Live Preview jest podłączony, ale może nie być skonfigurowany pod subdomain routing.
+
+Sprawdź czy Live Preview (`/admin/collections/blocks/[id]`) poprawnie ładuje subdomain URL — jeśli nie, port `livePreviewUrl` w Payload config wymaga funkcji która buduje URL z `data.portfolio.subdomain`.
+
+#### Komunikat 404 per portfolio vs. landing page
+Teraz gdy wejdziesz na `nieistniejacy.localhost:3000`, Next.js zwraca ogólny 404. Warto rozróżnić:
+- Subdomain istnieje ale blok nie znaleziony → custom 404 per portfolio (z motywem właściciela)
+- Subdomain nie istnieje → landing page z "Chcesz swoje portfolio? Zaloguj się."
+Middleware już rozróżnia te przypadki przez `x-portfolio-slug` — wystarczy to wykorzystać w `not-found.tsx`.
+
+---
+
+### 23.3 Nowe typy bloków które mają sens dla aktualnych użytkowników
+
+Sorted by ROI — od najłatwiejszych do najtrudniejszych:
+
+| Blok | Dla kogo | Czas impl. | Dlaczego warto |
+|------|----------|------------|----------------|
+| `testimonials` | radek (PM portfolio) | 2h | Referencje od klientów/pracodawców to silny social proof w CV |
+| `stats` | radek, milosz | 2h | "5 lat doświadczenia / 20 projektów / 3 branże" — liczby działają |
+| `books` | martyna | 3h | Podstawa portfolio autorki, brakuje go teraz |
+| `gallery` | martyna | 2h | Okładki książek, zdjęcia z eventów |
+| `cta` | wszyscy | 1h | Sekcja "Skontaktuj się ze mną" z dużym guzikiem między blokami |
+| `timeline` | radek | 3h | Alternatywa dla experience — wizualny timeline kariery |
+| `faq` | martyna, cbm | 2h | Dla portfolio autorki: FAQ o książkach, dla CBM: FAQ o usługach |
+
+#### Blok `books` — szczegółowy projekt (dla Martyny, jutro)
+```typescript
+interface BookItem {
+  title: string;           // localized
+  year: number;
+  coverUrl?: string;       // z R2
+  description?: string;    // localized, textarea
+  genre?: string;
+  buyUrl?: string;         // link do empiku/amazona
+  isAvailable: boolean;
+}
+```
+Wyświetlanie: horizontal scroll na mobile, grid 2–3 col na desktop. Karta = okładka + tytuł + rok + badge dostępności + link "Kup". Motyw slate-rose — karty z `bg-rose-50 dark:bg-rose-950/30`.
+
+---
+
+### 23.4 Architektura — co bym zmienił gdyby projekt miał rosnąć
+
+#### Wydzielenie `portfolio-app` i `admin-app` jako osobne Next.js instances
+Aktualnie jeden monorepo Next.js obsługuje i portfolio (publiczne) i Payload admin. To dobry wybór na start (ADR-002), ale przy większej skali:
+- Admin (Payload) ma ciężkie Node.js zależności — `serverExternalPackages` to workaround
+- Portfolio strony mogą być statyczne/edge, admin musi być Node.js
+- Jedna awaria deploymentu crashuje oba
+
+Alternatywa na przyszłość: Payload jako headless API na `api.korp-cbm.com` (Node.js Vercel function), portfolio jako Edge runtime. Nie robiłbym tego teraz — zbyt wczesna optymalizacja.
+
+#### Typowanie bloków end-to-end (Payload → TypeScript → React)
+Aktualnie `extractBlockData` w `portfolio.ts` castuje `doc as Record<string, unknown>` i ręcznie buduje typy. Payload 3 generuje typy z kolekcji przez `payload generate:types`. 
+
+Włączenie `payload generate:types` jako `prebuild` step wyeliminuje ręczne castowanie i doda auto-complete w IDE. Ryzyko: typy mogą być zbyt szczegółowe (Payload tworzy union types dla lokalizacji). Warto spróbować jako eksperyment.
+
+#### Edge Middleware dla subdomain routing
+Aktualnie `middleware.ts` działa jako Node.js Edge Runtime (Vercel). Przy dużej liczbie portfolii (100+) i wysokim ruchu, middleware mógłby stać się bottleneck bo każdy request przechodzi przez niego.
+
+Lepsza alternatywa: Cloudflare Worker przed Vercel który ustawia header `x-portfolio-slug` i przekierowuje. Worker jest dosłownie na edge, latency <1ms. Ale to dodatkowa warstwa infra — sensowne przy >1000 req/s.
+
+---
+
+### 23.5 Rzeczy których nie robiłem a które mnie niepokoją
+
+#### Brak backupu bazy danych
+Neon free tier nie ma automatycznych backupów (tylko point-in-time recovery przez 7 dni). Dla projektu portfolio to akceptowalne ryzyko, ale dla CBM (firma) — już nie. Warto rozważyć cron job który co tydzień eksportuje `pg_dump` do R2.
+
+```bash
+# scripts/backup-db.sh (uruchamiane przez Vercel Cron lub GitHub Actions)
+pg_dump "$DATABASE_URL" | gzip > backup-$(date +%Y%m%d).sql.gz
+# upload do R2: backups/portfoliohub/YYYY-MM-DD/
+```
+
+#### Brak monitoringu błędów (Sentry lub podobne)
+Aplikacja jest w produkcji (korp-cbm.com). Jeśli ktoś wejdzie na radek.korp-cbm.com i coś się wysypie — dowiesz się dopiero gdy Radosław sam sprawdzi. Sentry free tier (5k errors/month) + 3 linie kodu w `layout.tsx` = pełny stack trace każdego błędu w Twoim mailu.
+
+```bash
+npm install @sentry/nextjs
+npx @sentry/wizard@latest -i nextjs
+```
+
+#### Ochrona przed spamem w formularzu kontaktowym
+Rate limiting jest (Redis, 3 req/15min), ale bez CAPTCHA. Bot który rotuje IP może zafloodować skrzynkę mailową właściciela. Cloudflare Turnstile (darmowe, lepsze UX niż reCAPTCHA) to drop-in replacement — ukryte CAPTCHA które nie irytuje użytkowników.
+
+---
+
+### 23.6 Pomysł biznesowy — PortfolioHub jako produkt SaaS
+
+To platforma którą budujesz na swój użytek, ale architektura jest już multi-tenant. Kilka obserwacji:
+
+**Co masz już gotowe dla SaaS:**
+- Multi-tenant subdomain routing (`*.korp-cbm.com`)
+- RBAC per portfolio (owner widzi tylko swoje bloki)
+- System motywów (10 wariantów)
+- Panel admin dla każdego użytkownika
+- Bloki edytowalne bez kodu
+
+**Czego brakuje do produktu:**
+- Self-service rejestracja (teraz tylko admin tworzy konta)
+- Onboarding wizard ("Stwórz swoje pierwsze portfolio w 5 minut")
+- Custom domeny per portfolio (D11.4)
+- Plany cenowe (free: 5 bloków, pro: nieograniczone + custom domena)
+- Billing (Stripe)
+
+**Alternatywne zastosowanie:** Sprzedaż gotowych portfolio jako usługa (jak np. read.cv). Klient płaci raz lub miesięcznie, dostaje subdomenę i panel admin. Nie trzeba SaaS infra — wystarczy proste konto Stripe + ręczne tworzenie kont przez Radosława.
+
+**Rynek:** Freelancerzy, PMowie, developerzy, autorzy — grupy które mają potrzebę profesjonalnego portfolio ale nie chcą kodować. Cena 9–19€/mies wydaje się rozsądna.
+
+---
+
+### 23.7 Moje priorytety gdybym miał tydzień wolnego na ten projekt
+
+1. **ISR + Redis cache** — eliminuje bottleneck Neon, strony ładują się w <100ms nawet z zimnym startem
+2. **Sentry** — wiem o błędach zanim Radosław mi o nich powie
+3. **Backup DB** — cron job, raz w tygodniu, do R2
+4. **Blok `testimonials`** — dla radka, najbardziej brakuje w PM portfolio
+5. **Drag & drop kolejności bloków** — największy pain point przy edycji treści
+6. **Cloudflare Turnstile** — ochrona formularza kontaktowego bez irytowania użytkowników
+7. **Self-service rejestracja** — gdybym chciał testować PortfolioHub jako produkt
+
+---
+
+### 23.8 Rzeczy które zrobiłem i z których jestem szczególnie zadowolony
+
+- **System motywów z `--scanline-color` per theme** — eleganckie rozwiązanie, jeden token steruje scanlines na wszystkich motywach. Łatwe do rozszerzenia.
+- **`getBlocksBySlug(slug, locale)`** — czyste API, jeden parametr dodaje pełną wielojęzyczność.
+- **`seed-neon.ts` idempotentny** — można uruchomić wielokrotnie bez efektów ubocznych. Ważne przy debugowaniu prod.
+- **RBAC przez async access function zwracającą `where` clause** — Payload pattern który skaluje. Owner może mieć dziesiątki bloków, zawsze dostaje tylko swoje.
+- **PortfolioNav `max-w-0` collapse** — zamiast `opacity-0` które ukrywa ale nie zwalnia przestrzeni. Małe, ale poprawne.
+
+---
+
+---
+
+### 23.9 Wnioski — czego nauczyłem się przy tym projekcie
+
+#### Payload CMS 3 + Next.js 15 to dobre połączenie, ale ma pułapki
+Payload generuje własny root layout z `RootLayout` i `ConfigProvider` — jeśli dodasz `app/layout.tsx` obok `(payload)/layout.tsx`, React tree się psuje i admin przestaje działać. Rozwiązanie (multiple route groups bez wspólnego layoutu) jest nieoczywiste i nie ma go w dokumentacji. Straciłem na tym godzinę.
+
+Drugi problem: `importMap.js` vs `importMap.ts` — Payload auto-generuje plik `.js`, ale TypeScript project może przypadkowo śledzić `.ts` wersję. Stale `.ts` blokuje custom komponenty w admin. Zawsze sprawdź który plik jest "aktywny".
+
+#### Subdomain routing na localhost działa bez /etc/hosts — Linux rozwiązuje `*.localhost` natywnie
+Nie wiedziałem tego na początku. Przez chwilę planowałem dodawać wpisy do `/etc/hosts` dla każdego subdomain (`radek.localhost`, `milosz.localhost`). Systemd-resolved na Linuxie Ubuntuowym automatycznie rozwiązuje `*.localhost` → `::1`. Na macOS wymaga `dscacheutil` lub Caddy.
+
+Wniosek: zawsze sprawdź co platforma robi natywnie zanim zaczniesz konfigurować.
+
+#### Seed scripts muszą być idempotentne od początku
+Pierwsze seedy pisałem bez sprawdzania czy rekord już istnieje. Po 3 uruchomieniu miałem zduplikowane bloki i musiałem czyścić bazę ręcznie. Od drugiej sesji każdy seed ma `if (existing.docs.length) return` na początku. Kosztuje 5 linii, oszczędza godzinę.
+
+#### `overrideAccess: true` to nie obejście — to właściwy wzorzec dla seed scriptów
+Payload access control jest zaprojektowany pod request context (zalogowany user). Seed script nie ma użytkownika — używa `overrideAccess: true`. To nie jest hack, to oficjalny sposób na operacje administratorskie bez kontekstu HTTP.
+
+#### Polski w HTTP headers → ERR_INVALID_CHAR
+Przy uploadzie CV do R2 z `Content-Disposition: attachment; filename="CV-RadosławStawiszyński.pdf"` — request wylatywał z `ERR_INVALID_CHAR`. Nagłówki HTTP mają być ASCII. Polskie znaki (ł, ą, ę, ś, ź, ź, ń, ó) w nazwie pliku trzeba albo encode RFC 5987 (`filename*=UTF-8''...`) albo po prostu pominąć `Content-Disposition` (R2 serwuje plik po URL, browser używa nazwy z URL). Wybrałem to drugie — prostsze.
+
+#### CSS Custom Properties i `data-theme` to najlepszy wzorzec dla multi-theme
+Alternatywa to className per theme (duże CSS bundle), Tailwind dark: prefix (tylko 2 motywy), lub JS-driven style injection (flash of unstyled content). CSS Custom Properties z `[data-theme="dark"] { --color-bg: #0f0f0f; }` są:
+- Zero JS (zero FOUC)
+- Natywnie supportowane przez SSR (theme ustawiony w HTML przed hydratacją)
+- Łatwe do rozszerzenia (dodanie motywu = 10 linii CSS)
+- Działa z `prefers-color-scheme` media query
+
+#### Neon free tier ma limit połączeń (10 concurrent) — to realny problem przy SSR
+Każdy request SSR otwiera połączenie z Neon przez Payload. Przy 10 jednoczesnych userach — limit. Rozwiązania:
+1. PgBouncer (pooler) — Neon ma go wbudowanego, wystarczy użyć connection string z `?pgbouncer=true`
+2. ISR — redukuje liczbę requestów do Neon o ~95%
+3. Serverless connection (Neon HTTP driver) — jeden request HTTP zamiast TCP connection
+
+Aktualnie używamy zwykłego connection string bez pooler. Dodanie `pgbouncer=true` to 1 zmiana w env var.
+
+#### Commit message jako dokumentacja jest wart inwestycji
+W tym projekcie każdy commit ma opis w formacie `type(scope): opis`. Po miesiącu `git log --oneline` to czytelna historia projektu — widzę dokładnie kiedy co zostało zrobione i dlaczego. Dobre commity zastępują znaczną część dokumentacji.
+
+#### Multi-agent workflow (Claude Code + PLAN.md) sprawdza się przy złożonych projektach
+PLAN.md jako centralny dokument który każdy agent czyta na początku sesji eliminuje powtarzanie kontekstu. Słabość: PLAN.md może stać się nieaktualny jeśli agent nie zapisuje po sobie. Rozwiązanie: zasada §2 + Appendix A (rejestr zmian) + §21 Status.
+
+Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (bardziej standardowe), ale CLAUDE.md jest czytany przez Claude Code natywnie więc zostaje.
+
+---
+
+*Sekcja dodana: 2026-06-20 przez Claude Sonnet 4.6*
+*Nie są to decyzje — to zaproszenie do rozmowy.*
+
+---
+
 ## Appendix A — Rejestr zmian PLAN.md
 
 | Data       | Wersja | Zmiana                                              | Przez             |
@@ -1426,6 +1666,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | 2026-06-18 | 1.7    | DNS poprawiony: A record/proxied=false → CNAME/proxied🟠, SSL mode Full (H13.7 fix) | Radosław + Claude |
 | 2026-06-20 | 1.8    | Audyt: §21 status zaktualizowany, §11.2 DNS poprawione, D11.1/D11.2/H13.10 zaznaczone, Faza 5 checkboxy | Radosław + Claude |
 | 2026-06-20 | 1.9    | Faza 4 (większość done): seed Neon, blok projects, CV→R2, motyw radek, LangToggle PL/EN, responsywność; §17 M17.3/M17.8/M17.10/M17.11 done; §21 zaktualizowane | Radosław + Claude |
+| 2026-06-20 | 2.0    | Nowa sekcja §23: propozycje rozwoju, pomysły architektoniczne i wnioski z projektu (perspektywa agenta AI) | Claude Sonnet 4.6 |
 
 ---
 

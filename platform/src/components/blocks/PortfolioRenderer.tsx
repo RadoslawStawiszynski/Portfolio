@@ -1,7 +1,7 @@
 // platform/src/components/blocks/PortfolioRenderer.tsx
 import { logger } from "@/lib/logger";
 import { BLOCK_REGISTRY, type RegisteredBlockType } from "./registry";
-import type { BlockDoc } from "@/types/blocks";
+import type { BlockDoc, HeroData } from "@/types/blocks";
 import { PortfolioNav } from "@/components/ui/PortfolioNav";
 
 export type { BlockDoc };
@@ -36,9 +36,15 @@ export function PortfolioRenderer({ blocks, portfolioSlug }: Props) {
     label: SECTION_LABELS[b.type] ?? b.type,
   }));
 
+  const heroBlock = blocks.find((b) => b.type === "hero");
+  const heroData = heroBlock?.data as HeroData | undefined;
+  const identity = heroData
+    ? { name: heroData.title, subtitle: heroData.subtitle, avatarUrl: heroData.avatarUrl }
+    : undefined;
+
   return (
     <>
-      <PortfolioNav sections={sections} />
+      <PortfolioNav sections={sections} identity={identity} />
       <main className="pt-14">
         {blocks.map((block) => {
           const Component = BLOCK_REGISTRY[block.type as RegisteredBlockType];

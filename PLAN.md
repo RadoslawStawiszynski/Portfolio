@@ -1690,7 +1690,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ### 🔴 BEZPIECZEŃSTWO — przed następnym deployem
 
-- [ ] **TD-16** `Portfolios` API (`/api/portfolios`) zwraca WSZYSTKIE portfolia dla niezalogowanych — brak filtrowania po `isPublished`; `access.read: ({ req }) => { if (!req.user) return true }` na `Portfolios.ts:18` daje pełny odczyt; naprawić: `return { isPublished: { equals: true } }` dla gości (`platform/src/payload/collections/Portfolios.ts:17-21`)
+- [x] **TD-16** `Portfolios` API (`/api/portfolios`) zwraca WSZYSTKIE portfolia dla niezalogowanych (2026-06-20, Agent: Claude) — brak filtrowania po `isPublished`; `access.read: ({ req }) => { if (!req.user) return true }` na `Portfolios.ts:18` daje pełny odczyt; naprawić: `return { isPublished: { equals: true } }` dla gości (`platform/src/payload/collections/Portfolios.ts:17-21`)
 
 ### 🟡 BEZPIECZEŃSTWO — Faza 6
 
@@ -1703,7 +1703,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ### 🔴 CI/CD — przed następnym deployem
 
-- [ ] **TD-21** CI nie buduje aplikacji — `.github/workflows/ci.yml` uruchamia tylko `lint` + `typecheck`; błąd buildu wykrywany dopiero przez Vercel przy deploy; dodać job `build` z `npm run build` (potrzebuje env vars jak w typecheck step)
+- [x] **TD-21** CI nie buduje aplikacji — `.github/workflows/ci.yml` (2026-06-20, Agent: Claude) uruchamia tylko `lint` + `typecheck`; błąd buildu wykrywany dopiero przez Vercel przy deploy; dodać job `build` z `npm run build` (potrzebuje env vars jak w typecheck step)
 
 ### 🟡 CI/CD — Faza 6
 

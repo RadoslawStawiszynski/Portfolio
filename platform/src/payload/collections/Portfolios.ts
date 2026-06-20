@@ -15,7 +15,7 @@ export const Portfolios: CollectionConfig = {
   },
   access: {
     read: ({ req }) => {
-      if (!req.user) return true;
+      if (!req.user) return { isPublished: { equals: true } };
       if (req.user.role === "superadmin" || req.user.role === "admin") return true;
       return { owner: { equals: req.user.id } };
     },

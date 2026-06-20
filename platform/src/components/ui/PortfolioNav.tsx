@@ -22,7 +22,7 @@ export function PortfolioNav({ sections }: Props) {
         ([entry]) => {
           if (entry.isIntersecting) setActiveId(id);
         },
-        { threshold: 0.2, rootMargin: "-56px 0px -50% 0px" }
+        { threshold: 0.1, rootMargin: "-56px 0px -20% 0px" }
       );
       obs.observe(el);
       return obs;

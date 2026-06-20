@@ -104,6 +104,9 @@ export async function getBlocksBySlug(slug: string) {
     },
     sort: "order",
     limit: 100,
+    locale: "pl",
+    fallbackLocale: "en",
+    overrideAccess: true,
   });
 
   return blocksResult.docs.map((doc) => ({

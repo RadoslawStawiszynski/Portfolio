@@ -22,7 +22,7 @@ export function EducationBlock({ data }: Props) {
   const d = data as EducationData;
   return (
     <section className="py-16 px-4 bg-[var(--color-bg)]">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <h2 className="text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-8">
           Wykształcenie
         </h2>

@@ -14,7 +14,7 @@ export function ContactBlock({ data, portfolioSlug }: Props) {
   return (
     <>
       <section className="py-16 px-4 bg-[var(--color-bg-alt)]">
-        <AnimatedSection className="max-w-2xl mx-auto">
+        <AnimatedSection className="max-w-4xl mx-auto">
           <h2 className="text-2xl lg:text-3xl font-bold text-[var(--color-primary)] mb-3">
             Kontakt
           </h2>

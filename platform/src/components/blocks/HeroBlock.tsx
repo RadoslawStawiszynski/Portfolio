@@ -29,7 +29,7 @@ export function HeroBlock({ data }: Props) {
     <>
       {/* Sticky identity strip — pojawia się gdy hero znika z widoku */}
       <div
-        className={`fixed top-10 left-0 right-0 z-30 transition-all duration-300 ${
+        className={`fixed top-10 left-0 right-0 z-30 transition-all duration-300 bg-[var(--color-bg)]/95 backdrop-blur-md border-b border-[var(--color-bg-alt)] shadow-sm ${
           scrolled
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-2 pointer-events-none"

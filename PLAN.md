@@ -1371,6 +1371,10 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | Push `dev → main` + Vercel prod deploy     | Faza 5 | 🔴 po UAT|
 | Generator CV PDF z bloków                 | Faza 7 | ⚪       |
 | Blog per portfolio                         | Faza 7 | ⚪       |
+| **Dług techniczny TD-01–TD-03** (error boundary, R2 env checks, livePreview URL) | Przed deployem | 🔴 |
+| **Dług techniczny TD-04–TD-11** (Zod walidacja, media scope, CSP headers, a11y) | Faza 6 | 🟡 |
+
+> Szczegóły długu technicznego: §24
 
 ---
 
@@ -1652,6 +1656,38 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ---
 
+## 24. DŁUG TECHNICZNY — ZNANE PROBLEMY DO NAPRAWY
+
+> Zidentyfikowane podczas audytu kodu faz 0–3 (2026-06-20, Claude Sonnet 4.6).
+> Nie blokują MVP, ale powinny być naprawione przed launch.
+> Priorytety: 🔴 przed następnym deployem / 🟡 Faza 6 / ⚪ opcjonalne
+
+### 🔴 Przed następnym deployem (blokują jakość produkcji)
+
+- [ ] **TD-01** Error boundary w `PortfolioRenderer` — crash jednego bloku crashuje całą stronę; dodać React Error Boundary z fallback UI (`platform/src/components/blocks/PortfolioRenderer.tsx`)
+- [ ] **TD-02** Non-null assertions `!` dla R2 env vars w `payload.config.ts:64–75` — zastąpić explicit throw jak robi to `PAYLOAD_SECRET` i `DATABASE_URL` (np. `R2_BUCKET_NAME`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`)
+- [ ] **TD-03** `livePreview` URL hardcoded `/dev/{slug}` w Portfolios collection — na prod trafia na zły URL; przerobić na `${process.env.NEXT_PUBLIC_SERVER_URL}/dev/{slug}` z fallbackiem na localhost
+
+### 🟡 Faza 6 — przed launch
+
+- [ ] **TD-04** `extractBlockData()` w `lib/portfolio.ts` — masowe `as Record<string, unknown>` casty bez walidacji runtime; zastąpić Zod schema per typ bloku (powiązane z TD-15)
+- [ ] **TD-05** Media collection bez scope per portfolio — każdy owner widzi media wszystkich w Payload admin; dodać `access.read` filtrujący po relacji `portfolio` do zalogowanego usera
+- [ ] **TD-06** Rate limit hardcoded (`LIMIT=3`, `WINDOW_SECONDS=900`) w `lib/rate-limit.ts` — przenieść do env vars (`RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_S`)
+- [ ] **TD-07** Brak security headers w `next.config.ts` — dodać `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`
+- [ ] **TD-08** `<img>` zamiast `next/image` w `HeroBlock.tsx` i `AboutBlock.tsx` — brak lazy loading i optymalizacji; gorsze LCP w Lighthouse
+- [ ] **TD-09** Brak ARIA roles w `PortfolioNav.tsx` — brak `role="navigation"`, `aria-current="page"` na aktywnym linku; wpływa na a11y score
+- [ ] **TD-10** Brak loading/disabled state na przycisku Submit w `ContactForm.tsx` — UX: użytkownik nie wie że formularz się wysyła, może klikać wielokrotnie
+- [ ] **TD-11** Brak `.json` snapshot dla migracji `20260616_195812_add_todos.ts` — inne migracje mają pair `.ts` + `.json`; sprawdzić czy Payload wymaga snapshotu do `migrate:status`
+
+### ⚪ Opcjonalne / Nice-to-have
+
+- [ ] **TD-12** `Todos` collection — pole `portfolio` jest optional bez auto-fill; owner musi ręcznie wskazać portfolio; rozważyć `beforeChange` hook który ustawia portfolio z kontekstu usera
+- [ ] **TD-13** Brak audit logu edycji bloków — nie wiadomo kto/kiedy co zmienił; dodać `afterChange` hook zapisujący `updatedBy` i timestamp
+- [ ] **TD-14** Brak error handling w `getPortfolioBySlug()` na scenariusz DB timeout / Neon cold start — teraz rzuca unhandled exception; dodać try/catch z fallback 503
+- [ ] **TD-15** `payload generate:types` jako `prebuild` step w `package.json` — eliminuje ręczne casty w `portfolio.ts`, dodaje auto-complete; ryzyko: Payload generuje złożone union types dla lokalizacji
+
+---
+
 ## Appendix A — Rejestr zmian PLAN.md
 
 | Data       | Wersja | Zmiana                                              | Przez             |
@@ -1667,6 +1703,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 | 2026-06-20 | 1.8    | Audyt: §21 status zaktualizowany, §11.2 DNS poprawione, D11.1/D11.2/H13.10 zaznaczone, Faza 5 checkboxy | Radosław + Claude |
 | 2026-06-20 | 1.9    | Faza 4 (większość done): seed Neon, blok projects, CV→R2, motyw radek, LangToggle PL/EN, responsywność; §17 M17.3/M17.8/M17.10/M17.11 done; §21 zaktualizowane | Radosław + Claude |
 | 2026-06-20 | 2.0    | Nowa sekcja §23: propozycje rozwoju, pomysły architektoniczne i wnioski z projektu (perspektywa agenta AI) | Claude Sonnet 4.6 |
+| 2026-06-20 | 2.1    | Audyt kodu faz 0–3: §24 Dług techniczny (TD-01–TD-15), §21 Do zrobienia zaktualizowane o TD priorytety | Claude Sonnet 4.6 |
 
 ---
 

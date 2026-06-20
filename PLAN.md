@@ -1688,6 +1688,40 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ---
 
+### 🔴 BEZPIECZEŃSTWO — przed następnym deployem
+
+- [ ] **TD-16** `Portfolios` API (`/api/portfolios`) zwraca WSZYSTKIE portfolia dla niezalogowanych — brak filtrowania po `isPublished`; `access.read: ({ req }) => { if (!req.user) return true }` na `Portfolios.ts:18` daje pełny odczyt; naprawić: `return { isPublished: { equals: true } }` dla gości (`platform/src/payload/collections/Portfolios.ts:17-21`)
+
+### 🟡 BEZPIECZEŃSTWO — Faza 6
+
+- [ ] **TD-17** `Media` collection — brak `create/update/delete` access functions; Payload 3 domyślnie wymaga auth dla mutacji (bezpieczne), ale dowolny zalogowany user może uploadować media do cudzego portfolio; dodać access filtrujący po relacji do własnych portfolii (`platform/src/payload/collections/Media.ts`)
+- [ ] **TD-18** Rate limit race condition — `redis.incr(key)` + `redis.expire(key, ...)` to dwie osobne operacje; przy równoległych requestach TTL może nie zostać ustawiony; zamienić na atomowe Lua script lub `pipeline()` (`platform/src/lib/rate-limit.ts:6-18`)
+- [ ] **TD-19** X-Forwarded-For jako jedyne źródło IP w rate limiterze — spoofable przez klienta; na Vercel+Cloudflare header jest wiarygodny, ale warto dodać komentarz WHY i rozważyć `x-real-ip` jako fallback (`platform/src/app/(portfolio)/actions.ts:51-52`, `app/api/contact/route.ts:38-39`)
+- [ ] **TD-20** Brak walidacji formatu subdomeny — pole `subdomain` w Portfolios nie ma regex; można wpisać `../admin`, `my portfolio!` itp.; dodać `validate: (val) => /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/.test(val)` (`platform/src/payload/collections/Portfolios.ts:36-43`)
+
+---
+
+### 🔴 CI/CD — przed następnym deployem
+
+- [ ] **TD-21** CI nie buduje aplikacji — `.github/workflows/ci.yml` uruchamia tylko `lint` + `typecheck`; błąd buildu wykrywany dopiero przez Vercel przy deploy; dodać job `build` z `npm run build` (potrzebuje env vars jak w typecheck step)
+
+### 🟡 CI/CD — Faza 6
+
+- [ ] **TD-22** Brak `/api/health` endpointu — monitoring (UptimeRobot, powiązane z H13.11) i load balancer nie mają punktu do sprawdzenia stanu aplikacji; dodać `platform/src/app/api/health/route.ts` zwracający `{ status: "ok", timestamp }` z kodem 200
+- [ ] **TD-23** Brak centralnej walidacji env vars na starcie — kod używa `process.env.X!` assertions w różnych miejscach; awaria przy brakującej zmiennej objawia się runtime errorem głęboko w kodzie; dodać `platform/src/lib/env.ts` z Zod schema i importować w `payload.config.ts`
+
+### ⚪ CI/CD — Opcjonalne
+
+- [ ] **TD-24** `@upstash/redis` używa HTTP REST API — lokalny Docker Redis (TCP) jest niekompatybilny; developerzy muszą używać prawdziwych kredencjałów Upstash nawet w dev; udokumentować w `.env.local.example` i README
+
+---
+
+### ⚪ BRAKUJĄCE BLOKI — Faza 7
+
+- [ ] **TD-25** 8 typów bloków w `BLOCK_TYPES` (Blocks.ts:11-18) nie ma ani pól Payload, ani TypeScript interfejsów, ani komponentów React: `books`, `services`, `gallery`, `testimonials`, `timeline`, `stats`, `cta`, `faq`; są widoczne w dropdown admina ale po wybraniu nie mają żadnych pól i nie renderują; rozważyć: (A) usunąć z BLOCK_TYPES do czasu implementacji, lub (B) implementować wg potrzeb portfeli — priorytet: `books` i `gallery` (Martyna), `testimonials` i `stats` (Radek). Szczegółowy projekt bloków: §23.3
+
+---
+
 ## Appendix A — Rejestr zmian PLAN.md
 
 | Data       | Wersja | Zmiana                                              | Przez             |
@@ -1704,6 +1738,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 | 2026-06-20 | 1.9    | Faza 4 (większość done): seed Neon, blok projects, CV→R2, motyw radek, LangToggle PL/EN, responsywność; §17 M17.3/M17.8/M17.10/M17.11 done; §21 zaktualizowane | Radosław + Claude |
 | 2026-06-20 | 2.0    | Nowa sekcja §23: propozycje rozwoju, pomysły architektoniczne i wnioski z projektu (perspektywa agenta AI) | Claude Sonnet 4.6 |
 | 2026-06-20 | 2.1    | Audyt kodu faz 0–3: §24 Dług techniczny (TD-01–TD-15), §21 Do zrobienia zaktualizowane o TD priorytety | Claude Sonnet 4.6 |
+| 2026-06-20 | 2.2    | §24 rozszerzony o audyt 3 dodatkowych obszarów: bezpieczeństwo (TD-16–TD-20), CI/CD (TD-21–TD-24), brakujące bloki (TD-25) | Claude Sonnet 4.6 |
 
 ---
 

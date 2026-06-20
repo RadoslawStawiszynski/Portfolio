@@ -1,18 +1,19 @@
 /**
  * Seed script — tworzy portfolio "radek" z MVP blokami przez Payload Local API.
  *
- * Uruchom przeciwko lokalnej bazie (Docker):
- *   npx tsx scripts/seed-radek.ts
- *
- * Uruchom przeciwko Neon (produkcja):
- *   DATABASE_URL="postgresql://..." npx tsx scripts/seed-radek.ts
+ * Uruchom: npx tsx scripts/seed-radek.ts
  *
  * Wymaga: superadmin w bazie (stwórz konto na /admin najpierw).
  */
-import { getPayload } from "payload";
-import configPromise from "../payload.config";
+import { loadEnvConfig } from "@next/env";
+import path from "path";
+
+// loadEnvConfig musi być przed importem payload.config (dynamiczny import niżej)
+loadEnvConfig(path.resolve(__dirname, ".."));
 
 async function seed() {
+  const { getPayload } = await import("payload");
+  const { default: configPromise } = await import("../payload.config");
   const payload = await getPayload({ config: configPromise });
 
   // 1. Znajdź superadmina

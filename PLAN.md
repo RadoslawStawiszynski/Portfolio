@@ -1184,6 +1184,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - [ ] **AI19.3** Utwórz `OLLAMA_PROMPT.md` — gotowy do wklejenia kontekst dla Ollama
 - [x] **AI19.4** Utwórz `.clinerules/portfoliohub-rules.md` — reguły dla nowej struktury projektu (2026-06-12, Agent: Claude)
 - [ ] **AI19.5** Skonfiguruj `.agents/skills/` — skills dla poszczególnych faz (bootstrap, blok, deploy)
+- [ ] **AI19.6** Zainstaluj `gh` CLI i skonfiguruj GitHub token — umożliwi agentowi sprawdzanie statusu CI/CD, workflow runs i check-runs bez wchodzenia na GitHub w przeglądarce; instalacja: `sudo apt install gh` → `gh auth login`; token potrzebny z uprawnieniami: `repo`, `workflow`
 
 ---
 

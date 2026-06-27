@@ -4,7 +4,7 @@ export interface BlockDoc {
   id: string;
   type: string;
   themeOverride?: string | null;
-  data: HeroData | AboutData | ExperienceData | SkillsData | EducationData | ContactData | ProjectsData | BooksData | GalleryData | Record<string, unknown>;
+  data: HeroData | AboutData | ExperienceData | SkillsData | EducationData | ContactData | ProjectsData | BooksData | GalleryData | ServicesData | Record<string, unknown>;
 }
 
 export interface HeroData {
@@ -98,4 +98,15 @@ export interface GalleryItem {
 
 export interface GalleryData {
   items: GalleryItem[];
+}
+
+export interface ServiceItem {
+  name: string;
+  description?: string;
+  icon?: string;
+  price?: string;
+}
+
+export interface ServicesData {
+  items: ServiceItem[];
 }

@@ -344,6 +344,47 @@ export const Blocks: CollectionConfig = {
       ],
     },
 
+    // ─── SERVICES ────────────────────────────────────────────────
+    {
+      name: "servicesData",
+      type: "group",
+      admin: {
+        condition: (data) => data.type === "services",
+      },
+      fields: [
+        {
+          name: "items",
+          type: "array",
+          admin: { description: "Lista usług / oferta firmy" },
+          fields: [
+            {
+              name: "name",
+              type: "text",
+              required: true,
+              localized: true,
+              admin: { description: "Nazwa usługi" },
+            },
+            {
+              name: "description",
+              type: "textarea",
+              localized: true,
+              admin: { description: "Opis usługi" },
+            },
+            {
+              name: "icon",
+              type: "text",
+              admin: { description: "Emoji ikony (np. 💻, 🔧, 📊)" },
+            },
+            {
+              name: "price",
+              type: "text",
+              admin: { description: "Cena lub zakres (np. od 500 zł / mies., na zapytanie)" },
+            },
+          ],
+        },
+      ],
+    },
+
     // ─── BOOKS ───────────────────────────────────────────────────
     {
       name: "booksData",

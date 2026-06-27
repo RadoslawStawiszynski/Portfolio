@@ -98,6 +98,18 @@ function extractBlockData(doc: Record<string, unknown>, type: string): Record<st
         })),
       };
     }
+    case "services": {
+      const s = (doc.servicesData ?? {}) as Record<string, unknown>;
+      const items = (s.items as Record<string, unknown>[] | undefined) ?? [];
+      return {
+        items: items.map((item) => ({
+          name: String(item.name ?? ""),
+          description: item.description as string | undefined,
+          icon: item.icon as string | undefined,
+          price: item.price as string | undefined,
+        })),
+      };
+    }
     case "gallery": {
       const g = (doc.galleryData ?? {}) as Record<string, unknown>;
       const items = (g.items as Record<string, unknown>[] | undefined) ?? [];

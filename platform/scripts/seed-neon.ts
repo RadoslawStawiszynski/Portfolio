@@ -58,6 +58,15 @@ const PORTFOLIOS = [
     seoTitle: "Martyna Stawiszyńska — Autorka książek",
     seoDescription: "Portfolio Martyny Stawiszyńskiej — autorki książek Nancy Martin.",
   },
+  {
+    subdomain: "cbm",
+    theme: "dark" as const,
+    type: "company" as const,
+    language: "pl" as const,
+    contactEmail: "biuro@korp-cbm.com",
+    seoTitle: "CBM Sp. z o.o. — Specjaliści IT i Zarządzania Projektem",
+    seoDescription: "CBM Sp. z o.o. — wsparcie IT, zarządzanie projektami, wdrożenia systemów. Tczew / Trójmiasto.",
+  },
 ];
 
 // ─── Bloki per portfolio (copy from local seed scripts) ──────────────────────
@@ -145,16 +154,48 @@ function getMiloszBlocks(portfolioId: string | number) {
 function getMartynablocks(portfolioId: string | number) {
   return [
     { portfolio: portfolioId, type: "hero", order: 10, visible: true, heroData: {
-        title: "Martyna Stawiszyńska", subtitle: "Autorka | Nancy Martin",
+        title: "Martyna Stawiszyńska", subtitle: "Autorka książek | Nancy Martin",
     }},
     { portfolio: portfolioId, type: "about", order: 20, visible: true, aboutData: {
-        bio: `Jestem autorką książek piszącą pod pseudonimem Nancy Martin. Tworzę opowieści, które poruszają emocje i zmuszają do refleksji.
+        bio: `Jestem autorką książek piszącą pod pseudonimem Nancy Martin. Tworzę opowieści na styku psychologii, emocji i codzienności — światy, w których prawdziwe ludzkie napięcia mają większą siłę niż fikcja.
 
-Moje książki łączą elementy psychologiczne z dramatycznym napięciem, tworząc światy, w których bohaterowie muszą zmierzyć się z własnymi lękami i pragnieniami.`,
+Pisanie to dla mnie rzemiosło i odpowiedzialność jednocześnie. Każda historia zaczyna się od obserwacji — ludzi, relacji, momentów, które większość z nas uznaje za zwykłe. To w nich kryje się materiał na dramaty i przełomy, które moi czytelnicy poznają w kolejnych rozdziałach.
+
+Pracuję nad każdym tekstem w kilku etapach: od szkicu koncepcji, przez research, aż po wielokrotną redakcję. Zależy mi na tym, żeby język był precyzyjny, a emocje — prawdziwe.`,
     }},
+    { portfolio: portfolioId, type: "experience", order: 25, visible: true, experienceData: { items: [
+        {
+          company: "Nancy Martin — twórczość własna",
+          role: "Autorka książek",
+          startDate: "2018-01",
+          description: "Pisanie powieści i opowiadań w gatunkach: thriller psychologiczny, dramat obyczajowy, romans literacki. Samodzielna praca nad strukturą fabuły, redakcją i korektą. Współpraca z wydawcą i agentami literackimi.",
+        },
+        {
+          company: "Warsztaty literackie — Trójmiasto",
+          role: "Uczestniczka i prowadząca",
+          startDate: "2019-06",
+          endDate: "2023-12",
+          description: "Udział w warsztatach kreatywnego pisania oraz prowadzenie własnych sesji dla początkujących autorów. Tematy: budowanie postaci, dialog w prozie, techniki narracyjne.",
+        },
+        {
+          company: "Targi Książki — Warszawa, Kraków, Gdańsk",
+          role: "Autorka / prelegentka",
+          startDate: "2020-10",
+          description: "Regularne spotkania z czytelnikami na targach i festiwalach literackich. Panele dyskusyjne o współczesnej prozie polskiej, procesie twórczym i relacji autor–czytelnik.",
+        },
+        {
+          company: "Blog literacki Nancy Martin",
+          role: "Autorka i redaktorka",
+          startDate: "2017-03",
+          description: "Prowadzenie bloga o procesie pisania, recenzjach przeczytanych książek i kulisach pracy autorskiej. Budowanie społeczności czytelników w mediach społecznościowych.",
+        },
+    ]}},
     { portfolio: portfolioId, type: "skills", order: 30, visible: true, skillsData: { categories: [
-        { name: "Gatunki literackie", skills: "Thriller psychologiczny\nDramat obyczajowy\nRomans\nLiteratura faktu" },
-        { name: "Warsztaty i narzędzia", skills: "Scrivener\nRedakcja tekstów\nKorekta\nMarketing literacki\nMedia społecznościowe" },
+        { name: "Gatunki i formy", skills: "Thriller psychologiczny\nDramat obyczajowy\nRomans literacki\nOpowiadanie\nLiteratura faktu\nMikroproza" },
+        { name: "Warsztat pisarski", skills: "Budowanie fabuły (3-act, Save the Cat)\nKreacja postaci\nDialog i narracja\nRedakcja i korekta\nResearch tematyczny\nPisanie pod pseudonimem" },
+        { name: "Praca z wydawcą", skills: "Przygotowanie manuskryptu\nPrawa autorskie\nUmowy wydawnicze\nSelf-publishing (Kindle, Empik)\nKomunikacja z agentem literackim" },
+        { name: "Marketing autorki", skills: "Instagram dla autorów\nFacebook (fanpage)\nGoodreads — profil i recenzje\nNewsletter do czytelników\nSpotkainia autorskie\nMedia społecznościowe" },
+        { name: "Narzędzia", skills: "Scrivener\nMicrosoft Word\nCanva (grafiki okładek)\nMailchimp\nWordPress / Ghost" },
     ]}},
     { portfolio: portfolioId, type: "books", order: 40, visible: true, booksData: { items: [
         {
@@ -177,11 +218,99 @@ Moje książki łączą elementy psychologiczne z dramatycznym napięciem, tworz
         },
     ]}},
     { portfolio: portfolioId, type: "gallery", order: 50, visible: true, galleryData: { items: [
-        { imageUrl: "", caption: "Zdjęcie 1 — uzupełnij URL w panelu admina", alt: "Galeria" },
-        { imageUrl: "", caption: "Zdjęcie 2 — uzupełnij URL w panelu admina", alt: "Galeria" },
+        { imageUrl: "", caption: "Targi Książki — uzupełnij URL w panelu admina", alt: "Galeria" },
+        { imageUrl: "", caption: "Spotkanie autorskie — uzupełnij URL w panelu admina", alt: "Galeria" },
     ]}},
     { portfolio: portfolioId, type: "contact", order: 60, visible: true, contactData: {
         email: "martyna.stawiszynska@gmail.com",
+        showForm: true,
+    }},
+  ];
+}
+
+function getCBMBlocks(portfolioId: string | number) {
+  return [
+    { portfolio: portfolioId, type: "hero", order: 10, visible: true, heroData: {
+        title: "CBM Sp. z o.o.",
+        subtitle: "Specjaliści IT i Zarządzania Projektem",
+        ctaLabel: "Skontaktuj się",
+        ctaHref: "#contact",
+    }},
+    { portfolio: portfolioId, type: "about", order: 20, visible: true, aboutData: {
+        bio: `CBM Sp. z o.o. to firma specjalizująca się we wsparciu IT, wdrożeniach systemów informatycznych oraz doradztwie z zakresu zarządzania projektami.
+
+Działamy dla małych i średnich przedsiębiorstw, które potrzebują sprawnego partnera technicznego — bez korporacyjnych procedur, za to z pełnym zaangażowaniem i odpowiedzialnością za rezultaty.
+
+Pracujemy zarówno zdalnie, jak i na miejscu u klienta. Obsługujemy firmy z województwa pomorskiego i całej Polski.`,
+    }},
+    { portfolio: portfolioId, type: "services", order: 30, visible: true, servicesData: { items: [
+        {
+          name: "Wsparcie IT",
+          description: "Administracja systemami Windows i Linux, konfiguracja sieci, helpdesk L1–L2, zarządzanie infrastrukturą IT. Stały kontrakt lub interwencje doraźne.",
+          icon: "🖥️",
+          price: "od 800 zł / mies.",
+        },
+        {
+          name: "Zarządzanie projektami",
+          description: "Planowanie i koordynacja projektów IT metodą Agile / Scrum. Przygotowanie harmonogramów, raportowanie postępów, zarządzanie ryzykiem i budżetem.",
+          icon: "📊",
+          price: "na zapytanie",
+        },
+        {
+          name: "Wdrożenia systemów ERP / CRM",
+          description: "Dobór i wdrożenie systemów informatycznych dopasowanych do potrzeb firmy. Szkolenia dla użytkowników, wsparcie posprzedażowe, integracje z istniejącą infrastrukturą.",
+          icon: "⚙️",
+          price: "na zapytanie",
+        },
+        {
+          name: "Tworzenie stron i aplikacji webowych",
+          description: "Nowoczesne strony firmowe, sklepy, portfolio i aplikacje webowe (Next.js, WordPress). Hosting, domeny, SSL — kompleksowa obsługa.",
+          icon: "🌐",
+          price: "od 2 000 zł",
+        },
+        {
+          name: "Audyt IT",
+          description: "Analiza obecnej infrastruktury IT, identyfikacja słabych punktów i ryzyk bezpieczeństwa, rekomendacje zmian i modernizacji.",
+          icon: "🔍",
+          price: "od 500 zł",
+        },
+        {
+          name: "Automatyzacja procesów",
+          description: "Skrypty i narzędzia automatyzujące powtarzalne zadania (Python, PowerShell, n8n). Integracja systemów, automatyczne raporty, powiadomienia.",
+          icon: "🤖",
+          price: "na zapytanie",
+        },
+    ]}},
+    { portfolio: portfolioId, type: "projects", order: 40, visible: true, projectsData: { items: [
+        {
+          title: "PortfolioHub Platform",
+          description: "Wielodostępna platforma portfolio — Next.js 15, Payload CMS 3, PostgreSQL, subdomain routing, Cloudflare R2. Wdrożona na Vercel z własną domeną.",
+          tags: "Next.js, TypeScript, PostgreSQL, Tailwind CSS, Vercel",
+          status: "in-progress",
+        },
+        {
+          title: "DB Connector",
+          description: "Desktopowa aplikacja do zarządzania wieloma bazami danych (PostgreSQL, MSSQL, IBM DB2). Szyfrowanie Fernet, pakowanie PyInstaller.",
+          tags: "Python, Tkinter, PostgreSQL, MSSQL, IBM DB2",
+          status: "completed",
+        },
+        {
+          title: "Wdrożenie ERP — klient produkcyjny",
+          description: "Kompleksowe wdrożenie systemu ERP dla firmy z sektora produkcyjnego. Migracja danych, szkolenia 30+ użytkowników, integracja z magazynem.",
+          tags: "ERP, migracja danych, szkolenia, PM",
+          status: "completed",
+        },
+        {
+          title: "Automatyzacja raportowania",
+          description: "System automatycznego generowania raportów tygodniowych z danych PostgreSQL — Python, PDF, Resend email delivery. Oszczędność ~5h pracy tygodniowo.",
+          tags: "Python, PostgreSQL, PDF, automation",
+          status: "completed",
+        },
+    ]}},
+    { portfolio: portfolioId, type: "contact", order: 60, visible: true, contactData: {
+        email: "biuro@korp-cbm.com",
+        phone: "+48 500 000 000",
+        linkedin: "https://www.linkedin.com/in/radoslaw-stawiszynski/",
         showForm: true,
     }},
   ];
@@ -250,6 +379,7 @@ async function seed() {
     { ...PORTFOLIOS[0], ownerEmail: SUPERADMIN.email, getBlocks: getRadekBlocks },
     { ...PORTFOLIOS[1], ownerEmail: "milosz@portfoliohub.dev", getBlocks: getMiloszBlocks },
     { ...PORTFOLIOS[2], ownerEmail: "martyna.stawiszynska@gmail.com", getBlocks: getMartynablocks },
+    { ...PORTFOLIOS[3], ownerEmail: SUPERADMIN.email, getBlocks: getCBMBlocks },
   ];
 
   for (const pc of portfolioConfigs) {

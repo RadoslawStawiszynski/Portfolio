@@ -659,7 +659,8 @@ interface Portfolio {
 - [x] **B8.3** Implement subdomain routing w Next.js middleware (wykryj subdomenę, załaduj portfolio) (2026-06-12, Agent: Claude)
 - [ ] **B8.4** Implement custom domain routing (CNAME → portfolio match w DB)
 - [x] **B8.5** API endpoint formularz kontaktowy z rate limiting (Redis) (2026-06-13, Agent: Claude)
-- [ ] **B8.6** System zaproszeń: generowanie tokenów, email przez Resend/Brevo
+- [ ] **B8.6** System zaproszeń: generowanie tokenów jednorazowych (48h TTL), email przez Resend z linkiem aktywacyjnym → rejestracja konta owner; powiązane z B8.11 i A10.10
+- [ ] **B8.11** Kolekcja `WaitlistRequests` w Payload — pola: `name`, `email`, `note` (opcjonalne), `status` (pending/invited/rejected), `createdAt`; po zapisie: email powiadomienie do superadmina przez Resend z przyciskiem "Wyślij zaproszenie"; w adminie: widok listy zgłoszeń z filtrem po statusie
 - [ ] **B8.7** Upload handler: przyjmij plik, zwaliduj (typ/rozmiar), zapisz do volume
 - [ ] **B8.8** Analytics endpoint: licznik odwiedzin per portfolio (Redis incr → PostgreSQL batch)
 - [ ] **B8.9** Healthcheck endpoint (`/api/health` → 200 OK + status DB)
@@ -696,6 +697,7 @@ interface Portfolio {
 - [x] **F9.13** Cookie consent banner (GDPR) z preferencjami zapisanymi w cookie (2026-06-14, Agent: Claude)
 - [x] **F9.14** Landing page platformy (korp-cbm.com) z prezentacją możliwości (2026-06-14, Agent: Claude)
 - [x] **F9.15** Strona 404 per portfolio (2026-06-14, Agent: Claude)
+- [ ] **F9.16** Formularz "Dołącz do PortfolioHub" na landing page — sekcja z polami imię/email/notatka; Server Action → zapis do `WaitlistRequests` + email do superadmina; po wysłaniu: komunikat potwierdzający "Dziękujemy, odezwiemy się wkrótce"; powiązane z B8.11
 
 ### 9.3 Wymagania UX
 
@@ -1406,7 +1408,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 - **Widget feedbacku** (floating button na każdej stronie portfolio) — mini-formularz "Znalazłem błąd" / "Mam pomysł"; wysyłka przez Resend na adres administratora; opcjonalnie: pole email osoby zgłaszającej (nie wymagane)
 - **Publiczna strona roadmapy** (`korp-cbm.com/roadmap`) — co jest zbudowane, co planujemy, co jest w backlogu; aktualizowana ręcznie lub generowana z CHANGELOG.md; buduje zaufanie u potencjalnych użytkowników platformy
-- **Formularz "Chcę swoje portfolio"** na landing page — zainteresowany podaje imię i email, dostaje autoresponder z informacją i linkiem do demo; Radosław dostaje powiadomienie; prosta lista zainteresowanych w adminie (tabela Leads w Payload)
+- **Formularz "Dołącz do PortfolioHub"** na landing page — zainteresowany podaje imię, email i opcjonalną notkę; zapis do kolekcji `WaitlistRequests` w Payload; Radosław dostaje email z przyciskiem "Wyślij zaproszenie"; po kliknięciu generowany jednorazowy token → email aktywacyjny do zainteresowanego; w adminie: lista zgłoszeń z filtrem pending/invited/rejected (zadania: B8.11 + F9.16 + B8.6)
 - **Skrzynka feedbacku w adminie** — właściciel portfolio widzi zgłoszenia dotyczące jego strony (zebrane przez widget); możliwość oznaczenia jako "przeczytane" / "naprawione"
 - **GitHub Issues link** — na stronie roadmapy / w footerze platformy — "Zgłoś błąd na GitHub" dla użytkowników technicznych; repo publiczne lub prywatne z Issue template
 
@@ -1768,6 +1770,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 | 2026-06-20 | 2.2    | §24 rozszerzony o audyt 3 dodatkowych obszarów: bezpieczeństwo (TD-16–TD-20), CI/CD (TD-21–TD-24), brakujące bloki (TD-25) | Claude Sonnet 4.6 |
 | 2026-06-27 | 2.3    | Faza 4 prawie done: M17.14 (books+gallery), M17.16 (social media), M17.17–M17.20 (CBM), fix download-cv; §17/§20/§21/§24 zaktualizowane | Claude Sonnet 4.6 |
 | 2026-06-27 | 2.4    | §22 rozszerzony: 22.1 Rozwinięcie działu Projects (6 punktów), 22.2 Feedback i zgłaszanie błędów (5 punktów); renumeracja 22.2→22.4, 22.3→22.5 | Radosław + Claude |
+| 2026-06-27 | 2.5    | §8 B8.11 (WaitlistRequests collection), §9 F9.16 (formularz "Dołącz do PortfolioHub" na landing), §22.2 rozwinięty — system zaproszeniowy end-to-end | Radosław + Claude |
 
 ---
 
@@ -1787,5 +1790,5 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ---
 
-_Ostatnia aktualizacja: 2026-06-27 v2.4 — §22 rozszerzony: Projects + Feedback/Bug reporting_  
+_Ostatnia aktualizacja: 2026-06-27 v2.5 — formularz zaproszeniowy na landing page (B8.11, F9.16)_  
 _Następna aktualizacja: Po UAT z Miłoszem i Martyną_

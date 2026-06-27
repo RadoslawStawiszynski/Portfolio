@@ -659,8 +659,8 @@ interface Portfolio {
 - [x] **B8.3** Implement subdomain routing w Next.js middleware (wykryj subdomenę, załaduj portfolio) (2026-06-12, Agent: Claude)
 - [ ] **B8.4** Implement custom domain routing (CNAME → portfolio match w DB)
 - [x] **B8.5** API endpoint formularz kontaktowy z rate limiting (Redis) (2026-06-13, Agent: Claude)
-- [ ] **B8.6** System zaproszeń: generowanie tokenów jednorazowych (48h TTL), email przez Resend z linkiem aktywacyjnym → rejestracja konta owner; powiązane z B8.11 i A10.10
-- [ ] **B8.11** Kolekcja `WaitlistRequests` w Payload — pola: `name`, `email`, `note` (opcjonalne), `status` (pending/invited/rejected), `createdAt`; po zapisie: email powiadomienie do superadmina przez Resend z przyciskiem "Wyślij zaproszenie"; w adminie: widok listy zgłoszeń z filtrem po statusie
+- [ ] **B8.6** Tokeny zaproszeń: generowanie UUID + hash SHA-256 → zapis do `InvitationTokens` z TTL 48h; walidacja tokenu na `/join`; po użyciu token oznaczany jako `used`; powiązane z B8.11, F9.16, A10.10 — szczegóły §25
+- [ ] **B8.11** Kolekcja `WaitlistRequests` w Payload — pola: `name`, `email`, `note` (opcjonalne), `status` (pending/invited/rejected), `createdAt`; po zapisie: email powiadomienie do superadmina przez Resend; w adminie: lista z filtrem statusu + przycisk "Wyślij zaproszenie" — szczegóły §25
 - [ ] **B8.7** Upload handler: przyjmij plik, zwaliduj (typ/rozmiar), zapisz do volume
 - [ ] **B8.8** Analytics endpoint: licznik odwiedzin per portfolio (Redis incr → PostgreSQL batch)
 - [ ] **B8.9** Healthcheck endpoint (`/api/health` → 200 OK + status DB)
@@ -776,7 +776,7 @@ Superadmin
 - [ ] **A10.7** Zegar cyfrowy serwera (live, odświeżany co sekundę przez WebSocket lub polling)
 - [ ] **A10.8** Todo list dla każdego usera (CRUD) przechowywany w DB
 - [ ] **A10.9** Zarządzanie motywem/layoutem z podglądem live
-- [ ] **A10.10** System zaproszeń: formularz email → token → link aktywacyjny
+- [ ] **A10.10** Panel zaproszeń w adminie: widok `WaitlistRequests` z przyciskiem "Wyślij zaproszenie" → wywołuje B8.6; widok `InvitationTokens` z listą aktywnych/wygasłych tokenów; szczegóły §25
 - [ ] **A10.11** Zmiana hasła i danych profilu admina
 - [ ] **A10.12** Eksport CV do PDF (generowany z bloków experience/skills/education)
 - [ ] **A10.13** Skrzynka wiadomości z formularza kontaktowego
@@ -1312,6 +1312,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - [ ] Blog per portfolio
 - [ ] Custom domain (ADR-007 opcja B)
 - [ ] Generator CV PDF z bloków
+- [ ] System zaproszeniowy — pełny flow (§25): WaitlistRequests + tokeny + /join + auto-portfolio
 ```
 
 ---
@@ -1751,6 +1752,109 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ---
 
+## 25. SYSTEM ZAPROSZENIOWY — PEŁNY FLOW
+
+> **Priorytet: Faza 7** — do zbudowania po UAT i launch MVP.  
+> Cel: zainteresowany użytkownik wypełnia formularz na landing page → superadmin wysyła zaproszenie jednym kliknięciem → nowy użytkownik rejestruje konto i dostaje puste portfolio.
+
+### 25.1 Flow end-to-end
+
+```
+[Landing page]
+  Sekcja "Dołącz do PortfolioHub"
+  Formularz: Imię + Email + Notatka (opcjonalna)
+       │
+       ▼ Server Action (F9.16)
+[Payload: WaitlistRequests]          [Email do superadmina]
+  status: pending                    "Jan Kowalski chce portfolio"
+  name, email, note, createdAt       [Wyślij zaproszenie →]
+       │
+       ▼ Superadmin klika w adminie (A10.10)
+[API: /api/admin/invite]             [Email do Jana]
+  Generuje token UUID (B8.6)         "Twoje zaproszenie do PortfolioHub"
+  Hash SHA-256 → DB                  Link: korp-cbm.com/join?token=XYZ
+  TTL: 48h                           Ważny 48 godzin
+  WaitlistRequest.status → invited
+       │
+       ▼ Jan klika link
+[Strona /join?token=XYZ]
+  Walidacja tokenu (nie wygasł, nie użyty)
+  Formularz: Hasło + Potwierdź hasło
+       │
+       ▼ Submit
+  Tworzy User (role: owner)
+  Tworzy puste Portfolio (subdomain z email prefix)
+  Token oznaczony jako used
+  Redirect → /admin (zalogowany)
+       │
+       ▼
+[Panel admina — pierwsze logowanie]
+  Widzi swoje puste portfolio
+  Może dodawać bloki, edytować treść
+```
+
+### 25.2 Nowe kolekcje Payload
+
+**`WaitlistRequests`** (`platform/src/payload/collections/WaitlistRequests.ts`)
+
+| Pole       | Typ      | Opis                              |
+|------------|----------|-----------------------------------|
+| `name`     | text     | Imię i nazwisko                   |
+| `email`    | email    | Email zainteresowanego            |
+| `note`     | textarea | Opcjonalna notatka (po co portfolio) |
+| `status`   | select   | `pending` / `invited` / `rejected` |
+| `invitedAt`| date     | Kiedy wysłano zaproszenie         |
+
+Access: `create` — public (formularz landing); `read/update` — superadmin only.  
+Hook `afterCreate`: wysyła email powiadomienie do superadmina przez Resend.
+
+---
+
+**`InvitationTokens`** (`platform/src/payload/collections/InvitationTokens.ts`)
+
+| Pole          | Typ      | Opis                              |
+|---------------|----------|-----------------------------------|
+| `tokenHash`   | text     | SHA-256 hash tokenu (nie plain)   |
+| `email`       | email    | Do kogo wysłano                   |
+| `waitlistRef` | relation | FK do WaitlistRequests            |
+| `expiresAt`   | date     | `createdAt + 48h`                 |
+| `usedAt`      | date     | Kiedy użyty (null = aktywny)      |
+| `status`      | select   | `active` / `used` / `expired`     |
+
+Access: superadmin only (czysto wewnętrzna kolekcja).
+
+### 25.3 Nowe API endpointy
+
+| Method | Endpoint                    | Opis                                              |
+|--------|-----------------------------|---------------------------------------------------|
+| POST   | `/api/waitlist`             | Zapis do WaitlistRequests + email do superadmina  |
+| POST   | `/api/admin/invite`         | Generuj token + wyślij email zaproszeniowy        |
+| GET    | `/api/join?token=XYZ`       | Waliduj token (zwraca email, status)              |
+| POST   | `/api/join`                 | Utwórz konto + portfolio + unieważnij token       |
+
+### 25.4 Nowe strony frontend
+
+| Strona              | Opis                                                        |
+|---------------------|-------------------------------------------------------------|
+| `(portfolio)/join/page.tsx` | Formularz rejestracji z tokenem — walidacja, hasło, submit |
+| Landing page (sekcja) | Formularz "Dołącz do PortfolioHub" (F9.16)              |
+
+### 25.5 Lista zadań
+
+- [ ] **INV-01** Kolekcja `WaitlistRequests` — pola, access, hook `afterCreate` → email Resend do superadmina (B8.11)
+- [ ] **INV-02** Kolekcja `InvitationTokens` — pola, access superadmin-only (B8.6)
+- [ ] **INV-03** `POST /api/waitlist` — Server Action: zapis do WaitlistRequests + email powiadomienie (F9.16)
+- [ ] **INV-04** Sekcja "Dołącz do PortfolioHub" na landing page — formularz + komunikat potwierdzający (F9.16)
+- [ ] **INV-05** `POST /api/admin/invite` — generuj UUID → hash SHA-256 → zapis InvitationToken (TTL 48h) → email Resend do zainteresowanego z linkiem `/join?token=XYZ`; aktualizuj WaitlistRequest.status → invited (B8.6)
+- [ ] **INV-06** Przycisk "Wyślij zaproszenie" w widoku WaitlistRequests w Payload admin — custom component wywołujący `/api/admin/invite` (A10.10)
+- [ ] **INV-07** Strona `/join?token=XYZ` — walidacja tokenu (nie wygasł, nie użyty); formularz hasła; przy submit: utwórz User (role: owner), utwórz puste Portfolio (subdomain z prefiksu email), oznacz token jako used; redirect `/admin`
+- [ ] **INV-08** Cron job (GitHub Actions, raz dziennie) — oznacza tokeny po `expiresAt` jako `expired` (opcjonalnie: Vercel Cron)
+- [ ] **INV-09** Widok `InvitationTokens` w adminie — lista aktywnych/wygasłych/użytych tokenów z możliwością ręcznego unieważnienia
+
+> **Zależności:** INV-01 przed INV-03/04; INV-02 przed INV-05; INV-05/06 równolegle; INV-07 na końcu.
+
+---
+
 ## Appendix A — Rejestr zmian PLAN.md
 
 | Data       | Wersja | Zmiana                                              | Przez             |
@@ -1771,6 +1875,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 | 2026-06-27 | 2.3    | Faza 4 prawie done: M17.14 (books+gallery), M17.16 (social media), M17.17–M17.20 (CBM), fix download-cv; §17/§20/§21/§24 zaktualizowane | Claude Sonnet 4.6 |
 | 2026-06-27 | 2.4    | §22 rozszerzony: 22.1 Rozwinięcie działu Projects (6 punktów), 22.2 Feedback i zgłaszanie błędów (5 punktów); renumeracja 22.2→22.4, 22.3→22.5 | Radosław + Claude |
 | 2026-06-27 | 2.5    | §8 B8.11 (WaitlistRequests collection), §9 F9.16 (formularz "Dołącz do PortfolioHub" na landing), §22.2 rozwinięty — system zaproszeniowy end-to-end | Radosław + Claude |
+| 2026-06-27 | 2.6    | §25 System zaproszeniowy — pełny flow (INV-01–INV-09): WaitlistRequests, InvitationTokens, /join page, admin panel; Faza 7 zaktualizowana | Radosław + Claude |
 
 ---
 
@@ -1790,5 +1895,5 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ---
 
-_Ostatnia aktualizacja: 2026-06-27 v2.5 — formularz zaproszeniowy na landing page (B8.11, F9.16)_  
+_Ostatnia aktualizacja: 2026-06-27 v2.6 — §25 System zaproszeniowy pełny flow (INV-01–INV-09)_  
 _Następna aktualizacja: Po UAT z Miłoszem i Martyną_

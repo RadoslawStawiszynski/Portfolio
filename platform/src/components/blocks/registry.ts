@@ -6,6 +6,7 @@ import { SkillsBlock } from "./SkillsBlock";
 import { EducationBlock } from "./EducationBlock";
 import { ContactBlock } from "./ContactBlock";
 import { ProjectsBlock } from "./ProjectsBlock";
+import { BooksBlock } from "./BooksBlock";
 
 export const BLOCK_REGISTRY = {
   hero: HeroBlock,
@@ -15,6 +16,7 @@ export const BLOCK_REGISTRY = {
   education: EducationBlock,
   contact: ContactBlock,
   projects: ProjectsBlock,
+  books: BooksBlock,
 } as const;
 
 export type RegisteredBlockType = keyof typeof BLOCK_REGISTRY;

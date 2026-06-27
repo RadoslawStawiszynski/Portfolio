@@ -344,6 +344,65 @@ export const Blocks: CollectionConfig = {
       ],
     },
 
+    // ─── BOOKS ───────────────────────────────────────────────────
+    {
+      name: "booksData",
+      type: "group",
+      admin: {
+        condition: (data) => data.type === "books",
+      },
+      fields: [
+        {
+          name: "items",
+          type: "array",
+          admin: { description: "Lista książek — od najnowszej" },
+          fields: [
+            {
+              name: "title",
+              type: "text",
+              required: true,
+              localized: true,
+              admin: { description: "Tytuł książki" },
+            },
+            {
+              name: "year",
+              type: "number",
+              required: true,
+              admin: { description: "Rok wydania" },
+            },
+            {
+              name: "coverUrl",
+              type: "text",
+              admin: { description: "URL okładki (wgraj do Media lub R2, skopiuj URL)" },
+            },
+            {
+              name: "description",
+              type: "textarea",
+              localized: true,
+              admin: { description: "Opis / opis skrótu" },
+            },
+            {
+              name: "genre",
+              type: "text",
+              localized: true,
+              admin: { description: "Gatunek (np. Fantasy, Romans, Thriller)" },
+            },
+            {
+              name: "buyUrl",
+              type: "text",
+              admin: { description: "Link do zakupu (np. Empik, Amazon)" },
+            },
+            {
+              name: "isAvailable",
+              type: "checkbox",
+              defaultValue: true,
+              admin: { description: "Czy książka jest dostępna w sprzedaży?" },
+            },
+          ],
+        },
+      ],
+    },
+
     // ─── CONTACT ─────────────────────────────────────────────────
     {
       name: "contactData",

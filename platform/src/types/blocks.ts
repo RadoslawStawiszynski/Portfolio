@@ -4,7 +4,7 @@ export interface BlockDoc {
   id: string;
   type: string;
   themeOverride?: string | null;
-  data: HeroData | AboutData | ExperienceData | SkillsData | EducationData | ContactData | ProjectsData | Record<string, unknown>;
+  data: HeroData | AboutData | ExperienceData | SkillsData | EducationData | ContactData | ProjectsData | BooksData | Record<string, unknown>;
 }
 
 export interface HeroData {
@@ -71,4 +71,18 @@ export interface ProjectItem {
 
 export interface ProjectsData {
   items: ProjectItem[];
+}
+
+export interface BookItem {
+  title: string;
+  year: number;
+  coverUrl?: string;
+  description?: string;
+  genre?: string;
+  buyUrl?: string;
+  isAvailable: boolean;
+}
+
+export interface BooksData {
+  items: BookItem[];
 }

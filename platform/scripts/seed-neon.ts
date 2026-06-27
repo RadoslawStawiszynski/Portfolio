@@ -156,6 +156,26 @@ Moje książki łączą elementy psychologiczne z dramatycznym napięciem, tworz
         { name: "Gatunki literackie", skills: "Thriller psychologiczny\nDramat obyczajowy\nRomans\nLiteratura faktu" },
         { name: "Warsztaty i narzędzia", skills: "Scrivener\nRedakcja tekstów\nKorekta\nMarketing literacki\nMedia społecznościowe" },
     ]}},
+    { portfolio: portfolioId, type: "books", order: 40, visible: true, booksData: { items: [
+        {
+          title: "Tytuł książki 1",
+          year: 2023,
+          coverUrl: "",
+          description: "Opis pierwszej książki — uzupełnij w panelu admina.",
+          genre: "Thriller psychologiczny",
+          buyUrl: "",
+          isAvailable: true,
+        },
+        {
+          title: "Tytuł książki 2",
+          year: 2021,
+          coverUrl: "",
+          description: "Opis drugiej książki — uzupełnij w panelu admina.",
+          genre: "Dramat obyczajowy",
+          buyUrl: "",
+          isAvailable: true,
+        },
+    ]}},
     { portfolio: portfolioId, type: "contact", order: 60, visible: true, contactData: {
         email: "martyna.stawiszynska@gmail.com",
         showForm: true,

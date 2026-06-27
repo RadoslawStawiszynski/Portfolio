@@ -95,6 +95,21 @@ function extractBlockData(doc: Record<string, unknown>, type: string): Record<st
         })),
       };
     }
+    case "books": {
+      const b = (doc.booksData ?? {}) as Record<string, unknown>;
+      const items = (b.items as Record<string, unknown>[] | undefined) ?? [];
+      return {
+        items: items.map((item) => ({
+          title: item.title ?? "",
+          year: Number(item.year ?? 0),
+          coverUrl: item.coverUrl as string | undefined,
+          description: item.description as string | undefined,
+          genre: item.genre as string | undefined,
+          buyUrl: item.buyUrl as string | undefined,
+          isAvailable: Boolean(item.isAvailable ?? true),
+        })),
+      };
+    }
     default:
       return {};
   }

@@ -1389,11 +1389,31 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 > Sekcja na pomysły i przyszłe rozszerzenia. Nie blokują MVP.
 
-### 22.1 Funkcjonalności produktowe
+### 22.1 Rozwinięcie działu Projects
+
+> Blok `projects` istnieje (terminal-card grid), ale wymaga rozbudowy dla pełnej użyteczności CV/portfolio.
+
+- **Strony szczegółowe projektów** (`/projects/[slug]`) — rozszerzone info: opis techniczny, problem który rozwiązuje, stack (ikonki), timeline realizacji, screenshots z lightboxem, case study (dłuższa forma tekstu), lessons learned
+- **Filtrowanie po tagach** — client-side filter po technologiach/kategoriach (React, Python, PM, AI…); animowane fade z Framer Motion
+- **Wyróżniony projekt** — pole `featured: boolean` w Blocks; wyróżniony projekt wyświetlany pełną szerokością na górze gridu z większym opisem
+- **Więcej pól per projekt** — aktualnie: title/description/tags/github/demo/status; dodać: `thumbnailUrl` (okładka z R2), `startDate`/`endDate`, `role` (moja rola w projekcie), `teamSize`, `client` (opcjonalnie)
+- **Integracja GitHub** — auto-import pinned repos jako projekty (GitHub API v4 GraphQL); pola: name, description, language, stars, last commit; właściciel łączy konto GitHub w adminie
+- **Wideo demo embed** — pole `videoUrl` (YouTube/Vimeo); odtwarzanie w karcie projektu lub na stronie szczegółowej
+
+### 22.2 Feedback i zgłaszanie błędów od użytkowników
+
+> Użytkownicy (odwiedzający portfolio i właściciele) powinni mieć kanał informacji zwrotnej — zarówno do zgłaszania błędów, jak i propozycji rozwoju serwisu.
+
+- **Widget feedbacku** (floating button na każdej stronie portfolio) — mini-formularz "Znalazłem błąd" / "Mam pomysł"; wysyłka przez Resend na adres administratora; opcjonalnie: pole email osoby zgłaszającej (nie wymagane)
+- **Publiczna strona roadmapy** (`korp-cbm.com/roadmap`) — co jest zbudowane, co planujemy, co jest w backlogu; aktualizowana ręcznie lub generowana z CHANGELOG.md; buduje zaufanie u potencjalnych użytkowników platformy
+- **Formularz "Chcę swoje portfolio"** na landing page — zainteresowany podaje imię i email, dostaje autoresponder z informacją i linkiem do demo; Radosław dostaje powiadomienie; prosta lista zainteresowanych w adminie (tabela Leads w Payload)
+- **Skrzynka feedbacku w adminie** — właściciel portfolio widzi zgłoszenia dotyczące jego strony (zebrane przez widget); możliwość oznaczenia jako "przeczytane" / "naprawione"
+- **GitHub Issues link** — na stronie roadmapy / w footerze platformy — "Zgłoś błąd na GitHub" dla użytkowników technicznych; repo publiczne lub prywatne z Issue template
+
+### 22.3 Funkcjonalności produktowe
 
 - **Generator CV PDF** — generuj PDF z bloków experience/skills (Puppeteer lub @react-pdf/renderer)
 - **Blog per portfolio** — każdy właściciel może prowadzić bloga (blok `blog-preview` + strona)
-- **Integracja GitHub** — auto-import pinned repos jako projekty (GitHub API)
 - **Integracja LinkedIn** — import danych z LinkedIn (w ramach możliwości API)
 - **QR code** — generowany QR code do portfolio (dla wizytówek)
 - **Analityka real-time** — live visitor counter w adminie
@@ -1401,7 +1421,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - **Portfolio builder wizard** — kreator krok-po-kroku dla nowych użytkowników
 - **Template gallery** — gotowe szablony do jednego kliknięcia
 
-### 22.2 Funkcjonalności techniczne
+### 22.4 Funkcjonalności techniczne
 
 - **Redis Queue** (Bull) — asynchroniczne zadania (wysyłka emaili, generowanie PDF)
 - **WebSockets** — live preview w adminie (edytuj blok, widzisz zmiany natychmiast)
@@ -1412,7 +1432,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - **Webhooks** — powiadomienia o nowych wiadomościach (Slack, email, Discord)
 - **Two-factor auth** — TOTP (Google Authenticator) dla admina
 
-### 22.3 Uwagi i obserwacje
+### 22.5 Uwagi i obserwacje
 
 - Seohost.pl SH 2 to shared hosting — przed deployem Docker ustal czy masz VPS lub kup VPS (Hetzner CX22 ok. 6€/mies to dobry wybór)
 - `kopia/` folder zawiera wartościowy kod PHP (testy, Docker, admin) — zachowaj jako referencję w `archive/`
@@ -1747,6 +1767,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 | 2026-06-20 | 2.1    | Audyt kodu faz 0–3: §24 Dług techniczny (TD-01–TD-15), §21 Do zrobienia zaktualizowane o TD priorytety | Claude Sonnet 4.6 |
 | 2026-06-20 | 2.2    | §24 rozszerzony o audyt 3 dodatkowych obszarów: bezpieczeństwo (TD-16–TD-20), CI/CD (TD-21–TD-24), brakujące bloki (TD-25) | Claude Sonnet 4.6 |
 | 2026-06-27 | 2.3    | Faza 4 prawie done: M17.14 (books+gallery), M17.16 (social media), M17.17–M17.20 (CBM), fix download-cv; §17/§20/§21/§24 zaktualizowane | Claude Sonnet 4.6 |
+| 2026-06-27 | 2.4    | §22 rozszerzony: 22.1 Rozwinięcie działu Projects (6 punktów), 22.2 Feedback i zgłaszanie błędów (5 punktów); renumeracja 22.2→22.4, 22.3→22.5 | Radosław + Claude |
 
 ---
 
@@ -1766,5 +1787,5 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ---
 
-_Ostatnia aktualizacja: 2026-06-27 v2.3 — Faza 4 prawie ukończona (books/gallery/services/CBM done)_  
+_Ostatnia aktualizacja: 2026-06-27 v2.4 — §22 rozszerzony: Projects + Feedback/Bug reporting_  
 _Następna aktualizacja: Po UAT z Miłoszem i Martyną_

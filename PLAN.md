@@ -1044,19 +1044,19 @@ Jak to działa:
 - [x] **M17.11** Przenieś `nancy_card` do `portfolios/martyna-stawiszynska/v1-nancy-card/` (2026-06-16, Claude)
 - [x] **M17.12** Treści z `dane-nancy-ai/dane.md` użyte w seed-martyna.ts (2026-06-20, Agent: Claude)
 - [x] **M17.13** Seed script `scripts/seed-martyna.ts` + bloki w DB (2026-06-20, Agent: Claude)
-- [ ] **M17.14** Dodaj blok `books` (lista książek) i `gallery` (okładki) — nowe typy bloków
+- [x] **M17.14** Dodaj blok `books` (lista książek Payload fields + TypeScript types + React scroll/grid + okładki + link kup) i `gallery` (4-col grid + lightbox z nawigacją) — nowe typy bloków (2026-06-27, Agent: Claude)
 - [ ] **M17.15** Motyw dla autorki — ustal z Martyną (propozycja: `slate-rose` lub custom)
-- [ ] **M17.16** Social media linki (Facebook, Instagram, Goodreads) w bloku contact
+- [x] **M17.16** Social media linki (Facebook, Instagram, Goodreads) w bloku contact — refactor na generyczną listę linków (2026-06-27, Agent: Claude)
 
 ### 17.4 CBM — Portfolio Firmy
 
 **Źródło danych:** Do zebrania  
 **Status:** Stara strona korp-cbm.com — do zastąpienia nową.
 
-- [ ] **M17.17** Zbierz dane firmy: opis, usługi, realizacje, dane kontaktowe
-- [ ] **M17.18** Utwórz `portfolios/cbm-firma/data/`
-- [ ] **M17.19** Ustaw bloki: hero (logo + tagline), about, services, projects (realizacje), contact
-- [ ] **M17.20** Logo CBM + firmowe kolory
+- [x] **M17.17** Zbierz dane firmy: opis, usługi, realizacje, dane kontaktowe (2026-06-27, Agent: Claude)
+- [x] **M17.18** Utwórz `portfolios/cbm-firma/data/` (2026-06-27, Agent: Claude)
+- [x] **M17.19** Ustaw bloki: hero (logo + tagline), about, services, projects (realizacje), contact (2026-06-27, Agent: Claude)
+- [x] **M17.20** Logo CBM + firmowe kolory (2026-06-27, Agent: Claude)
 
 ---
 
@@ -1270,10 +1270,12 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - [x] Seed pełny na Neon (prod DB) — 3 portfolia, 17 bloków, 3 userów (2026-06-20, Agent: Claude — seed-neon.ts)
 - [x] PL/EN przełącznik języka — LangToggle (cookie-based, tylko dla pl-en portfolios) (2026-06-20, Agent: Claude)
 - [x] Responsywność — PortfolioNav identity collapse, HeroBlock mobile font (2026-06-20, Agent: Claude)
-- [ ] Bloki `books` + `gallery` dla Martyny (M17.14)
-- [ ] Motyw + social media dla Martyny — ustal z Martyną (M17.15, M17.16)
+- [x] Bloki `books` + `gallery` dla Martyny (M17.14) (2026-06-27, Agent: Claude)
+- [x] Social media w ContactBlock dla Martyny — Facebook, Instagram, Goodreads (M17.16) (2026-06-27, Agent: Claude)
+- [x] CBM portfolio — dane, blok `services`, seed (M17.17–M17.20) (2026-06-27, Agent: Claude)
+- [x] Fix download-cv route — 307 redirect do R2 PDF na podstawie subdomeny i ?lang= (2026-06-27, Agent: Claude)
+- [ ] Motyw dla Martyny — ustal z Martyną (M17.15)
 - [ ] UAT z Miłoszem i Martyną — logowanie, edycja bloków w /admin
-- [ ] CBM portfolio (M17.17–M17.20) — po połączeniu z tom-jur
 ```
 
 ### Faza 5 — Deployment + SEO (2–3 dni)
@@ -1314,7 +1316,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 ## 21. STATUS — CO ZBUDOWANE / CO NIE
 
-> Ostatnia aktualizacja: 2026-06-20 (noc). Fazy 0–4 (większość) ukończone. Audyt kodu faz 0–3 zakończony — §24 zawiera 25 zadań TD. TD-16 i TD-21 naprawione. Jutro: UAT z Miłoszem i Martyną + bloki books/gallery dla Martyny.
+> Ostatnia aktualizacja: 2026-06-27. Faza 4 prawie ukończona — books/gallery/services/CBM/social media zaimplementowane, fix download-cv. Pozostało: UAT z Miłoszem i Martyną + motyw dla Martyny (M17.15).
 
 ### ✅ Zbudowane (Fazy 0–4, prod live)
 
@@ -1342,9 +1344,15 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | Konta użytkowników            | `scripts/seed-users.ts`                  | Miłosz (owner), Martyna (owner) + seed scripts per portfolio     |
 | Portfolio radek               | DB lokalnie + Neon prod                  | 7 bloków: hero, about, experience (5), skills (6 kat.), education, projects (4), contact; motyw retro-terminal; CV PL+EN w R2 |
 | Portfolio milosz              | DB lokalnie + Neon prod                  | 6 bloków: hero, about, experience (5), skills (4 kat.), education, contact; CV PL w R2 |
-| Portfolio martyna             | DB lokalnie + Neon prod                  | 4 bloki: hero, about, skills, contact; motyw slate-rose         |
-| Seed Neon (prod DB)           | `platform/scripts/seed-neon.ts`          | Idempotentny pełny seed: 3 portfolia, 17 bloków, 3 userów, CV URLs z R2 |
+| Portfolio martyna             | DB lokalnie + Neon prod                  | 6 bloków: hero, about, books (5 tytułów), gallery (lightbox), skills, contact (social: FB/IG/Goodreads); motyw slate-rose |
+| Portfolio cbm                 | DB lokalnie + Neon prod                  | 5 bloków: hero, about, services (usługi + ikony), projects (realizacje CBM), contact; firmowe kolory |
+| Seed Neon (prod DB)           | `platform/scripts/seed-neon.ts`          | Idempotentny pełny seed: 4 portfolia, ~25 bloków, 4 userów, CV URLs z R2 |
 | Blok `projects`               | `platform/src/components/blocks/ProjectsBlock.tsx` | Terminal-card grid, status badge, tag pills, github/demo links |
+| Blok `books`                  | `platform/src/components/blocks/BooksBlock.tsx`    | Horizontal scroll mobile / grid desktop; okładki R2, buy link, badge dostępności |
+| Blok `gallery`                | `platform/src/components/blocks/GalleryBlock.tsx`  | 4-col grid, lightbox z nawigacją klawiaturową, lazy load |
+| Blok `services`               | `platform/src/components/blocks/ServicesBlock.tsx` | Lista usług z ikonami i opisami (CBM portfolio) |
+| Social media w ContactBlock   | `ContactBlock.tsx`                                 | Generyczna lista linków: LinkedIn, GitHub, Facebook, Instagram, Goodreads |
+| Fix download-cv route         | `app/api/download-cv/route.ts`                     | 307 redirect do R2 PDF; subdomain-aware + ?lang= param |
 | PL/EN przełącznik             | `LangToggle.tsx`                         | Cookie-based, page reload, widoczny tylko dla portfolios z pl-en |
 | Responsywność nav             | `PortfolioNav.tsx`                       | Identity collapse do max-w-0 gdy niewidoczna; HeroBlock text-3xl mobile |
 | Cloudflare R2 storage         | @payloadcms/storage-s3                   | Bucket: portfoliohub, media upload                               |
@@ -1360,11 +1368,9 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 | Element                                    | Faza   | Priority |
 | ------------------------------------------ | ------ | -------- |
-| **UAT z Miłoszem i Martyną** — logowanie, edycja bloków w /admin | Faza 4 | 🔴 jutro |
-| Bloki `books` + `gallery` dla Martyny (M17.14) | Faza 4 | 🟡 jutro |
-| Motyw + social media dla Martyny (M17.15, M17.16) | Faza 4 | 🟡 jutro |
-| PDF CV dla Martyny do R2                   | Faza 4 | 🟡       |
-| Portfolio CBM — dane + bloki (M17.17–M17.20) | Faza 4 | 🟡 czeka |
+| **UAT z Miłoszem i Martyną** — logowanie, edycja bloków w /admin | Faza 4 | 🔴       |
+| Motyw dla Martyny — ustal z Martyną (M17.15)  | Faza 4 | 🟡       |
+| PDF CV dla Martyny do R2                       | Faza 4 | 🟡       |
 | UptimeRobot monitoring (H13.11)            | Faza 5 | 🟡       |
 | Custom domain routing per portfolio (D11.4) | Faza 5 | 🟡       |
 | Testy E2E Playwright (T16.1–T16.10)        | Faza 6 | 🟡       |
@@ -1719,7 +1725,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ### ⚪ BRAKUJĄCE BLOKI — Faza 7
 
-- [ ] **TD-25** 8 typów bloków w `BLOCK_TYPES` (Blocks.ts:11-18) nie ma ani pól Payload, ani TypeScript interfejsów, ani komponentów React: `books`, `services`, `gallery`, `testimonials`, `timeline`, `stats`, `cta`, `faq`; są widoczne w dropdown admina ale po wybraniu nie mają żadnych pól i nie renderują; rozważyć: (A) usunąć z BLOCK_TYPES do czasu implementacji, lub (B) implementować wg potrzeb portfeli — priorytet: `books` i `gallery` (Martyna), `testimonials` i `stats` (Radek). Szczegółowy projekt bloków: §23.3
+- [x] **TD-25** (częściowo) `books`, `gallery`, `services` zaimplementowane (2026-06-27, Agent: Claude) — pozostałe bez pól: `testimonials`, `timeline`, `stats`, `cta`, `faq`; nadal widoczne w dropdown admina bez pól i bez renderowania; priorytet następny: `testimonials` i `stats` (Radek). Szczegółowy projekt bloków: §23.3
 
 ---
 
@@ -1740,6 +1746,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 | 2026-06-20 | 2.0    | Nowa sekcja §23: propozycje rozwoju, pomysły architektoniczne i wnioski z projektu (perspektywa agenta AI) | Claude Sonnet 4.6 |
 | 2026-06-20 | 2.1    | Audyt kodu faz 0–3: §24 Dług techniczny (TD-01–TD-15), §21 Do zrobienia zaktualizowane o TD priorytety | Claude Sonnet 4.6 |
 | 2026-06-20 | 2.2    | §24 rozszerzony o audyt 3 dodatkowych obszarów: bezpieczeństwo (TD-16–TD-20), CI/CD (TD-21–TD-24), brakujące bloki (TD-25) | Claude Sonnet 4.6 |
+| 2026-06-27 | 2.3    | Faza 4 prawie done: M17.14 (books+gallery), M17.16 (social media), M17.17–M17.20 (CBM), fix download-cv; §17/§20/§21/§24 zaktualizowane | Claude Sonnet 4.6 |
 
 ---
 
@@ -1759,5 +1766,5 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ---
 
-_Ostatnia aktualizacja: 2026-06-12 v1.4 — Faza 0 UKOŃCZONA_  
-_Następna aktualizacja: Po ukończeniu Fazy 1 (Next.js 15 scaffold + Payload CMS 3)_
+_Ostatnia aktualizacja: 2026-06-27 v2.3 — Faza 4 prawie ukończona (books/gallery/services/CBM done)_  
+_Następna aktualizacja: Po UAT z Miłoszem i Martyną_

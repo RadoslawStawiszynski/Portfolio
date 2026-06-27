@@ -176,6 +176,10 @@ Moje książki łączą elementy psychologiczne z dramatycznym napięciem, tworz
           isAvailable: true,
         },
     ]}},
+    { portfolio: portfolioId, type: "gallery", order: 50, visible: true, galleryData: { items: [
+        { imageUrl: "", caption: "Zdjęcie 1 — uzupełnij URL w panelu admina", alt: "Galeria" },
+        { imageUrl: "", caption: "Zdjęcie 2 — uzupełnij URL w panelu admina", alt: "Galeria" },
+    ]}},
     { portfolio: portfolioId, type: "contact", order: 60, visible: true, contactData: {
         email: "martyna.stawiszynska@gmail.com",
         showForm: true,

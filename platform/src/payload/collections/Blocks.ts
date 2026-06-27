@@ -403,6 +403,41 @@ export const Blocks: CollectionConfig = {
       ],
     },
 
+    // ─── GALLERY ─────────────────────────────────────────────────
+    {
+      name: "galleryData",
+      type: "group",
+      admin: {
+        condition: (data) => data.type === "gallery",
+      },
+      fields: [
+        {
+          name: "items",
+          type: "array",
+          admin: { description: "Zdjęcia / okładki — wgraj do Media lub R2 i skopiuj URL" },
+          fields: [
+            {
+              name: "imageUrl",
+              type: "text",
+              required: true,
+              admin: { description: "URL zdjęcia lub okładki" },
+            },
+            {
+              name: "caption",
+              type: "text",
+              localized: true,
+              admin: { description: "Podpis (opcjonalny — widoczny po najechaniu)" },
+            },
+            {
+              name: "alt",
+              type: "text",
+              admin: { description: "Tekst alternatywny dla dostępności" },
+            },
+          ],
+        },
+      ],
+    },
+
     // ─── CONTACT ─────────────────────────────────────────────────
     {
       name: "contactData",

@@ -95,6 +95,17 @@ function extractBlockData(doc: Record<string, unknown>, type: string): Record<st
         })),
       };
     }
+    case "gallery": {
+      const g = (doc.galleryData ?? {}) as Record<string, unknown>;
+      const items = (g.items as Record<string, unknown>[] | undefined) ?? [];
+      return {
+        items: items.map((item) => ({
+          imageUrl: String(item.imageUrl ?? ""),
+          caption: item.caption as string | undefined,
+          alt: item.alt as string | undefined,
+        })),
+      };
+    }
     case "books": {
       const b = (doc.booksData ?? {}) as Record<string, unknown>;
       const items = (b.items as Record<string, unknown>[] | undefined) ?? [];

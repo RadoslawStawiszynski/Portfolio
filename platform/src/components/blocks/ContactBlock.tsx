@@ -7,9 +7,20 @@ interface Props {
   portfolioSlug: string;
 }
 
+const SOCIAL_LINKS = [
+  { key: "linkedin",  label: "LinkedIn",   icon: "💼" },
+  { key: "github",    label: "GitHub",     icon: "💻" },
+  { key: "facebook",  label: "Facebook",   icon: "📘" },
+  { key: "instagram", label: "Instagram",  icon: "📸" },
+  { key: "goodreads", label: "Goodreads",  icon: "📚" },
+] as const;
+
 export function ContactBlock({ data, portfolioSlug }: Props) {
   const d = data as ContactData;
-  const hasLinks = d.linkedin || d.github;
+
+  const activeLinks = SOCIAL_LINKS.filter(
+    ({ key }) => !!d[key as keyof ContactData]
+  );
 
   return (
     <>
@@ -26,35 +37,23 @@ export function ContactBlock({ data, portfolioSlug }: Props) {
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            {/* Left column — identity links */}
-            <div className="flex flex-col gap-4">
-              {hasLinks && (
-                <div className="flex flex-col gap-3">
-                  {d.linkedin && (
-                    <a
-                      href={d.linkedin}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-3 px-5 py-3 rounded-lg border border-[var(--color-bg-alt)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors text-sm text-[var(--color-text)] font-mono"
-                    >
-                      <span className="text-lg">💼</span>
-                      <span>LinkedIn</span>
-                    </a>
-                  )}
-                  {d.github && (
-                    <a
-                      href={d.github}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-3 px-5 py-3 rounded-lg border border-[var(--color-bg-alt)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors text-sm text-[var(--color-text)] font-mono"
-                    >
-                      <span className="text-lg">💻</span>
-                      <span>GitHub</span>
-                    </a>
-                  )}
-                </div>
-              )}
-            </div>
+            {/* Left column — social links */}
+            {activeLinks.length > 0 && (
+              <div className="flex flex-col gap-3">
+                {activeLinks.map(({ key, label, icon }) => (
+                  <a
+                    key={key}
+                    href={d[key as keyof ContactData] as string}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-3 px-5 py-3 rounded-lg border border-[var(--color-bg-alt)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors text-sm text-[var(--color-text)] font-mono"
+                  >
+                    <span className="text-lg">{icon}</span>
+                    <span>{label}</span>
+                  </a>
+                ))}
+              </div>
+            )}
 
             {/* Right column — contact form */}
             {d.showForm && (
@@ -66,7 +65,6 @@ export function ContactBlock({ data, portfolioSlug }: Props) {
         </AnimatedSection>
       </section>
 
-      {/* Stopka */}
       <footer className="py-6 px-4 bg-[var(--color-bg)] border-t border-[var(--color-bg-alt)]">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-[var(--color-muted)]">
           <span>© {new Date().getFullYear()} PortfolioHub</span>

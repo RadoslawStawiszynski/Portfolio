@@ -75,6 +75,9 @@ function extractBlockData(doc: Record<string, unknown>, type: string): Record<st
         phone: c.phone as string | undefined,
         linkedin: c.linkedin as string | undefined,
         github: c.github as string | undefined,
+        facebook: c.facebook as string | undefined,
+        instagram: c.instagram as string | undefined,
+        goodreads: c.goodreads as string | undefined,
         showForm: Boolean(c.showForm ?? true),
       };
     }

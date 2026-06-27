@@ -57,6 +57,9 @@ export interface ContactData {
   phone?: string;
   linkedin?: string;
   github?: string;
+  facebook?: string;
+  instagram?: string;
+  goodreads?: string;
   showForm: boolean;
 }
 

@@ -466,6 +466,21 @@ export const Blocks: CollectionConfig = {
           admin: { description: "URL profilu GitHub" },
         },
         {
+          name: "facebook",
+          type: "text",
+          admin: { description: "URL profilu Facebook" },
+        },
+        {
+          name: "instagram",
+          type: "text",
+          admin: { description: "URL profilu Instagram" },
+        },
+        {
+          name: "goodreads",
+          type: "text",
+          admin: { description: "URL profilu Goodreads" },
+        },
+        {
           name: "showForm",
           type: "checkbox",
           defaultValue: true,

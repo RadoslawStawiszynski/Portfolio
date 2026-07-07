@@ -8,9 +8,14 @@ export const WaitlistRequests: CollectionConfig = {
   admin: {
     useAsTitle: "email",
     defaultColumns: ["name", "email", "status", "createdAt"],
-    // TODO(Task 4): SendInviteButton — Payload 3 does not have `afterFields` on
-    // CollectionAdminOptions.components. Use a custom edit view or sidebar
-    // component when implementing the send-invite button in Task 4.
+    components: {
+      edit: {
+        // Renderuje przycisk "Wyślij zaproszenie" nad kontrolkami Save w widoku edycji
+        beforeDocumentControls: [
+          "/src/payload/components/SendInviteButton#SendInviteButton",
+        ],
+      },
+    },
   },
   access: {
     create: () => true,

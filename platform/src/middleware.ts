@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const PLATFORM_DOMAIN =
   process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || "korp-cbm.com";
 
-const RESERVED = new Set(["www", "admin", "api"]);
+const RESERVED = new Set(["www", "admin", "api", "join"]);
 
 export function middleware(request: NextRequest) {
   const hostname = request.headers.get("host") || "";

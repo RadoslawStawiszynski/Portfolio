@@ -660,7 +660,7 @@ interface Portfolio {
 - [ ] **B8.4** Implement custom domain routing (CNAME → portfolio match w DB)
 - [x] **B8.5** API endpoint formularz kontaktowy z rate limiting (Redis) (2026-06-13, Agent: Claude)
 - [ ] **B8.6** Tokeny zaproszeń: generowanie UUID + hash SHA-256 → zapis do `InvitationTokens` z TTL 48h; walidacja tokenu na `/join`; po użyciu token oznaczany jako `used`; powiązane z B8.11, F9.16, A10.10 — szczegóły §25
-- [ ] **B8.11** Kolekcja `WaitlistRequests` w Payload — pola: `name`, `email`, `note` (opcjonalne), `status` (pending/invited/rejected), `createdAt`; po zapisie: email powiadomienie do superadmina przez Resend; w adminie: lista z filtrem statusu + przycisk "Wyślij zaproszenie" — szczegóły §25
+- [x] **B8.11** Kolekcja `WaitlistRequests` w Payload — pola: `name`, `email`, `note` (opcjonalne), `status` (pending/invited/rejected), `createdAt`; po zapisie: email powiadomienie do superadmina przez Resend; w adminie: lista z filtrem statusu + przycisk "Wyślij zaproszenie" — szczegóły §25 (2026-07-07, Agent: Claude)
 - [ ] **B8.7** Upload handler: przyjmij plik, zwaliduj (typ/rozmiar), zapisz do volume
 - [ ] **B8.8** Analytics endpoint: licznik odwiedzin per portfolio (Redis incr → PostgreSQL batch)
 - [ ] **B8.9** Healthcheck endpoint (`/api/health` → 200 OK + status DB)
@@ -697,7 +697,7 @@ interface Portfolio {
 - [x] **F9.13** Cookie consent banner (GDPR) z preferencjami zapisanymi w cookie (2026-06-14, Agent: Claude)
 - [x] **F9.14** Landing page platformy (korp-cbm.com) z prezentacją możliwości (2026-06-14, Agent: Claude)
 - [x] **F9.15** Strona 404 per portfolio (2026-06-14, Agent: Claude)
-- [ ] **F9.16** Formularz "Dołącz do PortfolioHub" na landing page — sekcja z polami imię/email/notatka; Server Action → zapis do `WaitlistRequests` + email do superadmina; po wysłaniu: komunikat potwierdzający "Dziękujemy, odezwiemy się wkrótce"; powiązane z B8.11
+- [x] **F9.16** Formularz "Dołącz do PortfolioHub" na landing page — sekcja z polami imię/email/notatka; Server Action → zapis do `WaitlistRequests` + email do superadmina; po wysłaniu: komunikat potwierdzający "Dziękujemy, odezwiemy się wkrótce"; powiązane z B8.11 (2026-07-07, Agent: Claude)
 
 ### 9.3 Wymagania UX
 
@@ -776,7 +776,7 @@ Superadmin
 - [ ] **A10.7** Zegar cyfrowy serwera (live, odświeżany co sekundę przez WebSocket lub polling)
 - [ ] **A10.8** Todo list dla każdego usera (CRUD) przechowywany w DB
 - [ ] **A10.9** Zarządzanie motywem/layoutem z podglądem live
-- [ ] **A10.10** Panel zaproszeń w adminie: widok `WaitlistRequests` z przyciskiem "Wyślij zaproszenie" → wywołuje B8.6; widok `InvitationTokens` z listą aktywnych/wygasłych tokenów; szczegóły §25
+- [x] **A10.10** Panel zaproszeń w adminie: widok `WaitlistRequests` z przyciskiem "Wyślij zaproszenie" → wywołuje B8.6; widok `InvitationTokens` z listą aktywnych/wygasłych tokenów; szczegóły §25 (2026-07-07, Agent: Claude)
 - [ ] **A10.11** Zmiana hasła i danych profilu admina
 - [ ] **A10.12** Eksport CV do PDF (generowany z bloków experience/skills/education)
 - [ ] **A10.13** Skrzynka wiadomości z formularza kontaktowego
@@ -1841,15 +1841,15 @@ Access: superadmin only (czysto wewnętrzna kolekcja).
 
 ### 25.5 Lista zadań
 
-- [ ] **INV-01** Kolekcja `WaitlistRequests` — pola, access, hook `afterCreate` → email Resend do superadmina (B8.11)
-- [ ] **INV-02** Kolekcja `InvitationTokens` — pola, access superadmin-only (B8.6)
-- [ ] **INV-03** `POST /api/waitlist` — Server Action: zapis do WaitlistRequests + email powiadomienie (F9.16)
-- [ ] **INV-04** Sekcja "Dołącz do PortfolioHub" na landing page — formularz + komunikat potwierdzający (F9.16)
-- [ ] **INV-05** `POST /api/admin/invite` — generuj UUID → hash SHA-256 → zapis InvitationToken (TTL 48h) → email Resend do zainteresowanego z linkiem `/join?token=XYZ`; aktualizuj WaitlistRequest.status → invited (B8.6)
-- [ ] **INV-06** Przycisk "Wyślij zaproszenie" w widoku WaitlistRequests w Payload admin — custom component wywołujący `/api/admin/invite` (A10.10)
-- [ ] **INV-07** Strona `/join?token=XYZ` — walidacja tokenu (nie wygasł, nie użyty); formularz hasła; przy submit: utwórz User (role: owner), utwórz puste Portfolio (subdomain z prefiksu email), oznacz token jako used; redirect `/admin`
-- [ ] **INV-08** Cron job (GitHub Actions, raz dziennie) — oznacza tokeny po `expiresAt` jako `expired` (opcjonalnie: Vercel Cron)
-- [ ] **INV-09** Widok `InvitationTokens` w adminie — lista aktywnych/wygasłych/użytych tokenów z możliwością ręcznego unieważnienia
+- [x] **INV-01** Kolekcja `WaitlistRequests` — pola, access, hook `afterCreate` → email Resend do superadmina (B8.11) (2026-07-07, Agent: Claude)
+- [x] **INV-02** Kolekcja `InvitationTokens` — pola, access superadmin-only (B8.6) (2026-07-07, Agent: Claude)
+- [x] **INV-03** `POST /api/waitlist` — Server Action: zapis do WaitlistRequests + email powiadomienie (F9.16) (2026-07-07, Agent: Claude)
+- [x] **INV-04** Sekcja "Dołącz do PortfolioHub" na landing page — formularz + komunikat potwierdzający (F9.16) (2026-07-07, Agent: Claude)
+- [x] **INV-05** `POST /api/admin/invite` — generuj UUID → hash SHA-256 → zapis InvitationToken (TTL 48h) → email Resend do zainteresowanego z linkiem `/join?token=XYZ`; aktualizuj WaitlistRequest.status → invited (B8.6) (2026-07-07, Agent: Claude)
+- [x] **INV-06** Przycisk "Wyślij zaproszenie" w widoku WaitlistRequests w Payload admin — custom component wywołujący `/api/admin/invite` (A10.10) (2026-07-07, Agent: Claude)
+- [x] **INV-07** Strona `/join?token=XYZ` — walidacja tokenu (nie wygasł, nie użyty); formularz hasła; przy submit: utwórz User (role: owner), utwórz puste Portfolio (subdomain z prefiksu email), oznacz token jako used; redirect `/admin` (2026-07-07, Agent: Claude)
+- [x] **INV-08** Cron job (GitHub Actions, raz dziennie) — oznacza tokeny po `expiresAt` jako `expired` (opcjonalnie: Vercel Cron) (2026-07-07, Agent: Claude)
+- [x] **INV-09** Widok `InvitationTokens` w adminie — lista aktywnych/wygasłych/użytych tokenów z możliwością ręcznego unieważnienia (2026-07-07, Agent: Claude)
 
 > **Zależności:** INV-01 przed INV-03/04; INV-02 przed INV-05; INV-05/06 równolegle; INV-07 na końcu.
 

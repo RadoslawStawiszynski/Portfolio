@@ -8,6 +8,24 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+## [2026-07-07] v2.7 — System zaproszeniowy (INV-01–INV-09)
+
+### Added
+- `PlatformSettings` Global w Payload — feature flag `invitationsEnabled` (domyślnie wyłączony)
+- Kolekcja `WaitlistRequests` — zgłoszenia z landing page, hook afterChange → email do superadmina
+- Kolekcja `InvitationTokens` — SHA-256 hash tokenów, TTL 48h, statusy active/used/expired
+- `POST /api/waitlist` — przyjmuje zgłoszenia, rate limit 3/IP/h, sprawdza flagę invitationsEnabled
+- `POST /api/admin/invite` — generuje UUID token → SHA-256 hash → email zaproszeniowy Resend
+- `SendInviteButton` — custom Payload component w widoku WaitlistRequest
+- `GET /api/cron/expire-tokens` — wygasza aktywne tokeny po 48h, chroniony CRON_SECRET
+- GitHub Actions workflow `expire-tokens.yml` — cron codziennie 00:00 UTC
+- Strona `/join?token=UUID` — walidacja tokenu, rejestracja użytkownika + portfolio z placeholderami
+- Landing page: sekcja "Chcesz własne portfolio?" widoczna gdy invitationsEnabled=true
+- `createPlaceholderBlocks()` — 6 bloków placeholder dla nowego portfolio (hero, about, experience, skills, education, contact)
+- Nowe env vars: `CRON_SECRET`, `SUPERADMIN_EMAIL`
+
+---
+
 ### Added (2026-06-27 — Faza 4 finał)
 - Blok `books` (`BooksBlock.tsx`) — Payload fields (tytuł/rok/gatunek/okładka/buyUrl/dostępność), TypeScript interface `BookItem`, React: horizontal scroll na mobile, 2–3 col grid na desktop, lazy-load okładek z R2, badge dostępności, link "Kup" (M17.14)
 - Blok `gallery` (`GalleryBlock.tsx`) — Payload fields (zdjęcia + podpisy), 4-col masonry grid, lightbox z nawigacją klawiaturową (Escape/strzałki), `aria-modal` + focus trap (M17.14)

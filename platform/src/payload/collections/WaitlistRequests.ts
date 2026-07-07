@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { Resend } from "resend";
+import { logger } from "@/lib/logger";
 
 export const WaitlistRequests: CollectionConfig = {
   slug: "waitlist-requests",
@@ -10,7 +11,6 @@ export const WaitlistRequests: CollectionConfig = {
     // TODO(Task 4): SendInviteButton — Payload 3 does not have `afterFields` on
     // CollectionAdminOptions.components. Use a custom edit view or sidebar
     // component when implementing the send-invite button in Task 4.
-    components: {},
   },
   access: {
     create: () => true,
@@ -24,24 +24,28 @@ export const WaitlistRequests: CollectionConfig = {
     afterChange: [
       async ({ doc, operation }) => {
         if (operation !== "create") return doc;
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        const adminEmail =
-          process.env.SUPERADMIN_EMAIL ?? "biuro@korp-cbm.com";
-        await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL ?? "noreply@korp-cbm.com",
-          to: adminEmail,
-          subject: `[PortfolioHub] Nowe zgłoszenie waitlist: ${doc.name}`,
-          text: [
-            `Nowe zgłoszenie do PortfolioHub:`,
-            `Imię: ${doc.name}`,
-            `Email: ${doc.email}`,
-            doc.note ? `Notatka: ${doc.note}` : "",
-            ``,
-            `Zaloguj się do panelu admina, aby wysłać zaproszenie.`,
-          ]
-            .filter(Boolean)
-            .join("\n"),
-        });
+        try {
+          const resend = new Resend(process.env.RESEND_API_KEY);
+          const adminEmail = process.env.SUPERADMIN_EMAIL ?? "biuro@korp-cbm.com";
+          await resend.emails.send({
+            from: process.env.RESEND_FROM_EMAIL ?? "noreply@korp-cbm.com",
+            to: adminEmail,
+            subject: `[PortfolioHub] Nowe zgłoszenie waitlist: ${doc.name}`,
+            text: [
+              `Nowe zgłoszenie do PortfolioHub:`,
+              `Imię: ${doc.name}`,
+              `Email: ${doc.email}`,
+              doc.note ? `Notatka: ${doc.note}` : "",
+              ``,
+              `Zaloguj się do panelu admina, aby wysłać zaproszenie.`,
+            ]
+              .filter(Boolean)
+              .join("\n"),
+          });
+          logger.info({ email: doc.email }, "Waitlist notification sent to admin");
+        } catch (err) {
+          logger.error({ err, email: doc.email }, "Failed to send waitlist notification — record saved");
+        }
         return doc;
       },
     ],

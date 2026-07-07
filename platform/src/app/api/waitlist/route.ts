@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
   }
 
   const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const { allowed } = await checkWaitlistRateLimit(ip);
   if (!allowed) {
     logger.warn({ ip }, "Rate limit exceeded on /api/waitlist");

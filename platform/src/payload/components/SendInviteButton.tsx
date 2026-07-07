@@ -32,6 +32,8 @@ export function SendInviteButton() {
             ? "System zaproszeniowy jest wyłączony w Ustawieniach Platformy."
             : data.error === "already_processed"
             ? "To zgłoszenie zostało już przetworzone."
+            : data.error === "token_already_sent"
+            ? "Zaproszenie zostało już wysłane. Sprawdź skrzynkę odbiorczą zapraszanego."
             : `Błąd: ${data.error ?? "nieznany"}`
         );
       }

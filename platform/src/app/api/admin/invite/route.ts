@@ -75,6 +75,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "already_processed" }, { status: 409 });
   }
 
+  // Sprawdź czy active token już istnieje dla tego zgłoszenia (idempotency guard)
+  let existingToken;
+  try {
+    existingToken = await payload.find({
+      collection: "invitation-tokens",
+      where: {
+        and: [
+          { waitlistRef: { equals: waitlistId } },
+          { status: { equals: "active" } },
+        ],
+      },
+      limit: 1,
+      overrideAccess: true,
+    });
+  } catch (err) {
+    logger.error({ err, waitlistId }, "Failed to check existing invitation token");
+    return NextResponse.json({ error: "server_error" }, { status: 500 });
+  }
+  if (existingToken.totalDocs > 0) {
+    return NextResponse.json({ error: "token_already_sent" }, { status: 409 });
+  }
+
   // Generuj token
   const rawToken = randomUUID();
   const tokenHash = hashToken(rawToken);

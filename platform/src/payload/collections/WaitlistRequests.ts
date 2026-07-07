@@ -18,7 +18,7 @@ export const WaitlistRequests: CollectionConfig = {
     },
   },
   access: {
-    create: () => true,
+    create: () => false, // Tylko przez /api/waitlist z overrideAccess:true
     read: ({ req }) =>
       req.user?.role === "superadmin" || req.user?.role === "admin",
     update: ({ req }) =>

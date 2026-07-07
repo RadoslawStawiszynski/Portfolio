@@ -100,39 +100,50 @@ export async function registerWithToken(
     return { error: "Błąd serwera podczas tworzenia konta." };
   }
 
-  // Create portfolio
-  const portfolio = (await payload.create({
-    collection: "portfolios",
-    data: {
-      subdomain: slug,
-      owner: newUser.id,
-      type: "cv",
-      theme: "light",
-      colorScheme: "light",
-      language: "pl",
-      isPublished: false,
-      contactEmail: email,
-    },
-    overrideAccess: true,
-  })) as { id: string };
+  // Create portfolio + bloki + oznacz token — w bloku try z cleanup po błędzie
+  try {
+    const portfolio = (await payload.create({
+      collection: "portfolios",
+      data: {
+        subdomain: slug,
+        owner: newUser.id,
+        type: "cv",
+        theme: "light",
+        colorScheme: "light",
+        language: "pl",
+        isPublished: false,
+        contactEmail: email,
+      },
+      overrideAccess: true,
+    })) as { id: string };
 
-  // Create placeholder blocks so the portfolio is never empty on first visit
-  const blocks = createPlaceholderBlocks(String(portfolio.id), email);
-  for (const block of blocks) {
-    await payload.create({
-      collection: "blocks",
-      data: block,
+    // Create placeholder blocks so the portfolio is never empty on first visit
+    const blocks = createPlaceholderBlocks(String(portfolio.id), email);
+    for (const block of blocks) {
+      await payload.create({
+        collection: "blocks",
+        data: block,
+        overrideAccess: true,
+      });
+    }
+
+    // Mark token as used
+    await payload.update({
+      collection: "invitation-tokens",
+      id: tokenId,
+      data: { status: "used", usedAt: new Date().toISOString() },
       overrideAccess: true,
     });
+  } catch (err) {
+    logger.error({ err, email }, "Failed to setup portfolio after user creation — attempting cleanup");
+    // Best-effort: usuń usera żeby umożliwić retry z tym samym tokenem
+    try {
+      await payload.delete({ collection: "users", id: newUser.id, overrideAccess: true });
+    } catch (cleanupErr) {
+      logger.error({ cleanupErr, userId: newUser.id }, "Failed to cleanup user after portfolio setup error");
+    }
+    return { error: "Błąd serwera podczas konfiguracji portfolio. Spróbuj ponownie." };
   }
-
-  // Mark token as used
-  await payload.update({
-    collection: "invitation-tokens",
-    id: tokenId,
-    data: { status: "used", usedAt: new Date().toISOString() },
-    overrideAccess: true,
-  });
 
   logger.info({ email, subdomain: slug }, "New user registered via invitation");
   redirect("/admin");

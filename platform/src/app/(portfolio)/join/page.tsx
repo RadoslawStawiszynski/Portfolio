@@ -143,17 +143,18 @@ export default async function JoinPage({
 }: {
   searchParams: Promise<Record<string, string>>;
 }) {
+  const params = await searchParams;
+  const rawToken = params.token ?? "";
+
   const headersList = await headers();
   const portfolioSlug = headersList.get("x-portfolio-slug");
 
   // If opened from a portfolio subdomain, redirect to platform root so
   // the page renders under the platform domain (not the user subdomain)
   if (portfolioSlug) {
-    redirect(`https://${PLATFORM_DOMAIN}/join`);
+    const qs = rawToken ? `?token=${encodeURIComponent(rawToken)}` : "";
+    redirect(`https://${PLATFORM_DOMAIN}/join${qs}`);
   }
-
-  const params = await searchParams;
-  const rawToken = params.token ?? "";
 
   if (!rawToken) {
     return (

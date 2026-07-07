@@ -7,6 +7,9 @@ import { Portfolios } from "@/payload/collections/Portfolios";
 import { Blocks } from "@/payload/collections/Blocks";
 import { Media } from "@/payload/collections/Media";
 import { Todos } from "@/payload/collections/Todos";
+import { WaitlistRequests } from "@/payload/collections/WaitlistRequests";
+import { InvitationTokens } from "@/payload/collections/InvitationTokens";
+import { PlatformSettings } from "@/payload/globals/PlatformSettings";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -29,7 +32,8 @@ export default buildConfig({
       titleSuffix: " — PortfolioHub",
     },
   },
-  collections: [Users, Portfolios, Blocks, Media, Todos],
+  collections: [Users, Portfolios, Blocks, Media, Todos, WaitlistRequests, InvitationTokens],
+  globals: [PlatformSettings],
   editor: lexicalEditor(),
   secret: (() => {
     if (!process.env.PAYLOAD_SECRET) throw new Error("Missing PAYLOAD_SECRET env var");

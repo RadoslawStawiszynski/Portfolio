@@ -1,0 +1,32 @@
+# .github/workflows/expire-tokens.yml
+#
+# Jak skonfigurować CRON_SECRET:
+# 1. Wygeneruj secret: openssl rand -hex 32
+# 2. GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+#    → nazwa: CRON_SECRET, wartość: wygenerowany hex
+# 3. Vercel → projekt → Settings → Environment Variables → dodaj CRON_SECRET
+#    (Production + Preview + Development)
+# 4. Lokalnie: dodaj do platform/.env.local
+
+name: Expire Invitation Tokens
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # codziennie 00:00 UTC
+  workflow_dispatch:        # możliwość ręcznego uruchomienia z zakładki Actions
+
+jobs:
+  expire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Expire tokens via API
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X GET \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://korp-cbm.com/api/cron/expire-tokens)
+          echo "HTTP status: $response"
+          if [ "$response" != "200" ]; then
+            echo "ERROR: Unexpected HTTP status $response"
+            exit 1
+          fi

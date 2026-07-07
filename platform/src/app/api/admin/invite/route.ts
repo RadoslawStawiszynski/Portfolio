@@ -41,20 +41,32 @@ export async function POST(req: NextRequest) {
   const { waitlistId } = parsed.data;
 
   // Sprawdź flagę
-  const settings = await payload.findGlobal({
-    slug: "platform-settings",
-    overrideAccess: true,
-  });
-  if (!settings.invitationsEnabled) {
+  let settings;
+  try {
+    settings = await payload.findGlobal({
+      slug: "platform-settings",
+      overrideAccess: true,
+    });
+  } catch (err) {
+    logger.error({ err }, "Failed to fetch platform settings");
+    return NextResponse.json({ error: "server_error" }, { status: 500 });
+  }
+  if (!settings?.invitationsEnabled) {
     return NextResponse.json({ error: "invitations_disabled" }, { status: 403 });
   }
 
   // Pobierz zgłoszenie
-  const waitlistRequest = await payload.findByID({
-    collection: "waitlist-requests",
-    id: waitlistId,
-    overrideAccess: true,
-  });
+  let waitlistRequest;
+  try {
+    waitlistRequest = await payload.findByID({
+      collection: "waitlist-requests",
+      id: waitlistId,
+      overrideAccess: true,
+    });
+  } catch (err) {
+    logger.error({ err, waitlistId }, "Failed to fetch waitlist request");
+    return NextResponse.json({ error: "server_error" }, { status: 500 });
+  }
 
   if (!waitlistRequest) {
     return NextResponse.json({ error: "not_found" }, { status: 404 });
@@ -68,20 +80,7 @@ export async function POST(req: NextRequest) {
   const tokenHash = hashToken(rawToken);
   const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString();
 
-  // Zapisz token
-  await payload.create({
-    collection: "invitation-tokens",
-    data: {
-      token: tokenHash,
-      waitlistRef: waitlistId,
-      email: waitlistRequest.email as string,
-      status: "active",
-      expiresAt,
-    },
-    overrideAccess: true,
-  });
-
-  // Wyślij email
+  // Wyślij email PRZED zapisem tokenu — jeśli email zawiedzie, nie ma orphaned token w DB
   const joinLink = `${SERVER_URL}/join?token=${rawToken}`;
   try {
     await resend.emails.send({
@@ -89,7 +88,7 @@ export async function POST(req: NextRequest) {
       to: waitlistRequest.email as string,
       subject: "Twoje zaproszenie do PortfolioHub",
       text: [
-        `Cześć ${waitlistRequest.name as string},`,
+        `Cześć ${(waitlistRequest.name as string | undefined) ?? ""},`,
         ``,
         `Masz zaproszenie do PortfolioHub! Kliknij link, aby założyć konto:`,
         ``,
@@ -105,16 +104,39 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "email_failed" }, { status: 500 });
   }
 
+  // Zapisz token dopiero po udanym wysłaniu emaila
+  try {
+    await payload.create({
+      collection: "invitation-tokens",
+      data: {
+        token: tokenHash,
+        waitlistRef: waitlistId,
+        email: waitlistRequest.email as string,
+        status: "active",
+        expiresAt,
+      },
+      overrideAccess: true,
+    });
+  } catch (err) {
+    logger.error({ err, waitlistId }, "Failed to create invitation token");
+    return NextResponse.json({ error: "server_error" }, { status: 500 });
+  }
+
   // Zaktualizuj status zgłoszenia
-  await payload.update({
-    collection: "waitlist-requests",
-    id: waitlistId,
-    data: {
-      status: "invited",
-      invitedAt: new Date().toISOString(),
-    },
-    overrideAccess: true,
-  });
+  try {
+    await payload.update({
+      collection: "waitlist-requests",
+      id: waitlistId,
+      data: {
+        status: "invited",
+        invitedAt: new Date().toISOString(),
+      },
+      overrideAccess: true,
+    });
+  } catch (err) {
+    logger.error({ err, waitlistId }, "Failed to update waitlist request status");
+    return NextResponse.json({ error: "server_error" }, { status: 500 });
+  }
 
   logger.info({ waitlistId, email: waitlistRequest.email }, "Invitation sent");
   return NextResponse.json({ success: true }, { status: 200 });

@@ -15,6 +15,9 @@ on:
     - cron: '0 0 * * *'   # codziennie 00:00 UTC
   workflow_dispatch:        # możliwość ręcznego uruchomienia z zakładki Actions
 
+env:
+  API_URL: https://korp-cbm.com/api/cron/expire-tokens
+
 jobs:
   expire:
     runs-on: ubuntu-latest
@@ -24,7 +27,7 @@ jobs:
           response=$(curl -s -o /dev/null -w "%{http_code}" \
             -X GET \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            https://korp-cbm.com/api/cron/expire-tokens)
+            "$API_URL")
           echo "HTTP status: $response"
           if [ "$response" != "200" ]; then
             echo "ERROR: Unexpected HTTP status $response"

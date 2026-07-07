@@ -14,30 +14,39 @@ export async function GET(req: NextRequest) {
 
   const payload = await getPayload({ config });
 
-  const now = new Date().toISOString();
-  const expired = await payload.find({
-    collection: "invitation-tokens",
-    where: {
-      and: [
-        { status: { equals: "active" } },
-        { expiresAt: { less_than: now } },
-      ],
-    },
-    limit: 500,
-    overrideAccess: true,
-  });
-
-  let count = 0;
-  for (const token of expired.docs) {
-    await payload.update({
+  try {
+    const now = new Date().toISOString();
+    const expired = await payload.find({
       collection: "invitation-tokens",
-      id: String(token.id),
-      data: { status: "expired" },
+      where: {
+        and: [
+          { status: { equals: "active" } },
+          { expiresAt: { less_than: now } },
+        ],
+      },
+      limit: 500,
       overrideAccess: true,
     });
-    count++;
-  }
 
-  logger.info({ count }, "Expired invitation tokens marked");
-  return NextResponse.json({ expired: count }, { status: 200 });
+    let count = 0;
+    for (const token of expired.docs) {
+      try {
+        await payload.update({
+          collection: "invitation-tokens",
+          id: String(token.id),
+          data: { status: "expired" },
+          overrideAccess: true,
+        });
+        count++;
+      } catch (tokenErr) {
+        logger.error({ tokenId: token.id, err: tokenErr }, "Failed to expire token");
+      }
+    }
+
+    logger.info({ count }, "Expired invitation tokens marked");
+    return NextResponse.json({ expired: count }, { status: 200 });
+  } catch (err) {
+    logger.error({ err }, "Failed to run expire-tokens cron");
+    return NextResponse.json({ error: "server_error" }, { status: 500 });
+  }
 }

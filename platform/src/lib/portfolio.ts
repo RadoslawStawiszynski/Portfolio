@@ -75,7 +75,65 @@ function extractBlockData(doc: Record<string, unknown>, type: string): Record<st
         phone: c.phone as string | undefined,
         linkedin: c.linkedin as string | undefined,
         github: c.github as string | undefined,
+        facebook: c.facebook as string | undefined,
+        instagram: c.instagram as string | undefined,
+        goodreads: c.goodreads as string | undefined,
         showForm: Boolean(c.showForm ?? true),
+      };
+    }
+    case "projects": {
+      const p = (doc.projectsData ?? {}) as Record<string, unknown>;
+      const items = (p.items as Record<string, unknown>[] | undefined) ?? [];
+      return {
+        items: items.map((item) => ({
+          title: item.title ?? "",
+          description: item.description as string | undefined,
+          tags: String(item.tags ?? "")
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean),
+          url: item.url as string | undefined,
+          githubUrl: item.githubUrl as string | undefined,
+          status: (item.status as string | undefined) ?? "completed",
+        })),
+      };
+    }
+    case "services": {
+      const s = (doc.servicesData ?? {}) as Record<string, unknown>;
+      const items = (s.items as Record<string, unknown>[] | undefined) ?? [];
+      return {
+        items: items.map((item) => ({
+          name: String(item.name ?? ""),
+          description: item.description as string | undefined,
+          icon: item.icon as string | undefined,
+          price: item.price as string | undefined,
+        })),
+      };
+    }
+    case "gallery": {
+      const g = (doc.galleryData ?? {}) as Record<string, unknown>;
+      const items = (g.items as Record<string, unknown>[] | undefined) ?? [];
+      return {
+        items: items.map((item) => ({
+          imageUrl: String(item.imageUrl ?? ""),
+          caption: item.caption as string | undefined,
+          alt: item.alt as string | undefined,
+        })),
+      };
+    }
+    case "books": {
+      const b = (doc.booksData ?? {}) as Record<string, unknown>;
+      const items = (b.items as Record<string, unknown>[] | undefined) ?? [];
+      return {
+        items: items.map((item) => ({
+          title: item.title ?? "",
+          year: Number(item.year ?? 0),
+          coverUrl: item.coverUrl as string | undefined,
+          description: item.description as string | undefined,
+          genre: item.genre as string | undefined,
+          buyUrl: item.buyUrl as string | undefined,
+          isAvailable: Boolean(item.isAvailable ?? true),
+        })),
       };
     }
     default:
@@ -83,7 +141,7 @@ function extractBlockData(doc: Record<string, unknown>, type: string): Record<st
   }
 }
 
-export async function getBlocksBySlug(slug: string) {
+export async function getBlocksBySlug(slug: string, locale: "pl" | "en" = "pl") {
   const payload = await getPayload({ config });
 
   const portfolioResult = await payload.find({
@@ -104,6 +162,9 @@ export async function getBlocksBySlug(slug: string) {
     },
     sort: "order",
     limit: 100,
+    locale,
+    fallbackLocale: "pl",
+    overrideAccess: true,
   });
 
   return blocksResult.docs.map((doc) => ({

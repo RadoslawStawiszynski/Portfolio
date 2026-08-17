@@ -613,7 +613,7 @@ interface Portfolio {
 
 **Cechy specyficzne:**
 
-- Logo firmy prominentne
+- Logo firmy pominentne
 - Blok `services` z ikonami i cenami (opcjonalnie)
 - Portfolio realizacji (blok `projects`)
 - Dane firmowe (NIP, adres, godziny pracy)
@@ -659,7 +659,8 @@ interface Portfolio {
 - [x] **B8.3** Implement subdomain routing w Next.js middleware (wykryj subdomenę, załaduj portfolio) (2026-06-12, Agent: Claude)
 - [ ] **B8.4** Implement custom domain routing (CNAME → portfolio match w DB)
 - [x] **B8.5** API endpoint formularz kontaktowy z rate limiting (Redis) (2026-06-13, Agent: Claude)
-- [ ] **B8.6** System zaproszeń: generowanie tokenów, email przez Resend/Brevo
+- [ ] **B8.6** Tokeny zaproszeń: generowanie UUID + hash SHA-256 → zapis do `InvitationTokens` z TTL 48h; walidacja tokenu na `/join`; po użyciu token oznaczany jako `used`; powiązane z B8.11, F9.16, A10.10 — szczegóły §25
+- [x] **B8.11** Kolekcja `WaitlistRequests` w Payload — pola: `name`, `email`, `note` (opcjonalne), `status` (pending/invited/rejected), `createdAt`; po zapisie: email powiadomienie do superadmina przez Resend; w adminie: lista z filtrem statusu + przycisk "Wyślij zaproszenie" — szczegóły §25 (2026-07-07, Agent: Claude)
 - [ ] **B8.7** Upload handler: przyjmij plik, zwaliduj (typ/rozmiar), zapisz do volume
 - [ ] **B8.8** Analytics endpoint: licznik odwiedzin per portfolio (Redis incr → PostgreSQL batch)
 - [ ] **B8.9** Healthcheck endpoint (`/api/health` → 200 OK + status DB)
@@ -696,6 +697,7 @@ interface Portfolio {
 - [x] **F9.13** Cookie consent banner (GDPR) z preferencjami zapisanymi w cookie (2026-06-14, Agent: Claude)
 - [x] **F9.14** Landing page platformy (korp-cbm.com) z prezentacją możliwości (2026-06-14, Agent: Claude)
 - [x] **F9.15** Strona 404 per portfolio (2026-06-14, Agent: Claude)
+- [x] **F9.16** Formularz "Dołącz do PortfolioHub" na landing page — sekcja z polami imię/email/notatka; Server Action → zapis do `WaitlistRequests` + email do superadmina; po wysłaniu: komunikat potwierdzający "Dziękujemy, odezwiemy się wkrótce"; powiązane z B8.11 (2026-07-07, Agent: Claude)
 
 ### 9.3 Wymagania UX
 
@@ -774,7 +776,7 @@ Superadmin
 - [ ] **A10.7** Zegar cyfrowy serwera (live, odświeżany co sekundę przez WebSocket lub polling)
 - [ ] **A10.8** Todo list dla każdego usera (CRUD) przechowywany w DB
 - [ ] **A10.9** Zarządzanie motywem/layoutem z podglądem live
-- [ ] **A10.10** System zaproszeń: formularz email → token → link aktywacyjny
+- [x] **A10.10** Panel zaproszeń w adminie: widok `WaitlistRequests` z przyciskiem "Wyślij zaproszenie" → wywołuje B8.6; widok `InvitationTokens` z listą aktywnych/wygasłych tokenów; szczegóły §25 (2026-07-07, Agent: Claude)
 - [ ] **A10.11** Zmiana hasła i danych profilu admina
 - [ ] **A10.12** Eksport CV do PDF (generowany z bloków experience/skills/education)
 - [ ] **A10.13** Skrzynka wiadomości z formularza kontaktowego
@@ -817,8 +819,9 @@ Proxy:       orange-cloud ON (CDN aktywne) — Cloudflare terminuje SSL, Vercel 
 - [x] **D11.1** Skonfiguruj wildcard DNS `*.korp-cbm.com` w Cloudflare — CNAME → cname.vercel-dns.com, proxied 🟠 (2026-06-18, poprawione — pierwotnie A record/proxied=false)
 - [x] **D11.2** Reverse proxy — obsługiwany przez Vercel (nie Caddy/Nginx; ADR-004) (2026-06-16)
 - [x] **D11.3** Implement Next.js middleware dla subdomain routing (2026-06-12, Agent: Claude)
+- [x] **D11.3b** Subdomain routing na dev — `radek.localhost`, `milosz.localhost`, `martyna.localhost` działają lokalnie bez `/etc/hosts` (2026-06-20, Agent: Claude)
 - [ ] **D11.4** Implement weryfikacja custom domain (DNS CNAME check)
-- [ ] **D11.5** Utwórz subdomain per portfolio w tabeli `portfolios` (`subdomain` field)
+- [x] **D11.5** Subdomain field w tabeli `portfolios` — pole `subdomain` istnieje od początku (Faza 1) (2026-06-12, Agent: Claude)
 
 ---
 
@@ -1010,52 +1013,52 @@ Jak to działa:
 
 ### 17.1 Miłosz Gawlik — CV Portfolio
 
-**Źródło danych:** `kopia/data/*.json` (gotowe!) + `kopia/CV Miłosz Gawlik.pdf`  
-**Status istniejącego kodu:** Kompletny PHP portfolio w `kopia/` — do zmigowania do blokowego systemu.
+**Źródło danych:** `portfolios/milosz-gawlik/data/*.json` (gotowe) + `kopia/CV Miłosz Gawlik.pdf`  
+**Status:** Zaseedowane — 6 bloków aktywnych na `milosz.localhost:3000`, konto owner: `milosz@portfoliohub.dev`
 
-- [ ] **M17.1** Utwórz `portfolios/milosz-gawlik/data/` z plikami JSON (skopiuj z `kopia/data/`)
-- [ ] **M17.2** Napisz skrypt migracji JSON → PostgreSQL dla portfolio Miłosza
-- [ ] **M17.3** Skopiuj CV PDF do `portfolios/milosz-gawlik/assets/`
-- [ ] **M17.4** Przetestuj portfolio na `milosz.korp-cbm.com` (dev)
-- [ ] **M17.5** Ustaw bloki: hero, about, experience, skills, education, contact
+- [x] **M17.1** Dane JSON dostępne w `portfolios/milosz-gawlik/data/` (przeniesione z `kopia/data/`) (2026-06-16)
+- [x] **M17.2** Seed script `scripts/seed-milosz.ts` — JSON → PostgreSQL (2026-06-20, Agent: Claude)
+- [x] **M17.3** Skopiuj CV PDF do `portfolios/milosz-gawlik/assets/` + wgraj do R2 (2026-06-20, Agent: Claude — upload-cv.ts, R2 key: milosz/cv/cv-milosz-pl.pdf)
+- [x] **M17.4** Portfolio działa na `milosz.localhost:3000` (dev) (2026-06-20, Agent: Claude)
+- [x] **M17.5** Bloki: hero, about, experience (5 pozycji), skills (4 kat.), education, contact (2026-06-20, Agent: Claude)
 - [ ] **M17.6** Dodaj dwujęzyczność PL/EN
 
 ### 17.2 Radosław Stawiszyński — CV + PM Portfolio
 
-**Źródło danych:** `CV_RadekS/` + `PLAN_1.md`, `PLAN_2.md`  
-**Status:** Plany gotowe, kod NIE zaimplementowany.
+**Źródło danych:** CV Radosława (pełne dane zaseedowane) + `portfolios/radek-stawiszynski/`  
+**Status:** Zaseedowane — 6 bloków z pełnym CV, `radek.localhost:3000` działa, owner=superadmin.
 
-- [ ] **M17.7** Utwórz `portfolios/radek-stawiszynski/data/` z plikami JSON na podstawie CV
-- [ ] **M17.8** Skopiuj CV PDF (PL + EN) do `portfolios/radek-stawiszynski/assets/`
-- [ ] **M17.9** Ustaw bloki: hero (PM positioning), about, experience (PM timeline), skills (PM + Tech), education, contact
-- [ ] **M17.10** Dodaj sekcję projektów PM (z PLAN_1 §6.2)
-- [ ] **M17.11** Motyw: ciemna zieleń + złoto (paleta z PLAN_1 §5)
+- [x] **M17.7** Dane CV zaseedowane przez `scripts/seed-radek.ts` (2026-06-20, Agent: Claude)
+- [x] **M17.8** Skopiuj CV PDF (PL + EN) do `portfolios/radek-stawiszynski/assets/` + wgraj do R2 (2026-06-20, Agent: Claude — R2 keys: radek/cv/cv-radek-pl.pdf, radek/cv/cv-radek-en.pdf)
+- [x] **M17.9** Bloki: hero, about, experience (5 pozycji PM), skills (6 kat.), education (3 wpisy), contact (2026-06-20, Agent: Claude)
+- [x] **M17.10** Dodaj sekcję projektów PM — blok `projects` (2026-06-20, Agent: Claude — 4 projekty: PortfolioHub, AI, DB Connector, Nancy Card)
+- [x] **M17.11** Ustaw motyw `retro-terminal` dla portfolio radek (2026-06-20, Agent: Claude — ustawiony w upload-cv.ts + seed-neon.ts)
 
 ### 17.3 Martyna Stawiszyńska — Portfolio Autorki
 
-**Źródło danych:** `portfolios/martyna-stawiszynska/v1-nancy-card/` (prototyp Next.js + Supabase) + dane w `v1-nancy-card/dane-nancy-ai/`
-**Status:** v1 przeniesione z `1.CODE/nancy_card/` — research i dane gotowe, do wdrożenia na platformie.
+**Źródło danych:** `portfolios/martyna-stawiszynska/v1-nancy-card/dane-nancy-ai/dane.md`  
+**Status:** Zaseedowane — 4 bloki (hero, about, skills, contact), konto: `martyna.stawiszynska@gmail.com`
 
 > **v1-nancy-card** to standalone prototyp (Next.js + Supabase Auth, panel admin, CRUD postów i palet kolorów).
 > Zawiera `dane-nancy-ai/dane.md` i `dane-nancy-ai/zrodla.md` — gotowe treści i źródła do użycia w platformie.
 > Docelowo portfolio Martyny będzie częścią PortfolioHub — v1 zostaje jako archiwum referencyje i bank danych.
 
 - [x] **M17.11** Przenieś `nancy_card` do `portfolios/martyna-stawiszynska/v1-nancy-card/` (2026-06-16, Claude)
-- [ ] **M17.12** Przejrzyj `v1-nancy-card/dane-nancy-ai/dane.md` i przenieś gotowe treści do `portfolios/martyna-stawiszynska/data/`
-- [ ] **M17.13** Utwórz `portfolios/martyna-stawiszynska/data/`
-- [ ] **M17.14** Ustaw bloki: hero, about (bio literackie), books, gallery, contact
-- [ ] **M17.15** Motyw dla autorki (estetyczny, literacki — do uzgodnienia z Martyną)
-- [ ] **M17.16** Social media linki (Facebook, Instagram, Goodreads)
+- [x] **M17.12** Treści z `dane-nancy-ai/dane.md` użyte w seed-martyna.ts (2026-06-20, Agent: Claude)
+- [x] **M17.13** Seed script `scripts/seed-martyna.ts` + bloki w DB (2026-06-20, Agent: Claude)
+- [x] **M17.14** Dodaj blok `books` (lista książek Payload fields + TypeScript types + React scroll/grid + okładki + link kup) i `gallery` (4-col grid + lightbox z nawigacją) — nowe typy bloków (2026-06-27, Agent: Claude)
+- [ ] **M17.15** Motyw dla autorki — ustal z Martyną (propozycja: `slate-rose` lub custom)
+- [x] **M17.16** Social media linki (Facebook, Instagram, Goodreads) w bloku contact — refactor na generyczną listę linków (2026-06-27, Agent: Claude)
 
 ### 17.4 CBM — Portfolio Firmy
 
 **Źródło danych:** Do zebrania  
 **Status:** Stara strona korp-cbm.com — do zastąpienia nową.
 
-- [ ] **M17.17** Zbierz dane firmy: opis, usługi, realizacje, dane kontaktowe
-- [ ] **M17.18** Utwórz `portfolios/cbm-firma/data/`
-- [ ] **M17.19** Ustaw bloki: hero (logo + tagline), about, services, projects (realizacje), contact
-- [ ] **M17.20** Logo CBM + firmowe kolory
+- [x] **M17.17** Zbierz dane firmy: opis, usługi, realizacje, dane kontaktowe (2026-06-27, Agent: Claude)
+- [x] **M17.18** Utwórz `portfolios/cbm-firma/data/` (2026-06-27, Agent: Claude)
+- [x] **M17.19** Ustaw bloki: hero (logo + tagline), about, services, projects (realizacje), contact (2026-06-27, Agent: Claude)
+- [x] **M17.20** Logo CBM + firmowe kolory (2026-06-27, Agent: Claude)
 
 ---
 
@@ -1183,6 +1186,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - [ ] **AI19.3** Utwórz `OLLAMA_PROMPT.md` — gotowy do wklejenia kontekst dla Ollama
 - [x] **AI19.4** Utwórz `.clinerules/portfoliohub-rules.md` — reguły dla nowej struktury projektu (2026-06-12, Agent: Claude)
 - [ ] **AI19.5** Skonfiguruj `.agents/skills/` — skills dla poszczególnych faz (bootstrap, blok, deploy)
+- [ ] **AI19.6** Zainstaluj `gh` CLI i skonfiguruj GitHub token — umożliwi agentowi sprawdzanie statusu CI/CD, workflow runs i check-runs bez wchodzenia na GitHub w przeglądarce; instalacja: `sudo apt install gh` → `gh auth login`; token potrzebny z uprawnieniami: `repo`, `workflow`
 
 ---
 
@@ -1257,10 +1261,23 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 ### Faza 4 — Migracja portfeli (3–5 dni)
 
 ```
-- [ ] Miłosz Gawlik portfolio (M17.1–M17.6)
-- [ ] Radosław Stawiszyński portfolio (M17.7–M17.11)
-- [ ] Dane od Martyny + jej portfolio (M17.12–M17.16)
-- [ ] CBM portfolio (M17.17–M17.20)
+- [x] Miłosz Gawlik — seed + 6 bloków + konto owner (M17.1, M17.2, M17.4, M17.5) (2026-06-20, Agent: Claude)
+- [x] Radosław Stawiszyński — pełne CV, 6 bloków + retro UI (M17.7, M17.9) (2026-06-20, Agent: Claude)
+- [x] Martyna Stawiszyńska — 4 bloki + konto owner (M17.11–M17.13) (2026-06-20, Agent: Claude)
+- [x] Konta owner Miłosz + Martyna z RBAC (Blocks per-portfolio access) (2026-06-20, Agent: Claude)
+- [x] Subdomain routing dev: *.localhost (D11.3b) (2026-06-20, Agent: Claude)
+- [x] PDF CV → R2 dla Radka (PL+EN) i Miłosza (PL) (M17.3, M17.8) (2026-06-20, Agent: Claude)
+- [x] Blok `projects` dla Radka — 4 projekty, terminal-card grid (M17.10) (2026-06-20, Agent: Claude)
+- [x] Motyw retro-terminal dla radek (M17.11) (2026-06-20, Agent: Claude)
+- [x] Seed pełny na Neon (prod DB) — 3 portfolia, 17 bloków, 3 userów (2026-06-20, Agent: Claude — seed-neon.ts)
+- [x] PL/EN przełącznik języka — LangToggle (cookie-based, tylko dla pl-en portfolios) (2026-06-20, Agent: Claude)
+- [x] Responsywność — PortfolioNav identity collapse, HeroBlock mobile font (2026-06-20, Agent: Claude)
+- [x] Bloki `books` + `gallery` dla Martyny (M17.14) (2026-06-27, Agent: Claude)
+- [x] Social media w ContactBlock dla Martyny — Facebook, Instagram, Goodreads (M17.16) (2026-06-27, Agent: Claude)
+- [x] CBM portfolio — dane, blok `services`, seed (M17.17–M17.20) (2026-06-27, Agent: Claude)
+- [x] Fix download-cv route — 307 redirect do R2 PDF na podstawie subdomeny i ?lang= (2026-06-27, Agent: Claude)
+- [ ] Motyw dla Martyny — ustal z Martyną (M17.15)
+- [ ] UAT z Miłoszem i Martyną — logowanie, edycja bloków w /admin
 ```
 
 ### Faza 5 — Deployment + SEO (2–3 dni)
@@ -1295,33 +1312,52 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - [ ] Blog per portfolio
 - [ ] Custom domain (ADR-007 opcja B)
 - [ ] Generator CV PDF z bloków
+- [ ] System zaproszeniowy — pełny flow (§25): WaitlistRequests + tokeny + /join + auto-portfolio
 ```
 
 ---
 
 ## 21. STATUS — CO ZBUDOWANE / CO NIE
 
-> Ostatnia aktualizacja: 2026-06-20. Fazy 0–3 ukończone, produkcja live.
+> Ostatnia aktualizacja: 2026-06-27. Faza 4 prawie ukończona — books/gallery/services/CBM/social media zaimplementowane, fix download-cv. Pozostało: UAT z Miłoszem i Martyną + motyw dla Martyny (M17.15).
 
-### ✅ Zbudowane (Fazy 0–3, prod live na korp-cbm.com)
+### ✅ Zbudowane (Fazy 0–4, prod live)
 
 | Element                       | Lokalizacja                              | Opis                                                             |
 | ----------------------------- | ---------------------------------------- | ---------------------------------------------------------------- |
-| Next.js 15 scaffold           | `platform/`                              | App Router, TypeScript 5, Tailwind CSS 4, 3-theme system         |
+| Next.js 15 scaffold           | `platform/`                              | App Router, TypeScript 5, Tailwind CSS 4                         |
 | Payload CMS 3                 | `platform/src/payload/`                  | Collections: Users, Portfolios, Blocks, Media, Todos             |
-| Subdomain routing middleware  | `platform/src/middleware.ts`             | x-portfolio-slug z subdomeny, dev /dev/[slug]                    |
+| Subdomain routing middleware  | `platform/src/middleware.ts`             | Prod: x-portfolio-slug z subdomeny; Dev: *.localhost + /dev/[slug] |
 | System bloków                 | `platform/src/components/blocks/`        | Hero, About, Experience, Skills, Education, Contact              |
 | Portfolio renderer            | `platform/src/app/(portfolio)/`          | PortfolioRenderer + BLOCK_REGISTRY + 404 per portfolio           |
-| System motywów                | CSS Custom Properties                    | light / dark / retro-terminal + cookie persistence               |
+| Retro UI accents              | `globals.css` + bloki                    | Typewriter, glitch heading, scanlines, terminal-card, live-dot, cursor-blink |
+| Identity w navbarze           | `PortfolioNav`                           | Avatar + imię pojawia się po prawej po przewinięciu poza hero    |
+| System motywów (10 wariantów) | CSS Custom Properties                    | light / dark / retro-terminal + 7 dodatkowych; --scanline-color per motyw |
 | Animacje Framer Motion        | AnimatedSection + staggered              | fade-in + slide-up, whileInView once:true                        |
 | Scroll-spy nav                | PortfolioNav                             | IntersectionObserver, smooth scroll                              |
+| Contact 2-col layout          | ContactBlock                             | Links (LinkedIn/GitHub) po lewej, formularz po prawej; telefon w CV |
 | Contact Server Action         | sendContactMessage                       | Zod + Resend + rate limiting Redis (3 req/15min)                 |
 | OpenGraph / SEO               | buildPortfolioMetadata                   | og:title, og:description, og:image, twitter:card                 |
 | Sitemap dynamiczny            | `(portfolio)/sitemap.ts`                 | Per portfolio, tylko isPublished                                  |
 | Download CV button            | DownloadCvButton                         | cvPdfPl / cvPdfEn fallback, fixowany bottom-left                 |
 | Cookie consent GDPR           | CookieConsentBanner                      | 1-rok cookie, role=dialog, aria-live                             |
 | Landing page                  | `(portfolio)/page.tsx` (root)            | Hero + Funkcje + Aktywne portfolio + Footer                      |
-| Panel admina (Payload)        | `korp-cbm.com/admin`                     | Custom branding, RBAC (superadmin/admin/owner), live preview      |
+| Panel admina (Payload)        | `/admin`                                 | Custom branding PortfolioHub, RBAC, live preview                  |
+| RBAC per portfolio            | `Blocks.access`                          | Owner widzi/edytuje tylko własne bloki (async portfolio lookup)  |
+| Konta użytkowników            | `scripts/seed-users.ts`                  | Miłosz (owner), Martyna (owner) + seed scripts per portfolio     |
+| Portfolio radek               | DB lokalnie + Neon prod                  | 7 bloków: hero, about, experience (5), skills (6 kat.), education, projects (4), contact; motyw retro-terminal; CV PL+EN w R2 |
+| Portfolio milosz              | DB lokalnie + Neon prod                  | 6 bloków: hero, about, experience (5), skills (4 kat.), education, contact; CV PL w R2 |
+| Portfolio martyna             | DB lokalnie + Neon prod                  | 6 bloków: hero, about, books (5 tytułów), gallery (lightbox), skills, contact (social: FB/IG/Goodreads); motyw slate-rose |
+| Portfolio cbm                 | DB lokalnie + Neon prod                  | 5 bloków: hero, about, services (usługi + ikony), projects (realizacje CBM), contact; firmowe kolory |
+| Seed Neon (prod DB)           | `platform/scripts/seed-neon.ts`          | Idempotentny pełny seed: 4 portfolia, ~25 bloków, 4 userów, CV URLs z R2 |
+| Blok `projects`               | `platform/src/components/blocks/ProjectsBlock.tsx` | Terminal-card grid, status badge, tag pills, github/demo links |
+| Blok `books`                  | `platform/src/components/blocks/BooksBlock.tsx`    | Horizontal scroll mobile / grid desktop; okładki R2, buy link, badge dostępności |
+| Blok `gallery`                | `platform/src/components/blocks/GalleryBlock.tsx`  | 4-col grid, lightbox z nawigacją klawiaturową, lazy load |
+| Blok `services`               | `platform/src/components/blocks/ServicesBlock.tsx` | Lista usług z ikonami i opisami (CBM portfolio) |
+| Social media w ContactBlock   | `ContactBlock.tsx`                                 | Generyczna lista linków: LinkedIn, GitHub, Facebook, Instagram, Goodreads |
+| Fix download-cv route         | `app/api/download-cv/route.ts`                     | 307 redirect do R2 PDF; subdomain-aware + ?lang= param |
+| PL/EN przełącznik             | `LangToggle.tsx`                         | Cookie-based, page reload, widoczny tylko dla portfolios z pl-en |
+| Responsywność nav             | `PortfolioNav.tsx`                       | Identity collapse do max-w-0 gdy niewidoczna; HeroBlock text-3xl mobile |
 | Cloudflare R2 storage         | @payloadcms/storage-s3                   | Bucket: portfoliohub, media upload                               |
 | Vercel Analytics              | @vercel/analytics                        | Page views w admin dashboardzie                                   |
 | Todo list                     | Todos collection                         | CRUD w Payload admin                                             |
@@ -1331,20 +1367,24 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | CI                            | `.github/workflows/`                     | Lint + typecheck na push dev/staging                             |
 | Logger                        | `platform/src/lib/logger.ts`             | pino, structured JSON, pretty-print dev                          |
 
-### ⏳ Do zrobienia (Faza 4+)
+### ⏳ Do zrobienia (Faza 4 finał + Fazy 5–7)
 
-| Element                      | Faza   | Priority |
-| ---------------------------- | ------ | -------- |
-| Portfolio Radosława (treść)  | Faza 4 | 🔴       |
-| Portfolio Miłosza (treść)    | Faza 4 | 🔴       |
-| Portfolio Martyny (treść)    | Faza 4 | 🟡       |
-| Portfolio CBM (treść)        | Faza 4 | 🟡       |
-| Konto admina w Neon/prod     | Faza 4 | 🔴       |
-| UptimeRobot monitoring       | Faza 5 | 🟡       |
-| B8.4 Custom domain routing   | Faza 5 | 🟡       |
-| Testy E2E                    | Faza 6 | 🟡       |
-| Generator CV PDF             | Faza 7 | ⚪       |
-| Blog per portfolio           | Faza 7 | ⚪       |
+| Element                                    | Faza   | Priority |
+| ------------------------------------------ | ------ | -------- |
+| **UAT z Miłoszem i Martyną** — logowanie, edycja bloków w /admin | Faza 4 | 🔴       |
+| Motyw dla Martyny — ustal z Martyną (M17.15)  | Faza 4 | 🟡       |
+| PDF CV dla Martyny do R2                       | Faza 4 | 🟡       |
+| UptimeRobot monitoring (H13.11)            | Faza 5 | 🟡       |
+| Custom domain routing per portfolio (D11.4) | Faza 5 | 🟡       |
+| Testy E2E Playwright (T16.1–T16.10)        | Faza 6 | 🟡       |
+| Lighthouse audit (Performance, A11y, SEO)  | Faza 6 | 🟡       |
+| Push `dev → main` + Vercel prod deploy     | Faza 5 | 🔴 po UAT|
+| Generator CV PDF z bloków                 | Faza 7 | ⚪       |
+| Blog per portfolio                         | Faza 7 | ⚪       |
+| ~~Dług techniczny TD-01–TD-03~~ (error boundary, R2 env checks, livePreview URL) | Przed deployem | ✅ 2026-08-17 |
+| **Dług techniczny TD-04–TD-11** (Zod walidacja, media scope, CSP headers, a11y) | Faza 6 | 🟡 |
+
+> Szczegóły długu technicznego: §24
 
 ---
 
@@ -1352,11 +1392,31 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 > Sekcja na pomysły i przyszłe rozszerzenia. Nie blokują MVP.
 
-### 22.1 Funkcjonalności produktowe
+### 22.1 Rozwinięcie działu Projects
+
+> Blok `projects` istnieje (terminal-card grid), ale wymaga rozbudowy dla pełnej użyteczności CV/portfolio.
+
+- **Strony szczegółowe projektów** (`/projects/[slug]`) — rozszerzone info: opis techniczny, problem który rozwiązuje, stack (ikonki), timeline realizacji, screenshots z lightboxem, case study (dłuższa forma tekstu), lessons learned
+- **Filtrowanie po tagach** — client-side filter po technologiach/kategoriach (React, Python, PM, AI…); animowane fade z Framer Motion
+- **Wyróżniony projekt** — pole `featured: boolean` w Blocks; wyróżniony projekt wyświetlany pełną szerokością na górze gridu z większym opisem
+- **Więcej pól per projekt** — aktualnie: title/description/tags/github/demo/status; dodać: `thumbnailUrl` (okładka z R2), `startDate`/`endDate`, `role` (moja rola w projekcie), `teamSize`, `client` (opcjonalnie)
+- **Integracja GitHub** — auto-import pinned repos jako projekty (GitHub API v4 GraphQL); pola: name, description, language, stars, last commit; właściciel łączy konto GitHub w adminie
+- **Wideo demo embed** — pole `videoUrl` (YouTube/Vimeo); odtwarzanie w karcie projektu lub na stronie szczegółowej
+
+### 22.2 Feedback i zgłaszanie błędów od użytkowników
+
+> Użytkownicy (odwiedzający portfolio i właściciele) powinni mieć kanał informacji zwrotnej — zarówno do zgłaszania błędów, jak i propozycji rozwoju serwisu.
+
+- **Widget feedbacku** (floating button na każdej stronie portfolio) — mini-formularz "Znalazłem błąd" / "Mam pomysł"; wysyłka przez Resend na adres administratora; opcjonalnie: pole email osoby zgłaszającej (nie wymagane)
+- **Publiczna strona roadmapy** (`korp-cbm.com/roadmap`) — co jest zbudowane, co planujemy, co jest w backlogu; aktualizowana ręcznie lub generowana z CHANGELOG.md; buduje zaufanie u potencjalnych użytkowników platformy
+- **Formularz "Dołącz do PortfolioHub"** na landing page — zainteresowany podaje imię, email i opcjonalną notkę; zapis do kolekcji `WaitlistRequests` w Payload; Radosław dostaje email z przyciskiem "Wyślij zaproszenie"; po kliknięciu generowany jednorazowy token → email aktywacyjny do zainteresowanego; w adminie: lista zgłoszeń z filtrem pending/invited/rejected (zadania: B8.11 + F9.16 + B8.6)
+- **Skrzynka feedbacku w adminie** — właściciel portfolio widzi zgłoszenia dotyczące jego strony (zebrane przez widget); możliwość oznaczenia jako "przeczytane" / "naprawione"
+- **GitHub Issues link** — na stronie roadmapy / w footerze platformy — "Zgłoś błąd na GitHub" dla użytkowników technicznych; repo publiczne lub prywatne z Issue template
+
+### 22.3 Funkcjonalności produktowe
 
 - **Generator CV PDF** — generuj PDF z bloków experience/skills (Puppeteer lub @react-pdf/renderer)
 - **Blog per portfolio** — każdy właściciel może prowadzić bloga (blok `blog-preview` + strona)
-- **Integracja GitHub** — auto-import pinned repos jako projekty (GitHub API)
 - **Integracja LinkedIn** — import danych z LinkedIn (w ramach możliwości API)
 - **QR code** — generowany QR code do portfolio (dla wizytówek)
 - **Analityka real-time** — live visitor counter w adminie
@@ -1364,7 +1424,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - **Portfolio builder wizard** — kreator krok-po-kroku dla nowych użytkowników
 - **Template gallery** — gotowe szablony do jednego kliknięcia
 
-### 22.2 Funkcjonalności techniczne
+### 22.4 Funkcjonalności techniczne
 
 - **Redis Queue** (Bull) — asynchroniczne zadania (wysyłka emaili, generowanie PDF)
 - **WebSockets** — live preview w adminie (edytuj blok, widzisz zmiany natychmiast)
@@ -1375,7 +1435,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - **Webhooks** — powiadomienia o nowych wiadomościach (Slack, email, Discord)
 - **Two-factor auth** — TOTP (Google Authenticator) dla admina
 
-### 22.3 Uwagi i obserwacje
+### 22.5 Uwagi i obserwacje
 
 - Seohost.pl SH 2 to shared hosting — przed deployem Docker ustal czy masz VPS lub kup VPS (Hetzner CX22 ok. 6€/mies to dobry wybór)
 - `kopia/` folder zawiera wartościowy kod PHP (testy, Docker, admin) — zachowaj jako referencję w `archive/`
@@ -1383,6 +1443,421 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 - Payload CMS 3 + Next.js 15 = naturalna para, ale wymagają Node.js 20+ (nie PHP)
 - Cloudflare wildcard SSL + Caddy = zero konfiguracji Let's Encrypt, działa automatycznie
 - Dla Ollama (lokalnych modeli) — upewnij się że CONTEXT.md jest zawsze aktualny i dołączony do prompta
+
+---
+
+## 23. PROPOZYCJE ROZWOJU — PERSPEKTYWA AGENTA (Claude Sonnet 4.6)
+
+> Ta sekcja to moje osobiste propozycje i obserwacje po miesiącu pracy z tym projektem.
+> Nie są to zadania do natychmiastowego zrobienia — to materiał do przemyślenia i dyskusji.
+> Zapisuję je jako agent który widzi kod, architekturę i kontekst użytkownika od środka.
+>
+> — Claude Sonnet 4.6, 2026-06-20
+
+---
+
+### 23.1 Rzeczy które zrobiłbym natychmiast (niski koszt, duży efekt)
+
+#### ISR zamiast pełnego SSR dla stron portfolio
+Aktualnie każde wejście na `radek.korp-cbm.com` wykonuje dwa zapytania do Neon (getPortfolioBySlug + getBlocksBySlug). Neon w free tierze ma zimny start ~200ms. Portfolio zmienia się rzadko — raz dziennie lub rzadziej.
+
+**Propozycja:** `export const revalidate = 300` w `page.tsx` (portal) + Payload hook `afterChange` na kolekcji `blocks`, który wywołuje `revalidateTag("portfolio-{slug}")`. Efekt: pierwsze wejście w ciągu 5 minut jest z cache CDN Vercel, zmiany widoczne w maks. 5 minut.
+
+```typescript
+// page.tsx
+export const revalidate = 300; // 5 minut
+
+// payload/hooks/revalidatePortfolio.ts
+afterChange: async ({ doc, req }) => {
+  const slug = ...; // pobierz subdomain z portfolio
+  await fetch(`${process.env.NEXT_PUBLIC_URL}/api/revalidate?tag=portfolio-${slug}`, ...);
+}
+```
+
+To jedna z najważniejszych optymalizacji — Neon free tier ma limit połączeń (10), ISR redukuje liczbę zapytań 100×.
+
+#### Redis cache dla getBlocksBySlug
+Bloki zmieniają się rzadko, ale są czytane przy każdym odświeżeniu nawigacji. Upstash Redis już jest w projekcie jako rate limiter — dodanie cache `blocks:{slug}:{locale}` z TTL 60s to ~20 linii kodu i eliminuje bottleneck Neon przy ruchu.
+
+```typescript
+const cached = await redis.get(`blocks:${slug}:${locale}`);
+if (cached) return JSON.parse(cached);
+// ... fetch from Neon
+await redis.set(`blocks:${slug}:${locale}`, JSON.stringify(result), { ex: 60 });
+```
+
+#### Powiadomienie email gdy ktoś wyśle formularz kontaktowy
+Resend jest podłączony. Właściciel portfolio wie że ktoś napisał dopiero jak zajrzy na skrzynkę — co może być za późno. Warto dodać natychmiastowe powiadomienie na email właściciela z treścią wiadomości (1 dodatkowe `resend.emails.send` w `actions.ts`). Kosztuje 0 linii infrastruktury, tylko 5 linii kodu.
+
+---
+
+### 23.2 Ulepszenia UX które zauważyłem jako użytkownik kodu
+
+#### Drag & drop kolejności bloków w adminie
+Payload CMS ma wbudowany `@payloadcms/richtext-lexical` i sortable arrays — ale pole `order` w kolekcji `Blocks` jest ręczne (liczba). Użytkownik musi wchodzić w każdy blok osobno i zmieniać `order: 10 → 20 → 30`. 
+
+Lepiej: Custom List View w admin z `@dnd-kit/sortable` który po drop wywołuje bulk update `order`. To jeden z bólów przy zarządzaniu treścią który będzie narastać gdy bloków będzie więcej.
+
+#### Podgląd motywu bez przeładowania strony
+Aktualnie ThemeToggle zmienia `document.documentElement.dataset.theme` — to działa bez przeładowania. Ale zmiana bloku w `/admin` wymaga ręcznego odświeżenia strony portfolio żeby zobaczyć efekt. Payload Live Preview jest podłączony, ale może nie być skonfigurowany pod subdomain routing.
+
+Sprawdź czy Live Preview (`/admin/collections/blocks/[id]`) poprawnie ładuje subdomain URL — jeśli nie, port `livePreviewUrl` w Payload config wymaga funkcji która buduje URL z `data.portfolio.subdomain`.
+
+#### Komunikat 404 per portfolio vs. landing page
+Teraz gdy wejdziesz na `nieistniejacy.localhost:3000`, Next.js zwraca ogólny 404. Warto rozróżnić:
+- Subdomain istnieje ale blok nie znaleziony → custom 404 per portfolio (z motywem właściciela)
+- Subdomain nie istnieje → landing page z "Chcesz swoje portfolio? Zaloguj się."
+Middleware już rozróżnia te przypadki przez `x-portfolio-slug` — wystarczy to wykorzystać w `not-found.tsx`.
+
+---
+
+### 23.3 Nowe typy bloków które mają sens dla aktualnych użytkowników
+
+Sorted by ROI — od najłatwiejszych do najtrudniejszych:
+
+| Blok | Dla kogo | Czas impl. | Dlaczego warto |
+|------|----------|------------|----------------|
+| `testimonials` | radek (PM portfolio) | 2h | Referencje od klientów/pracodawców to silny social proof w CV |
+| `stats` | radek, milosz | 2h | "5 lat doświadczenia / 20 projektów / 3 branże" — liczby działają |
+| `books` | martyna | 3h | Podstawa portfolio autorki, brakuje go teraz |
+| `gallery` | martyna | 2h | Okładki książek, zdjęcia z eventów |
+| `cta` | wszyscy | 1h | Sekcja "Skontaktuj się ze mną" z dużym guzikiem między blokami |
+| `timeline` | radek | 3h | Alternatywa dla experience — wizualny timeline kariery |
+| `faq` | martyna, cbm | 2h | Dla portfolio autorki: FAQ o książkach, dla CBM: FAQ o usługach |
+
+#### Blok `books` — szczegółowy projekt (dla Martyny, jutro)
+```typescript
+interface BookItem {
+  title: string;           // localized
+  year: number;
+  coverUrl?: string;       // z R2
+  description?: string;    // localized, textarea
+  genre?: string;
+  buyUrl?: string;         // link do empiku/amazona
+  isAvailable: boolean;
+}
+```
+Wyświetlanie: horizontal scroll na mobile, grid 2–3 col na desktop. Karta = okładka + tytuł + rok + badge dostępności + link "Kup". Motyw slate-rose — karty z `bg-rose-50 dark:bg-rose-950/30`.
+
+---
+
+### 23.4 Architektura — co bym zmienił gdyby projekt miał rosnąć
+
+#### Wydzielenie `portfolio-app` i `admin-app` jako osobne Next.js instances
+Aktualnie jeden monorepo Next.js obsługuje i portfolio (publiczne) i Payload admin. To dobry wybór na start (ADR-002), ale przy większej skali:
+- Admin (Payload) ma ciężkie Node.js zależności — `serverExternalPackages` to workaround
+- Portfolio strony mogą być statyczne/edge, admin musi być Node.js
+- Jedna awaria deploymentu crashuje oba
+
+Alternatywa na przyszłość: Payload jako headless API na `api.korp-cbm.com` (Node.js Vercel function), portfolio jako Edge runtime. Nie robiłbym tego teraz — zbyt wczesna optymalizacja.
+
+#### Typowanie bloków end-to-end (Payload → TypeScript → React)
+Aktualnie `extractBlockData` w `portfolio.ts` castuje `doc as Record<string, unknown>` i ręcznie buduje typy. Payload 3 generuje typy z kolekcji przez `payload generate:types`. 
+
+Włączenie `payload generate:types` jako `prebuild` step wyeliminuje ręczne castowanie i doda auto-complete w IDE. Ryzyko: typy mogą być zbyt szczegółowe (Payload tworzy union types dla lokalizacji). Warto spróbować jako eksperyment.
+
+#### Edge Middleware dla subdomain routing
+Aktualnie `middleware.ts` działa jako Node.js Edge Runtime (Vercel). Przy dużej liczbie portfolii (100+) i wysokim ruchu, middleware mógłby stać się bottleneck bo każdy request przechodzi przez niego.
+
+Lepsza alternatywa: Cloudflare Worker przed Vercel który ustawia header `x-portfolio-slug` i przekierowuje. Worker jest dosłownie na edge, latency <1ms. Ale to dodatkowa warstwa infra — sensowne przy >1000 req/s.
+
+---
+
+### 23.5 Rzeczy których nie robiłem a które mnie niepokoją
+
+#### Brak backupu bazy danych
+Neon free tier nie ma automatycznych backupów (tylko point-in-time recovery przez 7 dni). Dla projektu portfolio to akceptowalne ryzyko, ale dla CBM (firma) — już nie. Warto rozważyć cron job który co tydzień eksportuje `pg_dump` do R2.
+
+```bash
+# scripts/backup-db.sh (uruchamiane przez Vercel Cron lub GitHub Actions)
+pg_dump "$DATABASE_URL" | gzip > backup-$(date +%Y%m%d).sql.gz
+# upload do R2: backups/portfoliohub/YYYY-MM-DD/
+```
+
+#### Brak monitoringu błędów (Sentry lub podobne)
+Aplikacja jest w produkcji (korp-cbm.com). Jeśli ktoś wejdzie na radek.korp-cbm.com i coś się wysypie — dowiesz się dopiero gdy Radosław sam sprawdzi. Sentry free tier (5k errors/month) + 3 linie kodu w `layout.tsx` = pełny stack trace każdego błędu w Twoim mailu.
+
+```bash
+npm install @sentry/nextjs
+npx @sentry/wizard@latest -i nextjs
+```
+
+#### Ochrona przed spamem w formularzu kontaktowym
+Rate limiting jest (Redis, 3 req/15min), ale bez CAPTCHA. Bot który rotuje IP może zafloodować skrzynkę mailową właściciela. Cloudflare Turnstile (darmowe, lepsze UX niż reCAPTCHA) to drop-in replacement — ukryte CAPTCHA które nie irytuje użytkowników.
+
+---
+
+### 23.6 Pomysł biznesowy — PortfolioHub jako produkt SaaS
+
+To platforma którą budujesz na swój użytek, ale architektura jest już multi-tenant. Kilka obserwacji:
+
+**Co masz już gotowe dla SaaS:**
+- Multi-tenant subdomain routing (`*.korp-cbm.com`)
+- RBAC per portfolio (owner widzi tylko swoje bloki)
+- System motywów (10 wariantów)
+- Panel admin dla każdego użytkownika
+- Bloki edytowalne bez kodu
+
+**Czego brakuje do produktu:**
+- Self-service rejestracja (teraz tylko admin tworzy konta)
+- Onboarding wizard ("Stwórz swoje pierwsze portfolio w 5 minut")
+- Custom domeny per portfolio (D11.4)
+- Plany cenowe (free: 5 bloków, pro: nieograniczone + custom domena)
+- Billing (Stripe)
+
+**Alternatywne zastosowanie:** Sprzedaż gotowych portfolio jako usługa (jak np. read.cv). Klient płaci raz lub miesięcznie, dostaje subdomenę i panel admin. Nie trzeba SaaS infra — wystarczy proste konto Stripe + ręczne tworzenie kont przez Radosława.
+
+**Rynek:** Freelancerzy, PMowie, developerzy, autorzy — grupy które mają potrzebę profesjonalnego portfolio ale nie chcą kodować. Cena 9–19€/mies wydaje się rozsądna.
+
+---
+
+### 23.7 Moje priorytety gdybym miał tydzień wolnego na ten projekt
+
+1. **ISR + Redis cache** — eliminuje bottleneck Neon, strony ładują się w <100ms nawet z zimnym startem
+2. **Sentry** — wiem o błędach zanim Radosław mi o nich powie
+3. **Backup DB** — cron job, raz w tygodniu, do R2
+4. **Blok `testimonials`** — dla radka, najbardziej brakuje w PM portfolio
+5. **Drag & drop kolejności bloków** — największy pain point przy edycji treści
+6. **Cloudflare Turnstile** — ochrona formularza kontaktowego bez irytowania użytkowników
+7. **Self-service rejestracja** — gdybym chciał testować PortfolioHub jako produkt
+
+---
+
+### 23.8 Rzeczy które zrobiłem i z których jestem szczególnie zadowolony
+
+- **System motywów z `--scanline-color` per theme** — eleganckie rozwiązanie, jeden token steruje scanlines na wszystkich motywach. Łatwe do rozszerzenia.
+- **`getBlocksBySlug(slug, locale)`** — czyste API, jeden parametr dodaje pełną wielojęzyczność.
+- **`seed-neon.ts` idempotentny** — można uruchomić wielokrotnie bez efektów ubocznych. Ważne przy debugowaniu prod.
+- **RBAC przez async access function zwracającą `where` clause** — Payload pattern który skaluje. Owner może mieć dziesiątki bloków, zawsze dostaje tylko swoje.
+- **PortfolioNav `max-w-0` collapse** — zamiast `opacity-0` które ukrywa ale nie zwalnia przestrzeni. Małe, ale poprawne.
+
+---
+
+---
+
+### 23.9 Wnioski — czego nauczyłem się przy tym projekcie
+
+#### Payload CMS 3 + Next.js 15 to dobre połączenie, ale ma pułapki
+Payload generuje własny root layout z `RootLayout` i `ConfigProvider` — jeśli dodasz `app/layout.tsx` obok `(payload)/layout.tsx`, React tree się psuje i admin przestaje działać. Rozwiązanie (multiple route groups bez wspólnego layoutu) jest nieoczywiste i nie ma go w dokumentacji. Straciłem na tym godzinę.
+
+Drugi problem: `importMap.js` vs `importMap.ts` — Payload auto-generuje plik `.js`, ale TypeScript project może przypadkowo śledzić `.ts` wersję. Stale `.ts` blokuje custom komponenty w admin. Zawsze sprawdź który plik jest "aktywny".
+
+#### Subdomain routing na localhost działa bez /etc/hosts — Linux rozwiązuje `*.localhost` natywnie
+Nie wiedziałem tego na początku. Przez chwilę planowałem dodawać wpisy do `/etc/hosts` dla każdego subdomain (`radek.localhost`, `milosz.localhost`). Systemd-resolved na Linuxie Ubuntuowym automatycznie rozwiązuje `*.localhost` → `::1`. Na macOS wymaga `dscacheutil` lub Caddy.
+
+Wniosek: zawsze sprawdź co platforma robi natywnie zanim zaczniesz konfigurować.
+
+#### Seed scripts muszą być idempotentne od początku
+Pierwsze seedy pisałem bez sprawdzania czy rekord już istnieje. Po 3 uruchomieniu miałem zduplikowane bloki i musiałem czyścić bazę ręcznie. Od drugiej sesji każdy seed ma `if (existing.docs.length) return` na początku. Kosztuje 5 linii, oszczędza godzinę.
+
+#### `overrideAccess: true` to nie obejście — to właściwy wzorzec dla seed scriptów
+Payload access control jest zaprojektowany pod request context (zalogowany user). Seed script nie ma użytkownika — używa `overrideAccess: true`. To nie jest hack, to oficjalny sposób na operacje administratorskie bez kontekstu HTTP.
+
+#### Polski w HTTP headers → ERR_INVALID_CHAR
+Przy uploadzie CV do R2 z `Content-Disposition: attachment; filename="CV-RadosławStawiszyński.pdf"` — request wylatywał z `ERR_INVALID_CHAR`. Nagłówki HTTP mają być ASCII. Polskie znaki (ł, ą, ę, ś, ź, ź, ń, ó) w nazwie pliku trzeba albo encode RFC 5987 (`filename*=UTF-8''...`) albo po prostu pominąć `Content-Disposition` (R2 serwuje plik po URL, browser używa nazwy z URL). Wybrałem to drugie — prostsze.
+
+#### CSS Custom Properties i `data-theme` to najlepszy wzorzec dla multi-theme
+Alternatywa to className per theme (duże CSS bundle), Tailwind dark: prefix (tylko 2 motywy), lub JS-driven style injection (flash of unstyled content). CSS Custom Properties z `[data-theme="dark"] { --color-bg: #0f0f0f; }` są:
+- Zero JS (zero FOUC)
+- Natywnie supportowane przez SSR (theme ustawiony w HTML przed hydratacją)
+- Łatwe do rozszerzenia (dodanie motywu = 10 linii CSS)
+- Działa z `prefers-color-scheme` media query
+
+#### Neon free tier ma limit połączeń (10 concurrent) — to realny problem przy SSR
+Każdy request SSR otwiera połączenie z Neon przez Payload. Przy 10 jednoczesnych userach — limit. Rozwiązania:
+1. PgBouncer (pooler) — Neon ma go wbudowanego, wystarczy użyć connection string z `?pgbouncer=true`
+2. ISR — redukuje liczbę requestów do Neon o ~95%
+3. Serverless connection (Neon HTTP driver) — jeden request HTTP zamiast TCP connection
+
+Aktualnie używamy zwykłego connection string bez pooler. Dodanie `pgbouncer=true` to 1 zmiana w env var.
+
+#### Commit message jako dokumentacja jest wart inwestycji
+W tym projekcie każdy commit ma opis w formacie `type(scope): opis`. Po miesiącu `git log --oneline` to czytelna historia projektu — widzę dokładnie kiedy co zostało zrobione i dlaczego. Dobre commity zastępują znaczną część dokumentacji.
+
+#### Multi-agent workflow (Claude Code + PLAN.md) sprawdza się przy złożonych projektach
+PLAN.md jako centralny dokument który każdy agent czyta na początku sesji eliminuje powtarzanie kontekstu. Słabość: PLAN.md może stać się nieaktualny jeśli agent nie zapisuje po sobie. Rozwiązanie: zasada §2 + Appendix A (rejestr zmian) + §21 Status.
+
+Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (bardziej standardowe), ale CLAUDE.md jest czytany przez Claude Code natywnie więc zostaje.
+
+---
+
+*Sekcja dodana: 2026-06-20 przez Claude Sonnet 4.6*
+*Nie są to decyzje — to zaproszenie do rozmowy.*
+
+---
+
+## 24. DŁUG TECHNICZNY — ZNANE PROBLEMY DO NAPRAWY
+
+> Zidentyfikowane podczas audytu kodu faz 0–3 (2026-06-20, Claude Sonnet 4.6).
+> Nie blokują MVP, ale powinny być naprawione przed launch.
+> Priorytety: 🔴 przed następnym deployem / 🟡 Faza 6 / ⚪ opcjonalne
+
+### 🔴 Przed następnym deployem (blokują jakość produkcji)
+
+- [x] TD-01 Error boundary w `PortfolioRenderer` — crash jednego bloku crashuje całą stronę; dodać React Error Boundary z fallback UI (`platform/src/components/blocks/PortfolioRenderer.tsx`) (2026-08-17, Agent: Claude)
+- [x] TD-02 Non-null assertions `!` dla R2 env vars w `payload.config.ts:64–75` — zastąpić explicit throw jak robi to `PAYLOAD_SECRET` i `DATABASE_URL` (np. `R2_BUCKET_NAME`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`) (2026-08-17, Agent: Claude)
+- [x] TD-03 `livePreview` URL hardcoded `/dev/{slug}` w Portfolios collection — na prod trafia na zły URL; przerobić na `${process.env.NEXT_PUBLIC_SERVER_URL}/dev/{slug}` z fallbackiem na localhost (2026-08-17, Agent: Claude)
+
+### 🟡 Faza 6 — przed launch
+
+- [ ] **TD-04** `extractBlockData()` w `lib/portfolio.ts` — masowe `as Record<string, unknown>` casty bez walidacji runtime; zastąpić Zod schema per typ bloku (powiązane z TD-15)
+- [ ] **TD-05** Media collection bez scope per portfolio — każdy owner widzi media wszystkich w Payload admin; dodać `access.read` filtrujący po relacji `portfolio` do zalogowanego usera
+- [ ] **TD-06** Rate limit hardcoded (`LIMIT=3`, `WINDOW_SECONDS=900`) w `lib/rate-limit.ts` — przenieść do env vars (`RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_S`)
+- [ ] **TD-07** Brak security headers w `next.config.ts` — dodać `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`
+- [ ] **TD-08** `<img>` zamiast `next/image` w `HeroBlock.tsx` i `AboutBlock.tsx` — brak lazy loading i optymalizacji; gorsze LCP w Lighthouse
+- [ ] **TD-09** Brak ARIA roles w `PortfolioNav.tsx` — brak `role="navigation"`, `aria-current="page"` na aktywnym linku; wpływa na a11y score
+- [ ] **TD-10** Brak loading/disabled state na przycisku Submit w `ContactForm.tsx` — UX: użytkownik nie wie że formularz się wysyła, może klikać wielokrotnie
+- [ ] **TD-11** Brak `.json` snapshot dla migracji `20260616_195812_add_todos.ts` — inne migracje mają pair `.ts` + `.json`; sprawdzić czy Payload wymaga snapshotu do `migrate:status`
+
+### ⚪ Opcjonalne / Nice-to-have
+
+- [ ] **TD-12** `Todos` collection — pole `portfolio` jest optional bez auto-fill; owner musi ręcznie wskazać portfolio; rozważyć `beforeChange` hook który ustawia portfolio z kontekstu usera
+- [ ] **TD-13** Brak audit logu edycji bloków — nie wiadomo kto/kiedy co zmienił; dodać `afterChange` hook zapisujący `updatedBy` i timestamp
+- [ ] **TD-14** Brak error handling w `getPortfolioBySlug()` na scenariusz DB timeout / Neon cold start — teraz rzuca unhandled exception; dodać try/catch z fallback 503
+- [ ] **TD-15** `payload generate:types` jako `prebuild` step w `package.json` — eliminuje ręczne casty w `portfolio.ts`, dodaje auto-complete; ryzyko: Payload generuje złożone union types dla lokalizacji
+
+---
+
+### 🔴 BEZPIECZEŃSTWO — przed następnym deployem
+
+- [x] **TD-16** `Portfolios` API (`/api/portfolios`) zwraca WSZYSTKIE portfolia dla niezalogowanych (2026-06-20, Agent: Claude) — brak filtrowania po `isPublished`; `access.read: ({ req }) => { if (!req.user) return true }` na `Portfolios.ts:18` daje pełny odczyt; naprawić: `return { isPublished: { equals: true } }` dla gości (`platform/src/payload/collections/Portfolios.ts:17-21`)
+
+### 🟡 BEZPIECZEŃSTWO — Faza 6
+
+- [ ] **TD-17** `Media` collection — brak `create/update/delete` access functions; Payload 3 domyślnie wymaga auth dla mutacji (bezpieczne), ale dowolny zalogowany user może uploadować media do cudzego portfolio; dodać access filtrujący po relacji do własnych portfolii (`platform/src/payload/collections/Media.ts`)
+- [ ] **TD-18** Rate limit race condition — `redis.incr(key)` + `redis.expire(key, ...)` to dwie osobne operacje; przy równoległych requestach TTL może nie zostać ustawiony; zamienić na atomowe Lua script lub `pipeline()` (`platform/src/lib/rate-limit.ts:6-18`)
+- [ ] **TD-19** X-Forwarded-For jako jedyne źródło IP w rate limiterze — spoofable przez klienta; na Vercel+Cloudflare header jest wiarygodny, ale warto dodać komentarz WHY i rozważyć `x-real-ip` jako fallback (`platform/src/app/(portfolio)/actions.ts:51-52`, `app/api/contact/route.ts:38-39`)
+- [ ] **TD-20** Brak walidacji formatu subdomeny — pole `subdomain` w Portfolios nie ma regex; można wpisać `../admin`, `my portfolio!` itp.; dodać `validate: (val) => /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/.test(val)` (`platform/src/payload/collections/Portfolios.ts:36-43`)
+
+---
+
+### 🔴 CI/CD — przed następnym deployem
+
+- [x] **TD-21** CI nie buduje aplikacji — `.github/workflows/ci.yml` (2026-06-20, Agent: Claude) uruchamia tylko `lint` + `typecheck`; błąd buildu wykrywany dopiero przez Vercel przy deploy; dodać job `build` z `npm run build` (potrzebuje env vars jak w typecheck step)
+
+### 🟡 CI/CD — Faza 6
+
+- [ ] **TD-22** Brak `/api/health` endpointu — monitoring (UptimeRobot, powiązane z H13.11) i load balancer nie mają punktu do sprawdzenia stanu aplikacji; dodać `platform/src/app/api/health/route.ts` zwracający `{ status: "ok", timestamp }` z kodem 200
+- [ ] **TD-23** Brak centralnej walidacji env vars na starcie — kod używa `process.env.X!` assertions w różnych miejscach; awaria przy brakującej zmiennej objawia się runtime errorem głęboko w kodzie; dodać `platform/src/lib/env.ts` z Zod schema i importować w `payload.config.ts`
+
+### ⚪ CI/CD — Opcjonalne
+
+- [ ] **TD-24** `@upstash/redis` używa HTTP REST API — lokalny Docker Redis (TCP) jest niekompatybilny; developerzy muszą używać prawdziwych kredencjałów Upstash nawet w dev; udokumentować w `.env.local.example` i README
+
+---
+
+### ⚪ BRAKUJĄCE BLOKI — Faza 7
+
+- [x] **TD-25** (częściowo) `books`, `gallery`, `services` zaimplementowane (2026-06-27, Agent: Claude) — pozostałe bez pól: `testimonials`, `timeline`, `stats`, `cta`, `faq`; nadal widoczne w dropdown admina bez pól i bez renderowania; priorytet następny: `testimonials` i `stats` (Radek). Szczegółowy projekt bloków: §23.3
+
+---
+
+### 🟡 BEZPIECZEŃSTWO — odkryte 2026-08-17 (przed UAT)
+
+- [ ] **TD-26** Payload nie ma wpiętego email adaptera w `payload.config.ts` — wbudowany "forgot password" na `/admin` nie wysyła maila, tylko loguje link resetu do konsoli/Vercel logs (potwierdzone w dev logu: `No email adapter provided`). Resend jest już używany bezpośrednio w `/api/contact`, `/api/admin/invite`, `WaitlistRequests` hook — brakuje tylko `@payloadcms/email-resend` (lub własnego adaptera) spiętego w `email:` configu, żeby też auth-owe maile (reset hasła, weryfikacja) faktycznie docierały. Obejście do czasu fixa: `scripts/rotate-user-password.ts` (2026-08-17, Agent: Claude)
+
+---
+
+## 25. SYSTEM ZAPROSZENIOWY — PEŁNY FLOW
+
+> **Priorytet: Faza 7** — do zbudowania po UAT i launch MVP.  
+> Cel: zainteresowany użytkownik wypełnia formularz na landing page → superadmin wysyła zaproszenie jednym kliknięciem → nowy użytkownik rejestruje konto i dostaje puste portfolio.
+
+### 25.1 Flow end-to-end
+
+```
+[Landing page]
+  Sekcja "Dołącz do PortfolioHub"
+  Formularz: Imię + Email + Notatka (opcjonalna)
+       │
+       ▼ Server Action (F9.16)
+[Payload: WaitlistRequests]          [Email do superadmina]
+  status: pending                    "Jan Kowalski chce portfolio"
+  name, email, note, createdAt       [Wyślij zaproszenie →]
+       │
+       ▼ Superadmin klika w adminie (A10.10)
+[API: /api/admin/invite]             [Email do Jana]
+  Generuje token UUID (B8.6)         "Twoje zaproszenie do PortfolioHub"
+  Hash SHA-256 → DB                  Link: korp-cbm.com/join?token=XYZ
+  TTL: 48h                           Ważny 48 godzin
+  WaitlistRequest.status → invited
+       │
+       ▼ Jan klika link
+[Strona /join?token=XYZ]
+  Walidacja tokenu (nie wygasł, nie użyty)
+  Formularz: Hasło + Potwierdź hasło
+       │
+       ▼ Submit
+  Tworzy User (role: owner)
+  Tworzy puste Portfolio (subdomain z email prefix)
+  Token oznaczony jako used
+  Redirect → /admin (zalogowany)
+       │
+       ▼
+[Panel admina — pierwsze logowanie]
+  Widzi swoje puste portfolio
+  Może dodawać bloki, edytować treść
+```
+
+### 25.2 Nowe kolekcje Payload
+
+**`WaitlistRequests`** (`platform/src/payload/collections/WaitlistRequests.ts`)
+
+| Pole       | Typ      | Opis                              |
+|------------|----------|-----------------------------------|
+| `name`     | text     | Imię i nazwisko                   |
+| `email`    | email    | Email zainteresowanego            |
+| `note`     | textarea | Opcjonalna notatka (po co portfolio) |
+| `status`   | select   | `pending` / `invited` / `rejected` |
+| `invitedAt`| date     | Kiedy wysłano zaproszenie         |
+
+Access: `create` — public (formularz landing); `read/update` — superadmin only.  
+Hook `afterCreate`: wysyła email powiadomienie do superadmina przez Resend.
+
+---
+
+**`InvitationTokens`** (`platform/src/payload/collections/InvitationTokens.ts`)
+
+| Pole          | Typ      | Opis                              |
+|---------------|----------|-----------------------------------|
+| `tokenHash`   | text     | SHA-256 hash tokenu (nie plain)   |
+| `email`       | email    | Do kogo wysłano                   |
+| `waitlistRef` | relation | FK do WaitlistRequests            |
+| `expiresAt`   | date     | `createdAt + 48h`                 |
+| `usedAt`      | date     | Kiedy użyty (null = aktywny)      |
+| `status`      | select   | `active` / `used` / `expired`     |
+
+Access: superadmin only (czysto wewnętrzna kolekcja).
+
+### 25.3 Nowe API endpointy
+
+| Method | Endpoint                    | Opis                                              |
+|--------|-----------------------------|---------------------------------------------------|
+| POST   | `/api/waitlist`             | Zapis do WaitlistRequests + email do superadmina  |
+| POST   | `/api/admin/invite`         | Generuj token + wyślij email zaproszeniowy        |
+| GET    | `/api/join?token=XYZ`       | Waliduj token (zwraca email, status)              |
+| POST   | `/api/join`                 | Utwórz konto + portfolio + unieważnij token       |
+
+### 25.4 Nowe strony frontend
+
+| Strona              | Opis                                                        |
+|---------------------|-------------------------------------------------------------|
+| `(portfolio)/join/page.tsx` | Formularz rejestracji z tokenem — walidacja, hasło, submit |
+| Landing page (sekcja) | Formularz "Dołącz do PortfolioHub" (F9.16)              |
+
+### 25.5 Lista zadań
+
+- [x] **INV-01** Kolekcja `WaitlistRequests` — pola, access, hook `afterCreate` → email Resend do superadmina (B8.11) (2026-07-07, Agent: Claude)
+- [x] **INV-02** Kolekcja `InvitationTokens` — pola, access superadmin-only (B8.6) (2026-07-07, Agent: Claude)
+- [x] **INV-03** `POST /api/waitlist` — Server Action: zapis do WaitlistRequests + email powiadomienie (F9.16) (2026-07-07, Agent: Claude)
+- [x] **INV-04** Sekcja "Dołącz do PortfolioHub" na landing page — formularz + komunikat potwierdzający (F9.16) (2026-07-07, Agent: Claude)
+- [x] **INV-05** `POST /api/admin/invite` — generuj UUID → hash SHA-256 → zapis InvitationToken (TTL 48h) → email Resend do zainteresowanego z linkiem `/join?token=XYZ`; aktualizuj WaitlistRequest.status → invited (B8.6) (2026-07-07, Agent: Claude)
+- [x] **INV-06** Przycisk "Wyślij zaproszenie" w widoku WaitlistRequests w Payload admin — custom component wywołujący `/api/admin/invite` (A10.10) (2026-07-07, Agent: Claude)
+- [x] **INV-07** Strona `/join?token=XYZ` — walidacja tokenu (nie wygasł, nie użyty); formularz hasła; przy submit: utwórz User (role: owner), utwórz puste Portfolio (subdomain z prefiksu email), oznacz token jako used; redirect `/admin` (2026-07-07, Agent: Claude)
+- [x] **INV-08** Cron job (GitHub Actions, raz dziennie) — oznacza tokeny po `expiresAt` jako `expired` (opcjonalnie: Vercel Cron) (2026-07-07, Agent: Claude)
+- [x] **INV-09** Widok `InvitationTokens` w adminie — lista aktywnych/wygasłych/użytych tokenów z możliwością ręcznego unieważnienia (2026-07-07, Agent: Claude)
+
+> **Zależności:** INV-01 przed INV-03/04; INV-02 przed INV-05; INV-05/06 równolegle; INV-07 na końcu.
 
 ---
 
@@ -1399,6 +1874,14 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | 2026-06-16 | 1.6    | Faza 3 UKOŃCZONA: A10.1–A10.9 (admin branding, R2, Analytics, Todos, livePreview), deploy na Vercel prod | Radosław + Claude |
 | 2026-06-18 | 1.7    | DNS poprawiony: A record/proxied=false → CNAME/proxied🟠, SSL mode Full (H13.7 fix) | Radosław + Claude |
 | 2026-06-20 | 1.8    | Audyt: §21 status zaktualizowany, §11.2 DNS poprawione, D11.1/D11.2/H13.10 zaznaczone, Faza 5 checkboxy | Radosław + Claude |
+| 2026-06-20 | 1.9    | Faza 4 (większość done): seed Neon, blok projects, CV→R2, motyw radek, LangToggle PL/EN, responsywność; §17 M17.3/M17.8/M17.10/M17.11 done; §21 zaktualizowane | Radosław + Claude |
+| 2026-06-20 | 2.0    | Nowa sekcja §23: propozycje rozwoju, pomysły architektoniczne i wnioski z projektu (perspektywa agenta AI) | Claude Sonnet 4.6 |
+| 2026-06-20 | 2.1    | Audyt kodu faz 0–3: §24 Dług techniczny (TD-01–TD-15), §21 Do zrobienia zaktualizowane o TD priorytety | Claude Sonnet 4.6 |
+| 2026-06-20 | 2.2    | §24 rozszerzony o audyt 3 dodatkowych obszarów: bezpieczeństwo (TD-16–TD-20), CI/CD (TD-21–TD-24), brakujące bloki (TD-25) | Claude Sonnet 4.6 |
+| 2026-06-27 | 2.3    | Faza 4 prawie done: M17.14 (books+gallery), M17.16 (social media), M17.17–M17.20 (CBM), fix download-cv; §17/§20/§21/§24 zaktualizowane | Claude Sonnet 4.6 |
+| 2026-06-27 | 2.4    | §22 rozszerzony: 22.1 Rozwinięcie działu Projects (6 punktów), 22.2 Feedback i zgłaszanie błędów (5 punktów); renumeracja 22.2→22.4, 22.3→22.5 | Radosław + Claude |
+| 2026-06-27 | 2.5    | §8 B8.11 (WaitlistRequests collection), §9 F9.16 (formularz "Dołącz do PortfolioHub" na landing), §22.2 rozwinięty — system zaproszeniowy end-to-end | Radosław + Claude |
+| 2026-06-27 | 2.6    | §25 System zaproszeniowy — pełny flow (INV-01–INV-09): WaitlistRequests, InvitationTokens, /join page, admin panel; Faza 7 zaktualizowana | Radosław + Claude |
 
 ---
 
@@ -1418,5 +1901,5 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 
 ---
 
-_Ostatnia aktualizacja: 2026-06-12 v1.4 — Faza 0 UKOŃCZONA_  
-_Następna aktualizacja: Po ukończeniu Fazy 1 (Next.js 15 scaffold + Payload CMS 3)_
+_Ostatnia aktualizacja: 2026-06-27 v2.6 — §25 System zaproszeniowy pełny flow (INV-01–INV-09)_  
+_Następna aktualizacja: Po UAT z Miłoszem i Martyną_

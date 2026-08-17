@@ -40,7 +40,7 @@ export function ThemeToggle({ currentTheme }: { currentTheme: string }) {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
+    <div className="flex flex-col items-end gap-2">
       {panelOpen && (
         <div className="grid grid-cols-4 gap-1.5 rounded-xl bg-(--color-bg-alt) p-2 shadow-xl border border-(--color-muted)/30">
           {RETRO_THEMES.map((t) => (

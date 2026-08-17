@@ -19,7 +19,7 @@ last_collected: RRRR-MM-DD
 
 ## Pomysły / ulepszenia
 
-- [ ] [Pomysł na ulepszenie — niekoniecznie teraz]
+- [ ] trzeba dodać FUNCKJE ABY CV GENEROWAŁO SIĘ NA PODSTAWIE TEGO CO JEST na stronie a nie żeby moje cv się ściagło strona ma generowac cv w PL i ENG
 
 ## Wątpliwości
 
@@ -36,3 +36,5 @@ last_collected: RRRR-MM-DD
 <!-- Po zebraniu do PLAN: zmień [ ] na [v] i dodaj referencję -->
 <!-- Przykład: -->
 <!-- - [v] Dodać cache do endpointu X — zebrano do PLAN_2 §3.1 — 2026-04-28 -->
+
+

@@ -1,21 +1,25 @@
-import type { CollectionConfig } from "payload";
+import type { CollectionConfig, Where } from "payload";
 
 export const Portfolios: CollectionConfig = {
   slug: "portfolios",
   admin: {
     useAsTitle: "subdomain",
     livePreview: {
+      // NEXT_PUBLIC_SERVER_URL zamiast req.headers.get("host") (TD-03) — host
+      // requestu do admina bywa inny niż publiczny URL (Vercel deployment URL,
+      // reverse proxy), więc preview trafiał na zły adres na produkcji.
       url: ({ data, req }) => {
-        const host = req.headers.get("host") ?? "localhost:3000";
-        const protocol = host.includes("localhost") ? "http" : "https";
         const slug = (data.subdomain as string) ?? "";
-        return `${protocol}://${host}/dev/${slug}`;
+        const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+        if (serverUrl) return `${serverUrl}/dev/${slug}`;
+        const host = req.headers.get("host") ?? "localhost:3000";
+        return `http://${host}/dev/${slug}`;
       },
     },
   },
   access: {
-    read: ({ req }) => {
-      if (!req.user) return true;
+    read: ({ req }): boolean | Where => {
+      if (!req.user) return { isPublished: { equals: true } };
       if (req.user.role === "superadmin" || req.user.role === "admin") return true;
       return { owner: { equals: req.user.id } };
     },

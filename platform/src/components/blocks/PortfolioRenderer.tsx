@@ -1,8 +1,9 @@
 // platform/src/components/blocks/PortfolioRenderer.tsx
 import { logger } from "@/lib/logger";
 import { BLOCK_REGISTRY, type RegisteredBlockType } from "./registry";
-import type { BlockDoc } from "@/types/blocks";
+import type { BlockDoc, HeroData } from "@/types/blocks";
 import { PortfolioNav } from "@/components/ui/PortfolioNav";
+import { BlockErrorBoundary } from "./BlockErrorBoundary";
 
 export type { BlockDoc };
 
@@ -12,6 +13,7 @@ const SECTION_LABELS: Partial<Record<string, string>> = {
   experience: "Doświadczenie",
   skills: "Umiejętności",
   education: "Edukacja",
+  projects: "Projekty",
   contact: "Kontakt",
 };
 
@@ -36,9 +38,15 @@ export function PortfolioRenderer({ blocks, portfolioSlug }: Props) {
     label: SECTION_LABELS[b.type] ?? b.type,
   }));
 
+  const heroBlock = blocks.find((b) => b.type === "hero");
+  const heroData = heroBlock?.data as HeroData | undefined;
+  const identity = heroData
+    ? { name: heroData.title, subtitle: heroData.subtitle, avatarUrl: heroData.avatarUrl }
+    : undefined;
+
   return (
     <>
-      <PortfolioNav sections={sections} />
+      <PortfolioNav sections={sections} identity={identity} />
       <main className="pt-14">
         {blocks.map((block) => {
           const Component = BLOCK_REGISTRY[block.type as RegisteredBlockType];
@@ -54,7 +62,9 @@ export function PortfolioRenderer({ blocks, portfolioSlug }: Props) {
               className="scroll-mt-14"
               {...(block.themeOverride ? { "data-theme": block.themeOverride } : {})}
             >
-              <Component data={block.data} portfolioSlug={portfolioSlug} />
+              <BlockErrorBoundary blockType={block.type}>
+                <Component data={block.data} portfolioSlug={portfolioSlug} />
+              </BlockErrorBoundary>
             </div>
           );
         })}

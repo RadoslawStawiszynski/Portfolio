@@ -35,7 +35,7 @@ export function ContactForm({ portfolioSlug }: Props) {
       : null;
 
   return (
-    <form action={formAction} className="flex flex-col gap-4 max-w-lg">
+    <form action={formAction} className="flex flex-col gap-4 w-full">
       <input type="hidden" name="portfolioSlug" value={portfolioSlug} />
 
       <div>

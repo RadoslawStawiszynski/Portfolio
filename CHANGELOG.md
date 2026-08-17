@@ -8,7 +8,59 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
-### Fixed
+### Security (2026-08-17)
+- `scripts/seed-users.ts` — usunięto hardcodowane hasło `Zmien123!` (plaintext w git); wymaga teraz `SEED_MILOSZ_PASSWORD`/`SEED_MARTYNA_PASSWORD` env vars, tylko przy tworzeniu nowego konta
+- `scripts/rotate-user-password.ts` — nowy skrypt do rotacji hasła istniejącego użytkownika (`ROTATE_EMAIL`/`ROTATE_PASSWORD`), bez zależności od maila (Payload nie ma wpiętego email adaptera — TD-26)
+- `docs/access.md` — dodano ostrzeżenie: konta Miłosza i Martyny na Neon prod mają hasło z historii gita, do zrotowania przed UAT
+
+### Fixed (2026-08-17)
+- TD-01: `BlockErrorBoundary` — crash pojedynczego bloku portfolio nie wywraca już całej strony; fallback UI per blok (`platform/src/components/blocks/BlockErrorBoundary.tsx`, użyty w `PortfolioRenderer.tsx`)
+- TD-02: usunięto non-null assertions (`!`) dla zmiennych R2 w `payload.config.ts` — `requireEnv()` helper fail-fast przy starcie zamiast crasha dopiero przy uploadzie; zastosowany też do `PAYLOAD_SECRET`/`DATABASE_URL` dla spójności
+- TD-03: `livePreview` URL w kolekcji `Portfolios` używa `NEXT_PUBLIC_SERVER_URL` zamiast `req.headers.get("host")` — host requestu do admina bywał inny niż publiczny URL na produkcji (Vercel deployment URL/reverse proxy), przez co podgląd trafiał na zły adres; fallback na localhost zachowany dla dev
+
+## [2026-07-07] v2.7 — System zaproszeniowy (INV-01–INV-09)
+
+### Added
+- `PlatformSettings` Global w Payload — feature flag `invitationsEnabled` (domyślnie wyłączony)
+- Kolekcja `WaitlistRequests` — zgłoszenia z landing page, hook afterChange → email do superadmina
+- Kolekcja `InvitationTokens` — SHA-256 hash tokenów, TTL 48h, statusy active/used/expired
+- `POST /api/waitlist` — przyjmuje zgłoszenia, rate limit 3/IP/h, sprawdza flagę invitationsEnabled
+- `POST /api/admin/invite` — generuje UUID token → SHA-256 hash → email zaproszeniowy Resend
+- `SendInviteButton` — custom Payload component w widoku WaitlistRequest
+- `GET /api/cron/expire-tokens` — wygasza aktywne tokeny po 48h, chroniony CRON_SECRET
+- GitHub Actions workflow `expire-tokens.yml` — cron codziennie 00:00 UTC
+- Strona `/join?token=UUID` — walidacja tokenu, rejestracja użytkownika + portfolio z placeholderami
+- Landing page: sekcja "Chcesz własne portfolio?" widoczna gdy invitationsEnabled=true
+- `createPlaceholderBlocks()` — 6 bloków placeholder dla nowego portfolio (hero, about, experience, skills, education, contact)
+- Nowe env vars: `CRON_SECRET`, `SUPERADMIN_EMAIL`
+
+---
+
+### Added (2026-06-27 — Faza 4 finał)
+- Blok `books` (`BooksBlock.tsx`) — Payload fields (tytuł/rok/gatunek/okładka/buyUrl/dostępność), TypeScript interface `BookItem`, React: horizontal scroll na mobile, 2–3 col grid na desktop, lazy-load okładek z R2, badge dostępności, link "Kup" (M17.14)
+- Blok `gallery` (`GalleryBlock.tsx`) — Payload fields (zdjęcia + podpisy), 4-col masonry grid, lightbox z nawigacją klawiaturową (Escape/strzałki), `aria-modal` + focus trap (M17.14)
+- Blok `services` (`ServicesBlock.tsx`) — lista usług z ikonami Lucide i opisami; use case: CBM portfolio (M17.19, TD-25 partial)
+- Portfolio CBM (korp-cbm.com / www.korp-cbm.com) — 5 bloków: hero z logo, about, services (3 pakiety), projects (4 realizacje), contact; seed `scripts/seed-cbm.ts`; dane w `portfolios/cbm-firma/data/` (M17.17–M17.20)
+- Social media w `ContactBlock` — generyczna lista linków: LinkedIn, GitHub, Facebook, Instagram, Goodreads; ikonki SVG per platforma; refactor — zastąpiono hardcoded LinkedIn/GitHub dynamiczną tablicą (M17.16)
+- Wzbogacone CV Martyny — dodano bio, linki wydawnicze, seed `scripts/seed-martyna.ts` zaktualizowany o books i gallery (M17.14)
+
+### Fixed (2026-06-27)
+- `download-cv` route — 307 redirect do R2 PDF na podstawie subdomeny (x-portfolio-slug header) i `?lang=` query param; wcześniej zwracał 404 lub niepoprawny plik
+
+### Fixed (poprzednia sesja)
+- `Portfolios` API access control (TD-16): goście API widzą tylko `isPublished: true` portfolia zamiast wszystkich (`Portfolios.ts:18`)
+- CI workflow (TD-21): dodano job `build` uruchamiany po lint+typecheck — build failures są teraz wykrywane w CI zanim dotrą do Vercel (`.github/workflows/ci.yml`)
+
+### Added (poprzednia sesja)
+- §24 Dług techniczny w PLAN.md — 25 zadań TD z priorytetami (przed deployem / Faza 6 / opcjonalne); wynik audytu kodu faz 0–3 obejmujący jakość kodu, bezpieczeństwo, CI/CD i brakujące bloki
+
+### Docs
+- PLAN.md v2.3 — §17 M17.14/M17.16/M17.17–M17.20 zaznaczone done; §21 status i tabela zbudowane zaktualizowane; §24 TD-25 częściowo resolved; Appendix A v2.3
+- Usunięto hasła z `TODO.md` (plaintext credentials nie powinny być w git)
+
+---
+
+### Fixed (poprzednia sesja)
 - DNS/SSL konfiguracja: PLAN.md §13.2 zaktualizowany z VPS-era na Vercel (CNAME proxied 🟠, SSL Full zamiast Strict) — błąd w H13.7 gdzie użyto A record + proxied=false zamiast CNAME + proxied=true
 
 ### Added

@@ -54,8 +54,8 @@ coverage/
 .nyc_output/
 .vercel
 
-# Payload CMS — auto-generated
-platform/src/app/(payload)/admin/importMap.js
+# Payload CMS — importMap.ts placeholder (empty, can cause issues)
+platform/src/app/(payload)/admin/importMap.ts
 
 # Agent outputs (audit reports only — plans and specs are tracked)
 .agents/audit/
@@ -63,3 +63,4 @@ platform/src/app/(payload)/admin/importMap.js
 # Encryption keys / secrets
 *.key
 secret.key
+.superpowers/

@@ -1,4 +1,8 @@
+// platform/src/components/landing/LandingPage.tsx
 import Link from "next/link";
+import { getPayload } from "payload";
+import config from "@payload-config";
+import { WaitlistForm } from "./WaitlistForm";
 
 const PLATFORM_DOMAIN =
   process.env.NEXT_PUBLIC_PLATFORM_DOMAIN ?? "korp-cbm.com";
@@ -32,19 +36,24 @@ const EXAMPLES = [
     role: "Product Manager / Scrum Master",
     slug: "radek",
   },
-  {
-    name: "Miłosz Gawlik",
-    role: "Portfolio IT",
-    slug: "milosz",
-  },
-  {
-    name: "Martyna Stawiszyńska",
-    role: "Autorka książek",
-    slug: "martyna",
-  },
+  { name: "Miłosz Gawlik", role: "Portfolio IT", slug: "milosz" },
+  { name: "Martyna Stawiszyńska", role: "Autorka książek", slug: "martyna" },
 ];
 
-export function LandingPage() {
+export async function LandingPage() {
+  let invitationsEnabled = false;
+  try {
+    const payload = await getPayload({ config });
+    const settings = await payload.findGlobal({
+      slug: "platform-settings",
+      overrideAccess: true,
+    });
+    invitationsEnabled = Boolean(settings.invitationsEnabled);
+  } catch {
+    // Jeśli DB niedostępna lub global jeszcze nie istnieje — ukryj sekcję
+    invitationsEnabled = false;
+  }
+
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
       {/* ── Hero ── */}
@@ -63,13 +72,13 @@ export function LandingPage() {
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <a
             href={`https://radek.${PLATFORM_DOMAIN}`}
-            className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] shadow hover:opacity-90 transition-opacity"
+            className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] shadow transition-opacity hover:opacity-90"
           >
             Zobacz przykład →
           </a>
           <Link
             href="/admin"
-            className="rounded-full border border-[var(--color-bg-alt)] px-6 py-3 text-sm font-semibold text-[var(--color-text)] hover:bg-[var(--color-bg-alt)] transition-colors"
+            className="rounded-full border border-[var(--color-bg-alt)] px-6 py-3 text-sm font-semibold text-[var(--color-text)] transition-colors hover:bg-[var(--color-bg-alt)]"
           >
             Panel admina
           </Link>
@@ -116,13 +125,12 @@ export function LandingPage() {
                 href={`https://${e.slug}.${PLATFORM_DOMAIN}`}
                 className="group rounded-2xl border border-[var(--color-bg-alt)] p-6 transition-colors hover:border-[var(--color-accent)]"
               >
-                <div className="mb-3 h-10 w-10 rounded-full bg-[var(--color-accent)] opacity-70 transition-opacity group-hover:opacity-100" aria-hidden="true" />
-                <p className="font-semibold text-[var(--color-primary)]">
-                  {e.name}
-                </p>
-                <p className="mt-1 text-sm text-[var(--color-muted)]">
-                  {e.role}
-                </p>
+                <div
+                  className="mb-3 h-10 w-10 rounded-full bg-[var(--color-accent)] opacity-70 transition-opacity group-hover:opacity-100"
+                  aria-hidden="true"
+                />
+                <p className="font-semibold text-[var(--color-primary)]">{e.name}</p>
+                <p className="mt-1 text-sm text-[var(--color-muted)]">{e.role}</p>
                 <p className="mt-3 text-sm font-medium text-[var(--color-accent)]">
                   {e.slug}.{PLATFORM_DOMAIN} →
                 </p>
@@ -131,6 +139,21 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ── Waitlist (warunkowo) ── */}
+      {invitationsEnabled && (
+        <section className="bg-[var(--color-bg-alt)] px-6 py-20">
+          <div className="mx-auto max-w-5xl text-center">
+            <h2 className="mb-4 text-3xl font-bold text-[var(--color-primary)]">
+              Chcesz własne portfolio?
+            </h2>
+            <p className="mb-10 text-[var(--color-muted)]">
+              Zostaw dane — odezwiemy się z zaproszeniem.
+            </p>
+            <WaitlistForm />
+          </div>
+        </section>
+      )}
 
       {/* ── Footer ── */}
       <footer className="border-t border-[var(--color-bg-alt)] px-6 py-8 text-center text-sm text-[var(--color-muted)]">

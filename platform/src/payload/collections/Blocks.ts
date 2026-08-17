@@ -21,9 +21,44 @@ const BLOCK_TYPES = [
 export const Blocks: CollectionConfig = {
   slug: "blocks",
   access: {
-    read: ({ req }) => Boolean(req.user),
-    create: ({ req }) => Boolean(req.user),
-    update: ({ req }) => Boolean(req.user),
+    read: async ({ req }) => {
+      if (!req.user) return false;
+      if (req.user.role === "superadmin" || req.user.role === "admin") return true;
+      const owned = await req.payload.find({
+        collection: "portfolios",
+        where: { owner: { equals: req.user.id } },
+        limit: 100,
+        overrideAccess: true,
+        select: { id: true },
+      });
+      const ids = owned.docs.map((p) => p.id);
+      return ids.length > 0 ? { portfolio: { in: ids } } : false;
+    },
+    create: async ({ req }) => {
+      if (!req.user) return false;
+      if (req.user.role === "superadmin" || req.user.role === "admin") return true;
+      const owned = await req.payload.find({
+        collection: "portfolios",
+        where: { owner: { equals: req.user.id } },
+        limit: 1,
+        overrideAccess: true,
+        select: { id: true },
+      });
+      return owned.docs.length > 0;
+    },
+    update: async ({ req }) => {
+      if (!req.user) return false;
+      if (req.user.role === "superadmin" || req.user.role === "admin") return true;
+      const owned = await req.payload.find({
+        collection: "portfolios",
+        where: { owner: { equals: req.user.id } },
+        limit: 100,
+        overrideAccess: true,
+        select: { id: true },
+      });
+      const ids = owned.docs.map((p) => p.id);
+      return ids.length > 0 ? { portfolio: { in: ids } } : false;
+    },
     delete: ({ req }) => {
       return req.user?.role === "superadmin" || req.user?.role === "admin";
     },
@@ -255,6 +290,195 @@ export const Blocks: CollectionConfig = {
       ],
     },
 
+    // ─── PROJECTS ────────────────────────────────────────────────
+    {
+      name: "projectsData",
+      type: "group",
+      admin: {
+        condition: (data) => data.type === "projects",
+      },
+      fields: [
+        {
+          name: "items",
+          type: "array",
+          admin: { description: "Lista projektów — od najnowszego" },
+          fields: [
+            {
+              name: "title",
+              type: "text",
+              required: true,
+              localized: true,
+            },
+            {
+              name: "description",
+              type: "textarea",
+              localized: true,
+            },
+            {
+              name: "tags",
+              type: "text",
+              admin: { description: "Tagi/technologie oddzielone przecinkiem (np. React, TypeScript, Next.js)" },
+            },
+            {
+              name: "url",
+              type: "text",
+              admin: { description: "Link do projektu (opcjonalny)" },
+            },
+            {
+              name: "githubUrl",
+              type: "text",
+              admin: { description: "Link do GitHub (opcjonalny)" },
+            },
+            {
+              name: "status",
+              type: "select",
+              defaultValue: "completed",
+              options: [
+                { label: "Ukończony", value: "completed" },
+                { label: "W trakcie", value: "in-progress" },
+                { label: "Zarchiwizowany", value: "archived" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
+    // ─── SERVICES ────────────────────────────────────────────────
+    {
+      name: "servicesData",
+      type: "group",
+      admin: {
+        condition: (data) => data.type === "services",
+      },
+      fields: [
+        {
+          name: "items",
+          type: "array",
+          admin: { description: "Lista usług / oferta firmy" },
+          fields: [
+            {
+              name: "name",
+              type: "text",
+              required: true,
+              localized: true,
+              admin: { description: "Nazwa usługi" },
+            },
+            {
+              name: "description",
+              type: "textarea",
+              localized: true,
+              admin: { description: "Opis usługi" },
+            },
+            {
+              name: "icon",
+              type: "text",
+              admin: { description: "Emoji ikony (np. 💻, 🔧, 📊)" },
+            },
+            {
+              name: "price",
+              type: "text",
+              admin: { description: "Cena lub zakres (np. od 500 zł / mies., na zapytanie)" },
+            },
+          ],
+        },
+      ],
+    },
+
+    // ─── BOOKS ───────────────────────────────────────────────────
+    {
+      name: "booksData",
+      type: "group",
+      admin: {
+        condition: (data) => data.type === "books",
+      },
+      fields: [
+        {
+          name: "items",
+          type: "array",
+          admin: { description: "Lista książek — od najnowszej" },
+          fields: [
+            {
+              name: "title",
+              type: "text",
+              required: true,
+              localized: true,
+              admin: { description: "Tytuł książki" },
+            },
+            {
+              name: "year",
+              type: "number",
+              required: true,
+              admin: { description: "Rok wydania" },
+            },
+            {
+              name: "coverUrl",
+              type: "text",
+              admin: { description: "URL okładki (wgraj do Media lub R2, skopiuj URL)" },
+            },
+            {
+              name: "description",
+              type: "textarea",
+              localized: true,
+              admin: { description: "Opis / opis skrótu" },
+            },
+            {
+              name: "genre",
+              type: "text",
+              localized: true,
+              admin: { description: "Gatunek (np. Fantasy, Romans, Thriller)" },
+            },
+            {
+              name: "buyUrl",
+              type: "text",
+              admin: { description: "Link do zakupu (np. Empik, Amazon)" },
+            },
+            {
+              name: "isAvailable",
+              type: "checkbox",
+              defaultValue: true,
+              admin: { description: "Czy książka jest dostępna w sprzedaży?" },
+            },
+          ],
+        },
+      ],
+    },
+
+    // ─── GALLERY ─────────────────────────────────────────────────
+    {
+      name: "galleryData",
+      type: "group",
+      admin: {
+        condition: (data) => data.type === "gallery",
+      },
+      fields: [
+        {
+          name: "items",
+          type: "array",
+          admin: { description: "Zdjęcia / okładki — wgraj do Media lub R2 i skopiuj URL" },
+          fields: [
+            {
+              name: "imageUrl",
+              type: "text",
+              required: true,
+              admin: { description: "URL zdjęcia lub okładki" },
+            },
+            {
+              name: "caption",
+              type: "text",
+              localized: true,
+              admin: { description: "Podpis (opcjonalny — widoczny po najechaniu)" },
+            },
+            {
+              name: "alt",
+              type: "text",
+              admin: { description: "Tekst alternatywny dla dostępności" },
+            },
+          ],
+        },
+      ],
+    },
+
     // ─── CONTACT ─────────────────────────────────────────────────
     {
       name: "contactData",
@@ -281,6 +505,21 @@ export const Blocks: CollectionConfig = {
           name: "github",
           type: "text",
           admin: { description: "URL profilu GitHub" },
+        },
+        {
+          name: "facebook",
+          type: "text",
+          admin: { description: "URL profilu Facebook" },
+        },
+        {
+          name: "instagram",
+          type: "text",
+          admin: { description: "URL profilu Instagram" },
+        },
+        {
+          name: "goodreads",
+          type: "text",
+          admin: { description: "URL profilu Goodreads" },
         },
         {
           name: "showForm",

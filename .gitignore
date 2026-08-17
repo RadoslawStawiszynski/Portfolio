@@ -63,3 +63,4 @@ platform/src/app/(payload)/admin/importMap.ts
 # Encryption keys / secrets
 *.key
 secret.key
+.superpowers/

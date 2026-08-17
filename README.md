@@ -3,7 +3,7 @@
 Wielodostępna platforma portfolio — każdy użytkownik tworzy własną wizytówkę online,
 edytowalną przez przeglądarkę, z własną domeną lub subdomeną.
 
-**Status:** In development — Phase 0 (reorganizacja + konfiguracja usług)
+**Status:** Faza 4 (finał) — prod live na *.korp-cbm.com, przed UAT z Miłoszem i Martyną
 
 ## Dokumentacja
 
@@ -63,4 +63,4 @@ npm run dev
 
 ## Deployment
 
-Automatyczny deploy przez GitHub Actions → Vercel przy każdym push na `main`.
+`dev` (lokalnie) → `staging` (Vercel Preview, auto-deploy) → `main` (Vercel PROD, deploy ręczny po akceptacji). Szczegóły: [docs/git-workflow.md](docs/git-workflow.md).

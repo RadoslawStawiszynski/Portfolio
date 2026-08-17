@@ -16,6 +16,19 @@ import { fileURLToPath } from "url";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) throw new Error(`Missing ${name} env var`);
+  return value;
+}
+
+// Walidowane wcześnie (fail-fast przy starcie) zamiast `!` non-null assertions,
+// które przy braku zmiennej ładnie się typują ale wysypują dopiero przy uploadzie (TD-02)
+const r2Endpoint = requireEnv("R2_ENDPOINT");
+const r2Bucket = requireEnv("R2_BUCKET_NAME");
+const r2AccessKeyId = requireEnv("R2_ACCESS_KEY_ID");
+const r2SecretAccessKey = requireEnv("R2_SECRET_ACCESS_KEY");
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -35,19 +48,13 @@ export default buildConfig({
   collections: [Users, Portfolios, Blocks, Media, Todos, WaitlistRequests, InvitationTokens],
   globals: [PlatformSettings],
   editor: lexicalEditor(),
-  secret: (() => {
-    if (!process.env.PAYLOAD_SECRET) throw new Error("Missing PAYLOAD_SECRET env var");
-    return process.env.PAYLOAD_SECRET;
-  })(),
+  secret: requireEnv("PAYLOAD_SECRET"),
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: postgresAdapter({
     pool: {
-      connectionString: (() => {
-        if (!process.env.DATABASE_URL) throw new Error("Missing DATABASE_URL env var");
-        return process.env.DATABASE_URL;
-      })(),
+      connectionString: requireEnv("DATABASE_URL"),
     },
   }),
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000",
@@ -70,17 +77,17 @@ export default buildConfig({
         media: {
           prefix: "media",
           generateFileURL: ({ filename: fname, prefix }) =>
-            `${process.env.R2_ENDPOINT}/${process.env.R2_BUCKET_NAME}/${prefix}/${fname}`,
+            `${r2Endpoint}/${r2Bucket}/${prefix}/${fname}`,
         },
       },
-      bucket: process.env.R2_BUCKET_NAME!,
+      bucket: r2Bucket,
       config: {
         credentials: {
-          accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+          accessKeyId: r2AccessKeyId,
+          secretAccessKey: r2SecretAccessKey,
         },
         region: "auto",
-        endpoint: process.env.R2_ENDPOINT,
+        endpoint: r2Endpoint,
       },
     }),
   ],

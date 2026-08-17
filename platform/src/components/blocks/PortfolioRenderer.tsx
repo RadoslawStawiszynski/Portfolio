@@ -3,6 +3,7 @@ import { logger } from "@/lib/logger";
 import { BLOCK_REGISTRY, type RegisteredBlockType } from "./registry";
 import type { BlockDoc, HeroData } from "@/types/blocks";
 import { PortfolioNav } from "@/components/ui/PortfolioNav";
+import { BlockErrorBoundary } from "./BlockErrorBoundary";
 
 export type { BlockDoc };
 
@@ -61,7 +62,9 @@ export function PortfolioRenderer({ blocks, portfolioSlug }: Props) {
               className="scroll-mt-14"
               {...(block.themeOverride ? { "data-theme": block.themeOverride } : {})}
             >
-              <Component data={block.data} portfolioSlug={portfolioSlug} />
+              <BlockErrorBoundary blockType={block.type}>
+                <Component data={block.data} portfolioSlug={portfolioSlug} />
+              </BlockErrorBoundary>
             </div>
           );
         })}

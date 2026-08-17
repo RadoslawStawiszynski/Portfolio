@@ -1381,7 +1381,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | Push `dev → main` + Vercel prod deploy     | Faza 5 | 🔴 po UAT|
 | Generator CV PDF z bloków                 | Faza 7 | ⚪       |
 | Blog per portfolio                         | Faza 7 | ⚪       |
-| **Dług techniczny TD-01–TD-03** (error boundary, R2 env checks, livePreview URL) | Przed deployem | 🔴 |
+| ~~Dług techniczny TD-01–TD-03~~ (error boundary, R2 env checks, livePreview URL) | Przed deployem | ✅ 2026-08-17 |
 | **Dług techniczny TD-04–TD-11** (Zod walidacja, media scope, CSP headers, a11y) | Faza 6 | 🟡 |
 
 > Szczegóły długu technicznego: §24
@@ -1694,9 +1694,9 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ### 🔴 Przed następnym deployem (blokują jakość produkcji)
 
-- [ ] **TD-01** Error boundary w `PortfolioRenderer` — crash jednego bloku crashuje całą stronę; dodać React Error Boundary z fallback UI (`platform/src/components/blocks/PortfolioRenderer.tsx`)
-- [ ] **TD-02** Non-null assertions `!` dla R2 env vars w `payload.config.ts:64–75` — zastąpić explicit throw jak robi to `PAYLOAD_SECRET` i `DATABASE_URL` (np. `R2_BUCKET_NAME`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`)
-- [ ] **TD-03** `livePreview` URL hardcoded `/dev/{slug}` w Portfolios collection — na prod trafia na zły URL; przerobić na `${process.env.NEXT_PUBLIC_SERVER_URL}/dev/{slug}` z fallbackiem na localhost
+- [x] TD-01 Error boundary w `PortfolioRenderer` — crash jednego bloku crashuje całą stronę; dodać React Error Boundary z fallback UI (`platform/src/components/blocks/PortfolioRenderer.tsx`) (2026-08-17, Agent: Claude)
+- [x] TD-02 Non-null assertions `!` dla R2 env vars w `payload.config.ts:64–75` — zastąpić explicit throw jak robi to `PAYLOAD_SECRET` i `DATABASE_URL` (np. `R2_BUCKET_NAME`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`) (2026-08-17, Agent: Claude)
+- [x] TD-03 `livePreview` URL hardcoded `/dev/{slug}` w Portfolios collection — na prod trafia na zły URL; przerobić na `${process.env.NEXT_PUBLIC_SERVER_URL}/dev/{slug}` z fallbackiem na localhost (2026-08-17, Agent: Claude)
 
 ### 🟡 Faza 6 — przed launch
 

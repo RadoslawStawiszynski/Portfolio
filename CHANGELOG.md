@@ -8,6 +8,11 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+### Fixed (2026-08-17)
+- TD-01: `BlockErrorBoundary` — crash pojedynczego bloku portfolio nie wywraca już całej strony; fallback UI per blok (`platform/src/components/blocks/BlockErrorBoundary.tsx`, użyty w `PortfolioRenderer.tsx`)
+- TD-02: usunięto non-null assertions (`!`) dla zmiennych R2 w `payload.config.ts` — `requireEnv()` helper fail-fast przy starcie zamiast crasha dopiero przy uploadzie; zastosowany też do `PAYLOAD_SECRET`/`DATABASE_URL` dla spójności
+- TD-03: `livePreview` URL w kolekcji `Portfolios` używa `NEXT_PUBLIC_SERVER_URL` zamiast `req.headers.get("host")` — host requestu do admina bywał inny niż publiczny URL na produkcji (Vercel deployment URL/reverse proxy), przez co podgląd trafiał na zły adres; fallback na localhost zachowany dla dev
+
 ## [2026-07-07] v2.7 — System zaproszeniowy (INV-01–INV-09)
 
 ### Added

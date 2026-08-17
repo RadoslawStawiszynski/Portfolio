@@ -71,3 +71,16 @@ NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_PLATFORM_DOMAIN, LOG_LEVEL
 
 - H13.11: UptimeRobot monitoring
 - Faza 4: stworzenie konta admina + dodanie portfeli (radek, milosz, martyna, cbm)
+
+## ⚠️ Do zrobienia przed UAT (2026-08-17)
+
+Konta `milosz@portfoliohub.dev` i `martyna.stawiszynska@gmail.com` na Neon prod zostały
+utworzone hasłem `Zmien123!`, które trafiło w plaintext do historii gita (`scripts/seed-users.ts`,
+naprawione w commicie fix(quality) 2026-08-17 — ale historia już to ma). **Przed UAT zrotuj
+rzeczywiste hasła tych dwóch kont** przez `scripts/rotate-user-password.ts` (przekaż nowe hasło
+bezpośrednim kanałem, nie przez git/email).
+
+Uwaga: wbudowany w Payload "forgot password" na `/admin` **nie zadziała** — `payload.config.ts`
+nie ma wpiętego email adaptera, więc link resetu tylko loguje się do konsoli/Vercel logs zamiast
+lecieć mailem (mimo że Resend jest skonfigurowany i używany gdzie indziej — w `/api/contact`,
+zaproszeniach, waitlist — ale nie w samym Payload auth). To osobny dług techniczny do rozważenia.

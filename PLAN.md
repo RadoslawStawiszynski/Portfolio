@@ -1752,6 +1752,12 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ---
 
+### 🟡 BEZPIECZEŃSTWO — odkryte 2026-08-17 (przed UAT)
+
+- [ ] **TD-26** Payload nie ma wpiętego email adaptera w `payload.config.ts` — wbudowany "forgot password" na `/admin` nie wysyła maila, tylko loguje link resetu do konsoli/Vercel logs (potwierdzone w dev logu: `No email adapter provided`). Resend jest już używany bezpośrednio w `/api/contact`, `/api/admin/invite`, `WaitlistRequests` hook — brakuje tylko `@payloadcms/email-resend` (lub własnego adaptera) spiętego w `email:` configu, żeby też auth-owe maile (reset hasła, weryfikacja) faktycznie docierały. Obejście do czasu fixa: `scripts/rotate-user-password.ts` (2026-08-17, Agent: Claude)
+
+---
+
 ## 25. SYSTEM ZAPROSZENIOWY — PEŁNY FLOW
 
 > **Priorytet: Faza 7** — do zbudowania po UAT i launch MVP.  

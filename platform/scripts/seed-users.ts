@@ -2,29 +2,41 @@
  * Seed script — tworzy konta użytkowników dla Miłosza i Martyny.
  * Łączy je z istniejącymi portfolio przez pole `owner`.
  *
- * Uruchom: npx tsx scripts/seed-users.ts
- * Neon:    DATABASE_URL="postgresql://..." npx tsx scripts/seed-users.ts
+ * Uruchom: SEED_MILOSZ_PASSWORD=... SEED_MARTYNA_PASSWORD=... npx tsx scripts/seed-users.ts
+ * Neon:    DATABASE_URL="postgresql://..." SEED_MILOSZ_PASSWORD=... SEED_MARTYNA_PASSWORD=... npx tsx scripts/seed-users.ts
  *
- * Domyślne hasła (zmień po pierwszym logowaniu!):
- *   Miłosz:  milosz@portfoliohub.dev / Zmien123!
- *   Martyna: martyna.stawiszynska@gmail.com / Zmien123!
+ * Hasła NIE są hardcodowane (były w plaintext w git — patrz historia commitów
+ * sprzed 2026-08-17) — wygeneruj losowe np. `openssl rand -base64 18` i przekaż
+ * przez zmienną env, ustawianą tylko w shellu, nigdy w pliku trafiającym do gita.
+ * Zmienne wymagane są dopiero przy tworzeniu NOWEGO konta — rerun dla istniejących
+ * userów działa bez nich.
  */
 import { loadEnvConfig } from "@next/env";
 import path from "path";
 
 loadEnvConfig(path.resolve(__dirname, ".."));
 
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `Missing ${name} env var — wygeneruj hasło (np. \`openssl rand -base64 18\`) i ustaw w shellu przed uruchomieniem`
+    );
+  }
+  return value;
+}
+
 const USERS_TO_CREATE = [
   {
     email: "milosz@portfoliohub.dev",
-    password: "Zmien123!",
+    passwordEnvVar: "SEED_MILOSZ_PASSWORD",
     firstName: "Miłosz",
     lastName: "Gawlik",
     portfolioSlug: "milosz",
   },
   {
     email: "martyna.stawiszynska@gmail.com",
-    password: "Zmien123!",
+    passwordEnvVar: "SEED_MARTYNA_PASSWORD",
     firstName: "Martyna",
     lastName: "Stawiszyńska",
     portfolioSlug: "martyna",
@@ -51,11 +63,12 @@ async function seed() {
       userId = existingUser.docs[0].id;
       console.log(`↩  User already exists: ${u.email} (id: ${userId})`);
     } else {
+      const password = requireEnv(u.passwordEnvVar);
       const newUser = await payload.create({
         collection: "users",
         data: {
           email: u.email,
-          password: u.password,
+          password,
           role: "owner",
           firstName: u.firstName,
           lastName: u.lastName,

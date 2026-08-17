@@ -8,6 +8,11 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+### Security (2026-08-17)
+- `scripts/seed-users.ts` — usunięto hardcodowane hasło `Zmien123!` (plaintext w git); wymaga teraz `SEED_MILOSZ_PASSWORD`/`SEED_MARTYNA_PASSWORD` env vars, tylko przy tworzeniu nowego konta
+- `scripts/rotate-user-password.ts` — nowy skrypt do rotacji hasła istniejącego użytkownika (`ROTATE_EMAIL`/`ROTATE_PASSWORD`), bez zależności od maila (Payload nie ma wpiętego email adaptera — TD-26)
+- `docs/access.md` — dodano ostrzeżenie: konta Miłosza i Martyny na Neon prod mają hasło z historii gita, do zrotowania przed UAT
+
 ### Fixed (2026-08-17)
 - TD-01: `BlockErrorBoundary` — crash pojedynczego bloku portfolio nie wywraca już całej strony; fallback UI per blok (`platform/src/components/blocks/BlockErrorBoundary.tsx`, użyty w `PortfolioRenderer.tsx`)
 - TD-02: usunięto non-null assertions (`!`) dla zmiennych R2 w `payload.config.ts` — `requireEnv()` helper fail-fast przy starcie zamiast crasha dopiero przy uploadzie; zastosowany też do `PAYLOAD_SECRET`/`DATABASE_URL` dla spójności

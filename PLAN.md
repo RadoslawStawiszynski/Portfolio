@@ -1378,7 +1378,7 @@ Aktywna faza: Faza 4 — Migracja portfeli (treść do admina: radek, milosz, ma
 | Custom domain routing per portfolio (D11.4) | Faza 5 | 🟡       |
 | Testy E2E Playwright (T16.1–T16.10)        | Faza 6 | 🟡       |
 | Lighthouse audit (Performance, A11y, SEO)  | Faza 6 | 🟡       |
-| Push `dev → main` + Vercel prod deploy     | Faza 5 | 🔴 po UAT|
+| ~~Push `dev → main` + Vercel prod deploy~~ — main live, tylko portfolio Radka publiczne (Miłosz/Martyna nadal `isPublished=false` do czasu UAT) | Faza 5 | ✅ 2026-08-17 (częściowo — reszta po UAT) |
 | Generator CV PDF z bloków                 | Faza 7 | ⚪       |
 | Blog per portfolio                         | Faza 7 | ⚪       |
 | ~~Dług techniczny TD-01–TD-03~~ (error boundary, R2 env checks, livePreview URL) | Przed deployem | ✅ 2026-08-17 |
@@ -1756,6 +1756,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 - [ ] **TD-27** Vercel build nie odpala migracji Payload — schemat Neon prod może się rozjechać z kodem (dokładnie to spowodowało 500 na `radek.korp-cbm.com` po pierwszym deployu Fazy 4). Rozważyć: `postbuild` hook albo osobny krok deployu wołający `payload migrate` (przez `scripts/db-migrate-run.ts`, bo CLI crashuje pod Node 24 — patrz TD-28) zanim `vercel --prod` przełączy alias
 - [ ] **TD-28** `payload` CLI (`node_modules/payload/dist/bin`) crashuje pod Node 24 lokalnie (`ENOENT node:fs?tsx-namespace=...` — niekompatybilność loadera `tsx`). `.nvmrc` deklaruje Node 20, ale lokalnie zainstalowany jest tylko Node 24 (`nvm ls` → brak 20). Obejście: `scripts/db-migrate-create.ts`/`db-migrate-run.ts` (wołają `payload.db.createMigration`/`.migrate()` bezpośrednio przez `tsx`, z pominięciem binarki CLI). Docelowo: `nvm install 20` lub upgrade `tsx`/`payload` do wersji kompatybilnej z Node 24
+- [ ] **TD-29** `milosz.korp-cbm.com` i `martyna.korp-cbm.com` zwracają **525** (SSL handshake error Cloudflare↔origin), nie 404 — mimo że oba portfolio są `isPublished=false` (oczekiwalibyśmy 404 z naszej `not-found.tsx`, nie błędu na poziomie Cloudflare przed dotarciem do Vercela). Sugeruje że te konkretne subdomeny nie są poprawnie podpięte pod `*.korp-cbm.com` w Vercel/Cloudflare mimo wildcarda. Do zbadania przed UAT — Miłosz i Martyna będą chcieli zobaczyć swój podgląd
 
 ### 🟡 BEZPIECZEŃSTWO — odkryte 2026-08-17 (przed UAT)
 

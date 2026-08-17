@@ -12,7 +12,9 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - Pierwszy deploy `main` (711a1df) wywalił `radek.korp-cbm.com` 500-tką: Neon prod nie miał tabel dla bloków `services`/`books`/`gallery`/`projects` (i kolekcji `todos`/`waitlist-requests`/`invitation-tokens`/`platform-settings`) — nigdy nie wygenerowano formalnej migracji Payload dla Fazy 4 finał + systemu zaproszeniowego, tylko lokalny `push` w dev
 - Nowa migracja `20260817_181605_faza4_invite_system_schema` — dodaje brakujące tabele/kolumny (tylko `CREATE`/`ADD COLUMN`, bez ruszania istniejących danych)
 - Nowe skrypty `scripts/db-migrate-create.ts` / `db-migrate-run.ts` — `payload migrate:create`/`migrate` przez `tsx` zamiast CLI, które crashuje pod Node 24 (`node:fs?tsx-namespace=...` — niekompatybilność loadera `tsx` z Node 22+)
+- Migracja przerobiona na idempotentną (`IF NOT EXISTS`/`DO...EXCEPTION duplicate_object`) po tym jak pierwsza próba na Neon wywaliła się na `enum_blocks_projects_data_items_status" already exists` (bezpiecznie wycofana transakcja, zero zmian) — Neon miał częściowy stan schematu z wcześniejszego dev-push
 - Fix `join/page.tsx` build error (osobny commit) — patrz wyżej
+- **Potwierdzone naprawione:** `radek.korp-cbm.com` → 200, portfolio renderuje się poprawnie na produkcji (2026-08-17 21:15)
 
 ### Security (2026-08-17)
 - `scripts/seed-users.ts` — usunięto hardcodowane hasło `Zmien123!` (plaintext w git); wymaga teraz `SEED_MILOSZ_PASSWORD`/`SEED_MARTYNA_PASSWORD` env vars, tylko przy tworzeniu nowego konta

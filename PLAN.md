@@ -1752,6 +1752,11 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 ---
 
+### 🔴 CI/CD — odkryte 2026-08-17 (incydent produkcyjny)
+
+- [ ] **TD-27** Vercel build nie odpala migracji Payload — schemat Neon prod może się rozjechać z kodem (dokładnie to spowodowało 500 na `radek.korp-cbm.com` po pierwszym deployu Fazy 4). Rozważyć: `postbuild` hook albo osobny krok deployu wołający `payload migrate` (przez `scripts/db-migrate-run.ts`, bo CLI crashuje pod Node 24 — patrz TD-28) zanim `vercel --prod` przełączy alias
+- [ ] **TD-28** `payload` CLI (`node_modules/payload/dist/bin`) crashuje pod Node 24 lokalnie (`ENOENT node:fs?tsx-namespace=...` — niekompatybilność loadera `tsx`). `.nvmrc` deklaruje Node 20, ale lokalnie zainstalowany jest tylko Node 24 (`nvm ls` → brak 20). Obejście: `scripts/db-migrate-create.ts`/`db-migrate-run.ts` (wołają `payload.db.createMigration`/`.migrate()` bezpośrednio przez `tsx`, z pominięciem binarki CLI). Docelowo: `nvm install 20` lub upgrade `tsx`/`payload` do wersji kompatybilnej z Node 24
+
 ### 🟡 BEZPIECZEŃSTWO — odkryte 2026-08-17 (przed UAT)
 
 - [ ] **TD-26** Payload nie ma wpiętego email adaptera w `payload.config.ts` — wbudowany "forgot password" na `/admin` nie wysyła maila, tylko loguje link resetu do konsoli/Vercel logs (potwierdzone w dev logu: `No email adapter provided`). Resend jest już używany bezpośrednio w `/api/contact`, `/api/admin/invite`, `WaitlistRequests` hook — brakuje tylko `@payloadcms/email-resend` (lub własnego adaptera) spiętego w `email:` configu, żeby też auth-owe maile (reset hasła, weryfikacja) faktycznie docierały. Obejście do czasu fixa: `scripts/rotate-user-password.ts` (2026-08-17, Agent: Claude)

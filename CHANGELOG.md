@@ -8,6 +8,12 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+### Fixed (2026-08-17) — incydent produkcyjny
+- Pierwszy deploy `main` (711a1df) wywalił `radek.korp-cbm.com` 500-tką: Neon prod nie miał tabel dla bloków `services`/`books`/`gallery`/`projects` (i kolekcji `todos`/`waitlist-requests`/`invitation-tokens`/`platform-settings`) — nigdy nie wygenerowano formalnej migracji Payload dla Fazy 4 finał + systemu zaproszeniowego, tylko lokalny `push` w dev
+- Nowa migracja `20260817_181605_faza4_invite_system_schema` — dodaje brakujące tabele/kolumny (tylko `CREATE`/`ADD COLUMN`, bez ruszania istniejących danych)
+- Nowe skrypty `scripts/db-migrate-create.ts` / `db-migrate-run.ts` — `payload migrate:create`/`migrate` przez `tsx` zamiast CLI, które crashuje pod Node 24 (`node:fs?tsx-namespace=...` — niekompatybilność loadera `tsx` z Node 22+)
+- Fix `join/page.tsx` build error (osobny commit) — patrz wyżej
+
 ### Security (2026-08-17)
 - `scripts/seed-users.ts` — usunięto hardcodowane hasło `Zmien123!` (plaintext w git); wymaga teraz `SEED_MILOSZ_PASSWORD`/`SEED_MARTYNA_PASSWORD` env vars, tylko przy tworzeniu nowego konta
 - `scripts/rotate-user-password.ts` — nowy skrypt do rotacji hasła istniejącego użytkownika (`ROTATE_EMAIL`/`ROTATE_PASSWORD`), bez zależności od maila (Payload nie ma wpiętego email adaptera — TD-26)

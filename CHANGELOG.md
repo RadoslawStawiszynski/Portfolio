@@ -18,6 +18,7 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - Domyślny motyw portfolio radek: `light` (był `retro-terminal`; retro nadal wybieralny w przełączniku)
 
 ### Fixed (2026-09-28)
+- **Incydent:** po migracji `skills_localized` na Neon prod zwracał 500 — migracja robiła `DROP COLUMN skills`, a kod na Vercelu (sprzed zmiany) jeszcze z niej czytał. Hotfix: `scripts/hotfix-restore-skills-column.sql` (przywraca kolumnę z danymi PL). Migracja poprawiona: bez `DROP` (expand/contract), sprzątanie w TD-30
 - `blocks.skillsData.categories[].skills` było polem **niezlokalizowanym** — zapis wersji EN nadpisywał PL. Pole jest teraz `localized`; migracja `20260928_203201_skills_localized` przenosi dane do tabeli `_locales` bez utraty (idempotentna)
 - Update tablic bloków w drugim języku bez `id` wierszy kasował teksty pierwszego języka (wiersze tablic są współdzielone). `update-radek-content.ts` podpina EN pod wiersze PL przez `id`
 - Migracja `20260928_202820_education_description` (idempotentna)

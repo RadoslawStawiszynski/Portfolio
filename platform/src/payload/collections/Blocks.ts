@@ -235,6 +235,7 @@ export const Blocks: CollectionConfig = {
             {
               name: "skills",
               type: "textarea",
+              localized: true,
               admin: {
                 description: "Jedna umiejętność na linię (np. React\\nTypeScript\\nNext.js)",
               },

@@ -8,6 +8,22 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+### Security (2026-09-28) — dane osobowe osób trzecich (Miłosz, Martyna)
+Audyt produkcji (bez logowania) wykazał publiczny dostęp do danych osób, których strony jeszcze nie działają:
+- `korp-cbm.com/dev/{martyna,milosz}` renderowały ich pełne portfolia (trasa `/dev/[slug]` nie sprawdzała `isPublished`)
+- landing `korp-cbm.com` wypisywał ich imiona i nazwiska z linkami
+- publiczne REST `/api/portfolios` zwracało `contactEmail` (w Neon oba portfolia miały `isPublished=true`)
+- strona Radka wymieniała Martynę z imienia i nazwiska w opisie projektu
+- repozytorium GitHub jest **publiczne** (CV PDF, e-maile, dane w skryptach seed i w historii gita) — wymaga decyzji właściciela
+
+Zmiany w kodzie:
+- `/dev/[slug]` działa tylko poza `NODE_ENV=production` (lokalnie), nigdy na prod/preview
+- strona subdomeny i jej metadane: niepublikowane portfolio → 404 (`page.tsx`)
+- `Portfolios.contactEmail`: odczyt tylko dla zalogowanych (formularz kontaktowy czyta lokalnym API)
+- landing: usunięte karty Miłosza i Martyny (zostaje portfolio Radka)
+- `scripts/privacy-fix.ts`: wycofuje publikację `milosz`/`martyna` i czyści wzmianki o osobach trzecich w portfolio `radek` (idempotentny, z weryfikacją końcową)
+- Zasada: strona osoby trzeciej nie jest publikowana ani wymieniana publicznie bez jej zgody
+
 ### Changed (2026-09-28) — portfolio Radka: treść, zdjęcie, favicon, motywy light/dark
 - **Treść (z aktualnego CV, PL+EN):** `scripts/update-radek-content.ts` — hero, about (ton PM-a na starcie kariery), experience (4 pozycje; PortfolioHub usunięty ze stanowisk — to projekt, nie praca), skills (8 kategorii), education (ostatni rok studiów + opis). Idempotentny, działa też na Neon
 - **Awatar:** corporate headshot (Gemini) przycięty do 4:5 → `public/images/radek-avatar.jpg` (94 KB). Poprzedni `avatarUrl` wskazywał endpoint S3 R2 (`*.r2.cloudflarestorage.com`, HTTP 400 — nie jest publiczny), dlatego zdjęcie nie ładowało się w Hero ani w Nav

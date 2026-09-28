@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   const portfolio = await getPortfolioBySlug(slug);
-  if (!portfolio) return {};
+  if (!portfolio || !portfolio.isPublished) return {};
 
   return buildPortfolioMetadata(portfolio, slug);
 }
@@ -40,7 +40,8 @@ export default async function PortfolioPage() {
     getBlocksBySlug(slug, cookieLang ?? "pl"),
   ]);
 
-  if (!portfolio) notFound();
+  // Niepublikowane portfolio zawiera dane osobowe — nie może być renderowane publicznie.
+  if (!portfolio || !portfolio.isPublished) notFound();
 
   return <PortfolioRenderer blocks={blocks} portfolioSlug={slug} />;
 }

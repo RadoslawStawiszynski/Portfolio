@@ -131,6 +131,9 @@ export const Portfolios: CollectionConfig = {
       name: "contactEmail",
       type: "email",
       defaultValue: "biuro@korp-cbm.com",
+      // Publiczne REST /api/portfolios nie może ujawniać adresów właścicieli;
+      // formularz kontaktowy czyta pole lokalnym API (overrideAccess).
+      access: { read: ({ req }) => Boolean(req.user) },
       admin: {
         description:
           "Email do odbierania wiadomości z formularza kontaktowego.",

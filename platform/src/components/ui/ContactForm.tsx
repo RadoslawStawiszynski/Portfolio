@@ -99,7 +99,7 @@ export function ContactForm({ portfolioSlug }: Props) {
       <button
         type="submit"
         disabled={isPending}
-        className="px-8 py-3 bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+        className="px-8 py-3 bg-[var(--color-accent)] text-[var(--color-on-accent)] font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
       >
         {isPending ? "Wysyłanie…" : "Wyślij wiadomość"}
       </button>

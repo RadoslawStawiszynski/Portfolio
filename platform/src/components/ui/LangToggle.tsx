@@ -20,7 +20,7 @@ export function LangToggle({ currentLang }: Props) {
           aria-pressed={currentLang === lang}
           className={`w-8 h-8 rounded-full text-xs font-bold font-mono uppercase transition-colors ${
             currentLang === lang
-              ? "bg-(--color-accent) text-(--color-bg)"
+              ? "bg-(--color-accent) text-(--color-on-accent)"
               : "text-(--color-muted) hover:bg-(--color-bg) hover:text-(--color-text)"
           }`}
         >

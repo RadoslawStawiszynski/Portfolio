@@ -1,27 +1,51 @@
 @import "tailwindcss";
 
-/* ── Design tokens: light theme (default) ── */
-:root {
-  --color-primary: #1a1f00;
-  --color-secondary: #3a4605;
-  --color-accent: #e19d29;
-  --color-bg: #f5f3f2;
-  --color-bg-alt: #d8d2cf;
-  --color-muted: #8d8179;
-  --color-text: #1a1f00;
-  --scanline-color: rgba(0,0,0,0.07);
+/* ── Design tokens: light theme (default) — "dzień": pergamin, cynober, granat ── */
+:root,
+[data-theme="light"] {
+  --color-primary: #1b1712;
+  --color-secondary: #23425a;
+  --color-accent: #a32e1b;
+  --color-on-accent: #f6eedc;
+  --color-bg: #f1e8d4;
+  --color-bg-alt: #e6d8b9;
+  --color-muted: #5f5443;
+  --color-text: #1b1712;
+  --color-line: #1b1712;
+  --scanline-color: rgba(27,23,18,0.04);
+  --grid-color: rgba(27,23,18,0.07);
 }
 
-/* ── Dark theme ── */
+/* ── Dark theme — "noc": atrament, złota ochra, jasny cynober ── */
 [data-theme="dark"] {
-  --color-bg: #1a1f00;
-  --color-bg-alt: #2a2f05;
-  --color-text: #f5f3f2;
-  --color-primary: #f5f3f2;
-  --color-secondary: #d8d2cf;
-  --color-accent: #e19d29;
-  --color-muted: #8d8179;
-  --scanline-color: rgba(255,255,255,0.03);
+  --color-primary: #ede3cc;
+  --color-secondary: #7fa6c4;
+  --color-accent: #d9a441;
+  --color-on-accent: #14161c;
+  --color-bg: #14161c;
+  --color-bg-alt: #1e222b;
+  --color-muted: #a39a87;
+  --color-text: #ede3cc;
+  --color-line: #d9a441;
+  --scanline-color: rgba(237,227,204,0.03);
+  --grid-color: rgba(217,164,65,0.08);
+}
+
+/* Kształty w duchu ikony: płaskie płaszczyzny, ostre kanty, ciemny kontur.
+   Tylko light/dark — motywy retro zachowują zaokrąglenia. Tailwind 4 czyta --radius-*. */
+[data-theme="light"],
+[data-theme="dark"] {
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --card-radius: 0;
+  --card-border: 2px solid var(--color-line);
+  --avatar-aspect: 4 / 5;
+  --avatar-radius: 50%;
+  --avatar-ring: 2px solid var(--color-line);
 }
 
 /* ── Retro terminal (green CRT) ── */
@@ -29,6 +53,7 @@
   --color-primary: #00ff41;
   --color-secondary: #00cc33;
   --color-accent: #ffcc00;
+  --color-on-accent: #0a0a0a;
   --color-bg: #0a0a0a;
   --color-bg-alt: #0f1a0f;
   --color-text: #d4e8d4;
@@ -41,6 +66,7 @@
   --color-primary: #ff79c6;
   --color-secondary: #bd93f9;
   --color-accent: #ffb86c;
+  --color-on-accent: #0d0d1a;
   --color-bg: #0d0d1a;
   --color-bg-alt: #1a1a2e;
   --color-text: #f8f8f2;
@@ -53,6 +79,7 @@
   --color-primary: #ffb347;
   --color-secondary: #e8963a;
   --color-accent: #ffe066;
+  --color-on-accent: #0c0900;
   --color-bg: #0c0900;
   --color-bg-alt: #1a1200;
   --color-text: #f5deb3;
@@ -65,6 +92,7 @@
   --color-primary: #7fffd4;
   --color-secondary: #5ce8c8;
   --color-accent: #ff6ac1;
+  --color-on-accent: #080c10;
   --color-bg: #080c10;
   --color-bg-alt: #0f1923;
   --color-text: #c8e6e0;
@@ -77,6 +105,7 @@
   --color-primary: #d76144;
   --color-secondary: #eba796;
   --color-accent: #dfceb9;
+  --color-on-accent: #051214;
   --color-bg: #051214;
   --color-bg-alt: #0c4648;
   --color-text: #dfceb9;
@@ -89,6 +118,7 @@
   --color-primary: #ddc173;
   --color-secondary: #91a16a;
   --color-accent: #b36154;
+  --color-on-accent: #111a1a;
   --color-bg: #111a1a;
   --color-bg-alt: #1c2727;
   --color-text: #e5ddd0;
@@ -101,6 +131,7 @@
   --color-primary: #d9afa8;
   --color-secondary: #b9b394;
   --color-accent: #d9c7ab;
+  --color-on-accent: #1a2229;
   --color-bg: #1a2229;
   --color-bg-alt: #253040;
   --color-text: #d9c7ab;
@@ -113,6 +144,7 @@
   --color-primary: #e7c134;
   --color-secondary: #9db6a5;
   --color-accent: #fce464;
+  --color-on-accent: #131505;
   --color-bg: #131505;
   --color-bg-alt: #1e2108;
   --color-text: #ede5d0;
@@ -192,13 +224,13 @@ body {
 
 /* terminal card header */
 .terminal-card {
-  border: 1px solid var(--color-accent);
-  border-radius: 6px;
+  border: var(--card-border, 1px solid var(--color-accent));
+  border-radius: var(--card-radius, 6px);
   overflow: hidden;
 }
 .terminal-card-header {
   background: var(--color-accent);
-  color: var(--color-bg);
+  color: var(--color-on-accent);
   font-family: ui-monospace, monospace;
   font-size: 0.7rem;
   font-weight: 700;
@@ -229,4 +261,40 @@ body {
   background: #22c55e;
   animation: livePulse 1.8s ease-in-out infinite;
   flex-shrink: 0;
+}
+
+/* ── Light/dark: akcenty IT + ikona ── */
+[data-theme="light"] .glitch-heading,
+[data-theme="dark"] .glitch-heading {
+  display: block;
+  padding: 0 0 0.45rem 1.05em;
+  border-bottom: 2px solid var(--color-line);
+  background: linear-gradient(var(--color-accent), var(--color-accent)) no-repeat left 0.42em / 0.55em 0.55em;
+}
+[data-theme="light"] .glitch-heading::before,
+[data-theme="light"] .glitch-heading::after,
+[data-theme="dark"] .glitch-heading::before,
+[data-theme="dark"] .glitch-heading::after {
+  content: none;
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(var(--grid-color, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* awatar: owal jak nimb z ikony (light/dark), okrąg w retro */
+.avatar-frame {
+  aspect-ratio: var(--avatar-aspect, 1 / 1);
+  border-radius: var(--avatar-radius, 9999px);
+  outline: var(--avatar-ring, none);
+  outline-offset: 5px;
+}
+
+/* aktywna sekcja w nav i chipy: kontur zamiast cienia */
+[data-theme="light"] .terminal-card,
+[data-theme="dark"] .terminal-card {
+  box-shadow: 4px 4px 0 var(--color-line);
 }

@@ -70,7 +70,7 @@ export function ThemeToggle({ currentTheme }: { currentTheme: string }) {
             aria-pressed={active === t.value}
             className={`w-8 h-8 rounded-full text-sm transition-colors ${
               active === t.value
-                ? "bg-(--color-accent) text-(--color-bg)"
+                ? "bg-(--color-accent) text-(--color-on-accent)"
                 : "hover:bg-(--color-bg) text-(--color-text)"
             }`}
           >
@@ -83,7 +83,7 @@ export function ThemeToggle({ currentTheme }: { currentTheme: string }) {
           aria-pressed={isRetro}
           className={`w-8 h-8 rounded-full text-sm transition-colors ${
             isRetro || panelOpen
-              ? "bg-(--color-accent) text-(--color-bg)"
+              ? "bg-(--color-accent) text-(--color-on-accent)"
               : "hover:bg-(--color-bg) text-(--color-text)"
           }`}
         >

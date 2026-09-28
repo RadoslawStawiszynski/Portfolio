@@ -36,7 +36,7 @@ export default async function JoinPage({
         </p>
         <a
           href={`https://${PLATFORM_DOMAIN}`}
-          className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] hover:opacity-90"
+          className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] hover:opacity-90"
         >
           Wróć na stronę główną
         </a>
@@ -65,7 +65,7 @@ export default async function JoinPage({
         </p>
         <a
           href={`https://${PLATFORM_DOMAIN}`}
-          className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] hover:opacity-90"
+          className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] hover:opacity-90"
         >
           Wróć na stronę główną
         </a>

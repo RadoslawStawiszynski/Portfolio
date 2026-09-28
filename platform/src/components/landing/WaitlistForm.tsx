@@ -140,14 +140,14 @@ export function WaitlistForm() {
         <button
           type="submit"
           disabled={state.type === "loading"}
-          className="w-full rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] shadow transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="w-full rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] shadow transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {state.type === "loading" ? "Wysyłanie…" : "Wyślij zgłoszenie →"}
         </button>
       </form>
 
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-[var(--color-accent)] px-5 py-3 text-sm font-semibold text-[var(--color-bg)] shadow-lg">
+        <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-[var(--color-accent)] px-5 py-3 text-sm font-semibold text-[var(--color-on-accent)] shadow-lg">
           {toast}
         </div>
       )}

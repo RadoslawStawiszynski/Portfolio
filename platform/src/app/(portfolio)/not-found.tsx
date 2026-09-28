@@ -23,7 +23,7 @@ export default async function NotFound() {
         {slug && (
           <a
             href={process.env.NODE_ENV === "development" ? `/dev/${slug}` : "/"}
-            className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] shadow hover:opacity-90 transition-opacity"
+            className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] shadow hover:opacity-90 transition-opacity"
           >
             Strona główna
           </a>

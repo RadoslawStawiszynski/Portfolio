@@ -30,14 +30,14 @@ const FEATURES = [
   },
 ];
 
+// Tylko portfolia, których właściciele zgodzili się na publikację. Dane innych osób
+// (imię, nazwisko) nie mogą trafiać na publiczny landing przed ich zgodą.
 const EXAMPLES = [
   {
     name: "Radosław Stawiszyński",
-    role: "Product Manager / Scrum Master",
+    role: "Project Manager z kompetencjami technicznymi",
     slug: "radek",
   },
-  { name: "Miłosz Gawlik", role: "Portfolio IT", slug: "milosz" },
-  { name: "Martyna Stawiszyńska", role: "Autorka książek", slug: "martyna" },
 ];
 
 export async function LandingPage() {

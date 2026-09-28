@@ -9,7 +9,12 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+// Podgląd deweloperski renderuje także niepublikowane portfolia (dane osobowe) —
+// dostępny wyłącznie lokalnie, nigdy w buildzie produkcyjnym/preview.
+const DEV_ROUTE_ENABLED = process.env.NODE_ENV !== "production";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  if (!DEV_ROUTE_ENABLED) return {};
   const { slug } = await params;
   const portfolio = await getPortfolioBySlug(slug);
   if (!portfolio) return {};
@@ -18,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DevPortfolioPage({ params }: Props) {
+  if (!DEV_ROUTE_ENABLED) notFound();
   const { slug } = await params;
 
   const cookieStore = await cookies();

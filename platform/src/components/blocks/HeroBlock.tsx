@@ -43,7 +43,7 @@ export function HeroBlock({ data }: Props) {
             width={280}
             height={350}
             priority
-            className="avatar-frame w-32 lg:w-44 mb-8 object-cover object-top border-4 border-[var(--color-accent)] shadow-lg"
+            className="avatar-frame w-36 lg:w-52 mb-8 object-cover object-top border-4 border-[var(--color-accent)] shadow-lg"
           />
         </AnimatedSection>
       )}

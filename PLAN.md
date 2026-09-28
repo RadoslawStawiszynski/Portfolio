@@ -1033,6 +1033,11 @@ Jak to działa:
 - [x] **M17.9** Bloki: hero, about, experience (5 pozycji PM), skills (6 kat.), education (3 wpisy), contact (2026-06-20, Agent: Claude)
 - [x] **M17.10** Dodaj sekcję projektów PM — blok `projects` (2026-06-20, Agent: Claude — 4 projekty: PortfolioHub, AI, DB Connector, Nancy Card)
 - [x] **M17.11** Ustaw motyw `retro-terminal` dla portfolio radek (2026-06-20, Agent: Claude — ustawiony w upload-cv.ts + seed-neon.ts)
+- [x] **M17.12** Favicon (monitor `>_`) + awatar corporate headshot serwowany z `public/` (2026-09-28, Agent: Claude)
+- [x] **M17.13** Treść experience/about/skills/education zgodna z aktualnym CV, PL+EN (2026-09-28, Agent: Claude — `scripts/update-radek-content.ts`)
+- [x] **M17.14** Motywy light/dark w duchu Nowosielskiego + naprawa kontrastu (`--color-on-accent`) (2026-09-28, Agent: Claude)
+- [ ] **M17.15** Wdrożenie na Neon: migracje (`db-migrate-run.ts`) + `update-radek-content.ts` z `DATABASE_URL` Neon, potem push dev→staging (wymaga zgody Radosława)
+- [ ] **M17.16** i18n nagłówków bloków i etykiet nawigacji (hardcodowane PL: „O mnie”, „Doświadczenie”, „Start”…) — w wersji EN zostają po polsku
 
 ### 17.3 Martyna Stawiszyńska — Portfolio Autorki
 
@@ -1756,6 +1761,7 @@ Gdybym projektował od nowa: `.cursor/rules` lub `AGENTS.md` zamiast CLAUDE.md (
 
 - [ ] **TD-27** Vercel build nie odpala migracji Payload — schemat Neon prod może się rozjechać z kodem (dokładnie to spowodowało 500 na `radek.korp-cbm.com` po pierwszym deployu Fazy 4). Rozważyć: `postbuild` hook albo osobny krok deployu wołający `payload migrate` (przez `scripts/db-migrate-run.ts`, bo CLI crashuje pod Node 24 — patrz TD-28) zanim `vercel --prod` przełączy alias
 - [ ] **TD-28** `payload` CLI (`node_modules/payload/dist/bin`) crashuje pod Node 24 lokalnie (`ENOENT node:fs?tsx-namespace=...` — niekompatybilność loadera `tsx`). `.nvmrc` deklaruje Node 20, ale lokalnie zainstalowany jest tylko Node 24 (`nvm ls` → brak 20). Obejście: `scripts/db-migrate-create.ts`/`db-migrate-run.ts` (wołają `payload.db.createMigration`/`.migrate()` bezpośrednio przez `tsx`, z pominięciem binarki CLI). Docelowo: `nvm install 20` lub upgrade `tsx`/`payload` do wersji kompatybilnej z Node 24
+- [ ] **TD-30** Usunąć osierocone `blocks_skills_data_categories.skills` (po wdrożeniu kodu z zlokalizowanym `skills` i potwierdzeniu, że prod działa). Kolumna została celowo — migracja ze `DROP` wywaliła prod 500-tką (2026-09-28), bo stary kod jeszcze z niej czytał. Wzorzec na przyszłość: expand → deploy → contract w osobnej migracji
 - [ ] **TD-29** `milosz.korp-cbm.com` i `martyna.korp-cbm.com` zwracają **525** (SSL handshake error Cloudflare↔origin), nie 404 — mimo że oba portfolio są `isPublished=false` (oczekiwalibyśmy 404 z naszej `not-found.tsx`, nie błędu na poziomie Cloudflare przed dotarciem do Vercela). Sugeruje że te konkretne subdomeny nie są poprawnie podpięte pod `*.korp-cbm.com` w Vercel/Cloudflare mimo wildcarda. Do zbadania przed UAT — Miłosz i Martyna będą chcieli zobaczyć swój podgląd
 
 ### 🟡 BEZPIECZEŃSTWO — odkryte 2026-08-17 (przed UAT)

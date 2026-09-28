@@ -99,7 +99,7 @@ export function JoinForm({ action, platformDomain }: JoinFormProps) {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] shadow transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="w-full rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] shadow transition-opacity hover:opacity-90 disabled:opacity-50"
       >
         {isPending ? "Tworzenie konta…" : "Utwórz konto →"}
       </button>

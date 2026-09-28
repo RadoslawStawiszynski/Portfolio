@@ -33,16 +33,17 @@ export function HeroBlock({ data }: Props) {
 
   return (
     <section
-      className="relative scanlines min-h-[70vh] flex flex-col items-center justify-center text-center px-4 py-20 lg:py-32 bg-[var(--color-bg)]"
+      className="relative scanlines hero-grid min-h-[70vh] flex flex-col items-center justify-center text-center px-4 py-20 lg:py-32 bg-[var(--color-bg)]"
     >
       {d.avatarUrl && (
         <AnimatedSection delay={0} className="relative z-10">
           <Image
             src={d.avatarUrl}
             alt={d.title}
-            width={128}
-            height={128}
-            className="w-28 h-28 lg:w-36 lg:h-36 rounded-full mb-6 object-cover border-4 border-[var(--color-accent)] shadow-lg"
+            width={280}
+            height={350}
+            priority
+            className="avatar-frame w-36 lg:w-52 mb-8 object-cover object-top border-4 border-[var(--color-accent)] shadow-lg"
           />
         </AnimatedSection>
       )}
@@ -65,7 +66,7 @@ export function HeroBlock({ data }: Props) {
         <AnimatedSection delay={0.3} className="relative z-10">
           <a
             href={d.cta.href}
-            className="inline-block bg-[var(--color-accent)] text-[var(--color-bg)] px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-md font-mono tracking-wide"
+            className="inline-block bg-[var(--color-accent)] text-[var(--color-on-accent)] px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-md font-mono tracking-wide"
           >
             {d.cta.label}
           </a>

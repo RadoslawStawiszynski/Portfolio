@@ -235,6 +235,7 @@ export const Blocks: CollectionConfig = {
             {
               name: "skills",
               type: "textarea",
+              localized: true,
               admin: {
                 description: "Jedna umiejętność na linię (np. React\\nTypeScript\\nNext.js)",
               },
@@ -274,6 +275,12 @@ export const Blocks: CollectionConfig = {
               type: "text",
               localized: true,
               admin: { description: "Kierunek studiów" },
+            },
+            {
+              name: "description",
+              type: "textarea",
+              localized: true,
+              admin: { description: "Opcjonalny opis (np. status studiów, czym się zajmujesz)" },
             },
             {
               name: "startYear",

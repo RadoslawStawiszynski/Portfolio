@@ -1,27 +1,53 @@
 @import "tailwindcss";
 
-/* ── Design tokens: light theme (default) ── */
-:root {
-  --color-primary: #1a1f00;
-  --color-secondary: #3a4605;
-  --color-accent: #e19d29;
-  --color-bg: #f5f3f2;
-  --color-bg-alt: #d8d2cf;
-  --color-muted: #8d8179;
-  --color-text: #1a1f00;
-  --scanline-color: rgba(0,0,0,0.07);
+/* ── Design tokens: light theme (default) — "dzień": pergamin, cynober, granat ── */
+:root,
+[data-theme="light"] {
+  --color-primary: #1b1712;
+  --color-secondary: #23425a;
+  --color-accent: #a32e1b;
+  --color-on-accent: #f6eedc;
+  --color-bg: #f1e8d4;
+  --color-bg-alt: #e6d8b9;
+  --color-muted: #5f5443;
+  --color-text: #1b1712;
+  --color-line: #1b1712;
+  --scanline-color: rgba(27,23,18,0.04);
+  --grid-color: rgba(27,23,18,0.07);
 }
 
-/* ── Dark theme ── */
+/* ── Dark theme — "noc": atrament, złota ochra, jasny cynober ── */
 [data-theme="dark"] {
-  --color-bg: #1a1f00;
-  --color-bg-alt: #2a2f05;
-  --color-text: #f5f3f2;
-  --color-primary: #f5f3f2;
-  --color-secondary: #d8d2cf;
-  --color-accent: #e19d29;
-  --color-muted: #8d8179;
-  --scanline-color: rgba(255,255,255,0.03);
+  --color-primary: #ede3cc;
+  --color-secondary: #7fa6c4;
+  --color-accent: #d9a441;
+  --color-on-accent: #14161c;
+  --color-bg: #14161c;
+  --color-bg-alt: #1e222b;
+  --color-muted: #a39a87;
+  --color-text: #ede3cc;
+  --color-line: #d9a441;
+  --scanline-color: rgba(237,227,204,0.03);
+  --grid-color: rgba(217,164,65,0.08);
+}
+
+/* Kształty w duchu ikony: płaskie płaszczyzny, ostre kanty, ciemny kontur.
+   Tylko light/dark — motywy retro zachowują zaokrąglenia. Tailwind 4 czyta --radius-*. */
+[data-theme="light"],
+[data-theme="dark"] {
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --card-radius: 0;
+  --card-border: 3px solid var(--color-line);
+  --avatar-aspect: 3 / 4;
+  --avatar-radius: 50%;
+  --avatar-ring: none;
+  --bar-a: #a32e1b;
+  --bar-b: #d9a441;
 }
 
 /* ── Retro terminal (green CRT) ── */
@@ -29,6 +55,7 @@
   --color-primary: #00ff41;
   --color-secondary: #00cc33;
   --color-accent: #ffcc00;
+  --color-on-accent: #0a0a0a;
   --color-bg: #0a0a0a;
   --color-bg-alt: #0f1a0f;
   --color-text: #d4e8d4;
@@ -41,6 +68,7 @@
   --color-primary: #ff79c6;
   --color-secondary: #bd93f9;
   --color-accent: #ffb86c;
+  --color-on-accent: #0d0d1a;
   --color-bg: #0d0d1a;
   --color-bg-alt: #1a1a2e;
   --color-text: #f8f8f2;
@@ -53,6 +81,7 @@
   --color-primary: #ffb347;
   --color-secondary: #e8963a;
   --color-accent: #ffe066;
+  --color-on-accent: #0c0900;
   --color-bg: #0c0900;
   --color-bg-alt: #1a1200;
   --color-text: #f5deb3;
@@ -65,6 +94,7 @@
   --color-primary: #7fffd4;
   --color-secondary: #5ce8c8;
   --color-accent: #ff6ac1;
+  --color-on-accent: #080c10;
   --color-bg: #080c10;
   --color-bg-alt: #0f1923;
   --color-text: #c8e6e0;
@@ -77,6 +107,7 @@
   --color-primary: #d76144;
   --color-secondary: #eba796;
   --color-accent: #dfceb9;
+  --color-on-accent: #051214;
   --color-bg: #051214;
   --color-bg-alt: #0c4648;
   --color-text: #dfceb9;
@@ -89,6 +120,7 @@
   --color-primary: #ddc173;
   --color-secondary: #91a16a;
   --color-accent: #b36154;
+  --color-on-accent: #111a1a;
   --color-bg: #111a1a;
   --color-bg-alt: #1c2727;
   --color-text: #e5ddd0;
@@ -101,6 +133,7 @@
   --color-primary: #d9afa8;
   --color-secondary: #b9b394;
   --color-accent: #d9c7ab;
+  --color-on-accent: #1a2229;
   --color-bg: #1a2229;
   --color-bg-alt: #253040;
   --color-text: #d9c7ab;
@@ -113,6 +146,7 @@
   --color-primary: #e7c134;
   --color-secondary: #9db6a5;
   --color-accent: #fce464;
+  --color-on-accent: #131505;
   --color-bg: #131505;
   --color-bg-alt: #1e2108;
   --color-text: #ede5d0;
@@ -192,13 +226,13 @@ body {
 
 /* terminal card header */
 .terminal-card {
-  border: 1px solid var(--color-accent);
-  border-radius: 6px;
+  border: var(--card-border, 1px solid var(--color-accent));
+  border-radius: var(--card-radius, 6px);
   overflow: hidden;
 }
 .terminal-card-header {
   background: var(--color-accent);
-  color: var(--color-bg);
+  color: var(--color-on-accent);
   font-family: ui-monospace, monospace;
   font-size: 0.7rem;
   font-weight: 700;
@@ -230,3 +264,110 @@ body {
   animation: livePulse 1.8s ease-in-out infinite;
   flex-shrink: 0;
 }
+
+/* ── Light/dark: płaszczyzny koloru (Nowosielski) ──
+   Każda sekcja to osobna płaszczyzna: tokeny są przeliczane na wrapperze [data-block],
+   więc karty, nagłówki i przyciski w środku dziedziczą spójną, przetestowaną parę kontrastów. */
+
+/* granat */
+[data-theme="light"] :is([data-block="hero"], [data-block="skills"]) {
+  --color-bg: #23425a; --color-bg-alt: #1a3347;
+  --color-text: #f1e8d4; --color-primary: #f1e8d4; --color-secondary: #d9a441;
+  --color-muted: #b7c4cf; --color-accent: #d9a441; --color-on-accent: #14161c;
+  --color-line: #d9a441; --scanline-color: rgba(241,232,212,0.03); --grid-color: rgba(241,232,212,0.07);
+}
+/* ochra */
+[data-theme="light"] :is([data-block="about"], [data-block="contact"]) {
+  --color-bg: #d9a441; --color-bg-alt: #c9922f;
+  --color-text: #1b1712; --color-primary: #1b1712; --color-secondary: #7a1f10;
+  --color-muted: #3a2f1e; --color-accent: #7a1f10; --color-on-accent: #f6eedc;
+  --color-line: #1b1712;
+}
+/* cynober */
+[data-theme="light"] [data-block="projects"] {
+  --color-bg: #a32e1b; --color-bg-alt: #8a2617;
+  --color-text: #f6eedc; --color-primary: #f6eedc; --color-secondary: #f8d98a;
+  --color-muted: #efdcc0; --color-accent: #f8d98a; --color-on-accent: #14161c;
+  --color-line: #f6eedc;
+}
+/* noc: granat głęboki i ciemny cynober */
+[data-theme="dark"] :is([data-block="hero"], [data-block="projects"]) {
+  --color-bg: #1b3148; --color-bg-alt: #142639;
+  --color-text: #ede3cc; --color-primary: #ede3cc; --color-secondary: #d9a441;
+  --color-muted: #a9b8c6; --color-accent: #d9a441; --color-on-accent: #14161c;
+  --color-line: #d9a441; --scanline-color: rgba(237,227,204,0.03); --grid-color: rgba(237,227,204,0.06);
+}
+[data-theme="dark"] [data-block="skills"] {
+  --color-bg: #7a2314; --color-bg-alt: #651c0f;
+  --color-text: #f6eedc; --color-primary: #f6eedc; --color-secondary: #f8d98a;
+  --color-muted: #e8d3b5; --color-accent: #f8d98a; --color-on-accent: #14161c;
+  --color-line: #f6eedc;
+}
+
+/* grube kontury między płaszczyznami */
+[data-theme="light"] [data-block]:not([data-block="hero"]),
+[data-theme="dark"] [data-block]:not([data-block="hero"]) {
+  border-top: 4px solid var(--color-line);
+}
+[data-theme="light"] nav[aria-label],
+[data-theme="dark"] nav[aria-label] {
+  border-bottom: 3px solid var(--color-line);
+}
+
+/* nagłówki sekcji: kwadrat-ikonka + linia */
+[data-theme="light"] .glitch-heading,
+[data-theme="dark"] .glitch-heading {
+  display: block;
+  padding: 0 0 0.45rem 1.2em;
+  border-bottom: 3px solid var(--color-line);
+  background: linear-gradient(var(--color-accent), var(--color-accent)) no-repeat left 0.38em / 0.7em 0.7em;
+}
+[data-theme="light"] .glitch-heading::before,
+[data-theme="light"] .glitch-heading::after,
+[data-theme="dark"] .glitch-heading::before,
+[data-theme="dark"] .glitch-heading::after {
+  content: none;
+}
+
+/* Hero: dwa pionowe słupy koloru po bokach + siatka IT */
+.hero-grid {
+  --bar-w: clamp(0.6rem, 4vw, 2.75rem);
+  background-image:
+    linear-gradient(var(--bar-a, transparent), var(--bar-a, transparent)),
+    linear-gradient(var(--bar-b, transparent), var(--bar-b, transparent)),
+    linear-gradient(var(--grid-color, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color, transparent) 1px, transparent 1px);
+  background-size: var(--bar-w) 100%, var(--bar-w) 100%, 32px 32px, 32px 32px;
+  background-position: left top, right top, 0 0, 0 0;
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+}
+
+/* awatar: jeden owal, jedna ramka */
+.avatar-frame {
+  aspect-ratio: var(--avatar-aspect, 1 / 1);
+  border-radius: var(--avatar-radius, 9999px);
+  outline: var(--avatar-ring, none);
+}
+[data-theme="light"] .avatar-frame,
+[data-theme="dark"] .avatar-frame {
+  box-shadow: none;
+}
+
+/* płasko: kontur zamiast cienia */
+[data-theme="light"] .terminal-card,
+[data-theme="dark"] .terminal-card {
+  box-shadow: none;
+}
+[data-theme="light"] .terminal-card-header,
+[data-theme="dark"] .terminal-card-header {
+  border-bottom: 3px solid var(--color-line);
+}
+
+/* pływający przycisk CV leży na słupie koloru w Hero — kontur go odcina od tła */
+[data-theme="light"] .cv-download,
+[data-theme="dark"] .cv-download {
+  border: 3px solid var(--color-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+[data-theme="light"] .cv-download { border-color: #1b1712; background: #f1e8d4; color: #1b1712; }

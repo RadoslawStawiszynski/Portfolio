@@ -18,7 +18,7 @@ export function DownloadCvButton({ urlPl, urlEn, portfolioLang }: Props) {
       download
       target="_blank"
       rel="noreferrer"
-      className="fixed bottom-4 left-4 z-50 flex items-center gap-2 rounded-full bg-[var(--color-accent)] text-[var(--color-bg)] px-4 py-2 text-sm font-semibold shadow-lg hover:opacity-90 transition-opacity"
+      className="cv-download fixed bottom-4 left-4 z-50 flex items-center gap-2 rounded-full bg-[var(--color-accent)] text-[var(--color-on-accent)] px-4 py-2 text-sm font-semibold shadow-lg hover:opacity-90 transition-opacity"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -44,6 +44,7 @@ export interface EducationItem {
   school: string;
   degree: string;
   field: string;
+  description?: string;
   startYear: number;
   endYear?: number;
 }

@@ -8,6 +8,21 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+### Changed (2026-09-28) — portfolio Radka: treść, zdjęcie, favicon, motywy light/dark
+- **Treść (z aktualnego CV, PL+EN):** `scripts/update-radek-content.ts` — hero, about (ton PM-a na starcie kariery), experience (4 pozycje; PortfolioHub usunięty ze stanowisk — to projekt, nie praca), skills (8 kategorii), education (ostatni rok studiów + opis). Idempotentny, działa też na Neon
+- **Awatar:** corporate headshot (Gemini) przycięty do 4:5 → `public/images/radek-avatar.jpg` (94 KB). Poprzedni `avatarUrl` wskazywał endpoint S3 R2 (`*.r2.cloudflarestorage.com`, HTTP 400 — nie jest publiczny), dlatego zdjęcie nie ładowało się w Hero ani w Nav
+- **Favicon:** `(portfolio)/icon.svg` (monitor `>_`, wariant jasny/ciemny przez `prefers-color-scheme`), `apple-icon.png`, `favicon.ico`
+- **Motywy light/dark (Nowosielski):** pergamin+cynober / atrament+złota ochra, ostre kanty (`--radius-*` = 0 tylko dla light/dark), kontur i cień-offset kart, siatka IT w Hero, awatar w owalu 4:5. Motywy retro bez zmian
+- **Kontrast:** nowy token `--color-on-accent` (wcześniej tekst w kolorze `--color-bg` na `--color-accent` → 2.1:1 w jasnym). Teraz ≥ 6:1 w light i 8:1 w dark; retro dostaje swoje dotychczasowe tło jako `on-accent`
+- Blok `education`: nowe pole `description` (localized). Blok `experience`: opis wielolinijkowy renderowany jako lista
+- Domyślny motyw portfolio radek: `light` (był `retro-terminal`; retro nadal wybieralny w przełączniku)
+
+### Fixed (2026-09-28)
+- **Incydent:** po migracji `skills_localized` na Neon prod zwracał 500 — migracja robiła `DROP COLUMN skills`, a kod na Vercelu (sprzed zmiany) jeszcze z niej czytał. Hotfix: `scripts/hotfix-restore-skills-column.sql` (przywraca kolumnę z danymi PL). Migracja poprawiona: bez `DROP` (expand/contract), sprzątanie w TD-30
+- `blocks.skillsData.categories[].skills` było polem **niezlokalizowanym** — zapis wersji EN nadpisywał PL. Pole jest teraz `localized`; migracja `20260928_203201_skills_localized` przenosi dane do tabeli `_locales` bez utraty (idempotentna)
+- Update tablic bloków w drugim języku bez `id` wierszy kasował teksty pierwszego języka (wiersze tablic są współdzielone). `update-radek-content.ts` podpina EN pod wiersze PL przez `id`
+- Migracja `20260928_202820_education_description` (idempotentna)
+
 ### Fixed (2026-08-17) — incydent produkcyjny
 - Pierwszy deploy `main` (711a1df) wywalił `radek.korp-cbm.com` 500-tką: Neon prod nie miał tabel dla bloków `services`/`books`/`gallery`/`projects` (i kolekcji `todos`/`waitlist-requests`/`invitation-tokens`/`platform-settings`) — nigdy nie wygenerowano formalnej migracji Payload dla Fazy 4 finał + systemu zaproszeniowego, tylko lokalny `push` w dev
 - Nowa migracja `20260817_181605_faza4_invite_system_schema` — dodaje brakujące tabele/kolumny (tylko `CREATE`/`ADD COLUMN`, bez ruszania istniejących danych)

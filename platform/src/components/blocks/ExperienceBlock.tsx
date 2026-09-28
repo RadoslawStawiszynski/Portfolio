@@ -62,9 +62,18 @@ export function ExperienceBlock({ data }: Props) {
                   {item.company}
                 </p>
                 {item.description && (
-                  <p className="text-[var(--color-text)] leading-relaxed">
-                    {item.description}
-                  </p>
+                  <ul className="space-y-1.5 text-[var(--color-text)] leading-relaxed">
+                    {item.description
+                      .split("\n")
+                      .map((line) => line.trim())
+                      .filter(Boolean)
+                      .map((line, k) => (
+                        <li key={k} className="flex gap-2">
+                          <span aria-hidden className="mt-[0.15em] font-mono text-[var(--color-accent)]">▸</span>
+                          <span>{line}</span>
+                        </li>
+                      ))}
+                  </ul>
                 )}
               </motion.li>
             );

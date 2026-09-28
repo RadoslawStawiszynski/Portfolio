@@ -72,7 +72,7 @@ export async function LandingPage() {
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <a
             href={`https://radek.${PLATFORM_DOMAIN}`}
-            className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] shadow transition-opacity hover:opacity-90"
+            className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] shadow transition-opacity hover:opacity-90"
           >
             Zobacz przykład →
           </a>

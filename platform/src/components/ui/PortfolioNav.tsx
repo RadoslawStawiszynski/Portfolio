@@ -84,7 +84,7 @@ export function PortfolioNav({ sections, identity }: Props) {
               alt={identity.name}
               width={28}
               height={28}
-              className="w-7 h-7 rounded-full object-cover border border-[var(--color-accent)] shrink-0"
+              className="w-7 h-7 rounded-full object-cover object-top border border-[var(--color-accent)] shrink-0"
             />
           )}
           <div className="hidden sm:block text-right shrink-0">

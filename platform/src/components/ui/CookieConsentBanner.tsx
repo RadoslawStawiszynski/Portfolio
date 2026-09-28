@@ -57,7 +57,7 @@ export function CookieConsentBanner() {
           </button>
           <button
             onClick={handleAccept}
-            className="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[var(--color-accent)] text-[var(--color-bg)] hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-[var(--color-bg)] focus-visible:outline-offset-2"
+            className="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[var(--color-accent)] text-[var(--color-on-accent)] hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-[var(--color-bg)] focus-visible:outline-offset-2"
           >
             Akceptuję
           </button>

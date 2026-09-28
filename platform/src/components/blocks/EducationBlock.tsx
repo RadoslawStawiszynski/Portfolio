@@ -54,6 +54,11 @@ export function EducationBlock({ data }: Props) {
                     {item.field && (
                       <p className="text-sm text-[var(--color-text)]">{item.field}</p>
                     )}
+                    {item.description && (
+                      <p className="mt-3 text-sm leading-relaxed text-[var(--color-text)] whitespace-pre-line">
+                        {item.description}
+                      </p>
+                    )}
                   </div>
                 </div>
               </motion.li>

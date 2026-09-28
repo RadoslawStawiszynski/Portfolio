@@ -276,6 +276,12 @@ export const Blocks: CollectionConfig = {
               admin: { description: "Kierunek studiów" },
             },
             {
+              name: "description",
+              type: "textarea",
+              localized: true,
+              admin: { description: "Opcjonalny opis (np. status studiów, czym się zajmujesz)" },
+            },
+            {
               name: "startYear",
               type: "number",
               required: true,

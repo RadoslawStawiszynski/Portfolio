@@ -63,6 +63,7 @@ function extractBlockData(doc: Record<string, unknown>, type: string): Record<st
           school: item.school ?? "",
           degree: item.degree ?? "",
           field: item.field ?? "",
+          description: item.description as string | undefined,
           startYear: Number(item.startYear ?? 0),
           endYear: item.endYear != null ? Number(item.endYear) : undefined,
         })),

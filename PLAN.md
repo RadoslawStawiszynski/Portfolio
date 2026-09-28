@@ -1033,6 +1033,11 @@ Jak to działa:
 - [x] **M17.9** Bloki: hero, about, experience (5 pozycji PM), skills (6 kat.), education (3 wpisy), contact (2026-06-20, Agent: Claude)
 - [x] **M17.10** Dodaj sekcję projektów PM — blok `projects` (2026-06-20, Agent: Claude — 4 projekty: PortfolioHub, AI, DB Connector, Nancy Card)
 - [x] **M17.11** Ustaw motyw `retro-terminal` dla portfolio radek (2026-06-20, Agent: Claude — ustawiony w upload-cv.ts + seed-neon.ts)
+- [x] **M17.12** Favicon (monitor `>_`) + awatar corporate headshot serwowany z `public/` (2026-09-28, Agent: Claude)
+- [x] **M17.13** Treść experience/about/skills/education zgodna z aktualnym CV, PL+EN (2026-09-28, Agent: Claude — `scripts/update-radek-content.ts`)
+- [x] **M17.14** Motywy light/dark w duchu Nowosielskiego + naprawa kontrastu (`--color-on-accent`) (2026-09-28, Agent: Claude)
+- [ ] **M17.15** Wdrożenie na Neon: migracje (`db-migrate-run.ts`) + `update-radek-content.ts` z `DATABASE_URL` Neon, potem push dev→staging (wymaga zgody Radosława)
+- [ ] **M17.16** i18n nagłówków bloków i etykiet nawigacji (hardcodowane PL: „O mnie”, „Doświadczenie”, „Start”…) — w wersji EN zostają po polsku
 
 ### 17.3 Martyna Stawiszyńska — Portfolio Autorki
 
